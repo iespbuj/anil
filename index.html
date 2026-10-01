@@ -1938,6 +1938,7 @@ input:focus,select:focus,textarea:focus{ outline:none; border-color:var(--sapphi
 .anil-badge-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
 .anil-badge{
   --badge-color:#7184ff;
+  position:relative; cursor:pointer; font:inherit; color:inherit;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;
   min-width:0; min-height:112px; padding:12px 8px 10px; text-align:center;
   border:1px solid rgba(110,145,190,.15); border-radius:10px;
@@ -1950,6 +1951,17 @@ input:focus,select:focus,textarea:focus{ outline:none; border-color:var(--sapphi
   box-shadow:inset 0 0 18px color-mix(in srgb,var(--badge-color) 5%,transparent);
 }
 .anil-badge.earned:hover{ transform:translateY(-2px); box-shadow:0 0 18px color-mix(in srgb,var(--badge-color) 18%,transparent); }
+.anil-badge:focus-visible{ outline:2px solid var(--badge-color); outline-offset:2px; }
+.badge-hover-tooltip{ position:absolute; z-index:5; left:50%; bottom:calc(100% + 8px); width:max-content; max-width:min(220px,80vw); padding:8px 10px; border:1px solid color-mix(in srgb,var(--badge-color) 55%,var(--border)); border-radius:7px; background:rgba(8,16,30,.97); box-shadow:0 8px 22px rgba(0,0,0,.45); opacity:0; visibility:hidden; transform:translate(-50%,5px); transition:opacity .12s ease,transform .12s ease,visibility .12s; pointer-events:none; text-align:center; }
+.anil-badge:hover .badge-hover-tooltip,.anil-badge:focus-visible .badge-hover-tooltip{ opacity:1; visibility:visible; transform:translate(-50%,0); }
+.badge-hover-tooltip b{ display:block; color:var(--silver-bright); font:700 11px var(--f-ui); }
+.badge-hover-tooltip span{ display:block; margin-top:3px; color:var(--badge-color); font:700 10px var(--f-mono); }
+.gym-detail{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; }
+.gym-detail-title{ margin:0; color:var(--silver-bright); font:700 20px var(--f-ui); }
+.gym-detail-badge{ color:var(--silver-dim); font-size:12px; }
+.gym-detail-sprite{ width:144px; height:144px; object-fit:contain; image-rendering:pixelated; padding:8px; border:1px solid var(--border); border-radius:10px; background:radial-gradient(circle,#213654,#0b1425); }
+.gym-detail-cap{ color:var(--gold); font:700 16px var(--f-mono); }
+.gym-detail-status{ color:var(--silver-dim); font:600 11px var(--f-ui); }
 .badge-progress-track{ height:6px; overflow:hidden; margin:-4px 0 14px; border-radius:999px; background:rgba(133,164,210,.13); }
 .badge-progress-track i{ display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#6267ff,#45d8ff); box-shadow:0 0 12px rgba(69,216,255,.38); transition:width .35s ease; }
 .anil-badge-gem{
@@ -2858,6 +2870,17 @@ let trackerSnapshots = {};
 let trackerVersion = {};
 let trackerLives = {};
 let trackerBadgesAvailable = {};
+const ANIL_LEVEL_CAPS = [
+  { leader:'Brock', cap:14, sprite:'https://play.pokemonshowdown.com/sprites/trainers/brock-gen3.png' },
+  { leader:'Misty', cap:23, sprite:'https://play.pokemonshowdown.com/sprites/trainers/misty-gen3.png' },
+  { leader:'Teniente Surge', cap:30, sprite:'https://play.pokemonshowdown.com/sprites/trainers/ltsurge-gen3.png' },
+  { leader:'Erika', cap:39, sprite:'https://play.pokemonshowdown.com/sprites/trainers/erika-gen3.png' },
+  { leader:'Koga y Sachiko', cap:49, sprite:'https://play.pokemonshowdown.com/sprites/trainers/koga-gen3.png' },
+  { leader:'Sabrina', cap:54, sprite:'https://play.pokemonshowdown.com/sprites/trainers/sabrina-gen3.png' },
+  { leader:'Blaine', cap:59, sprite:'https://play.pokemonshowdown.com/sprites/trainers/blaine-gen3.png' },
+  { leader:'Urano', cap:66, sprite:'URANO_SPRITE_PLACEHOLDER'}
+];
+ANIL_LEVEL_CAPS[7].sprite = 'data:image/png;base64,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';
 let collections = {}; // idem: coleccion completa (equipo+cajas) por entrenador, para poder ver/ofertar cualquier Pokémon
 let graveyard = {}; // idem: cementerio (Pokémon caídos) por entrenador
 let manualFainted = {}; // override manual por si el watcher se equivoca: {trainer: [pids]}
@@ -2925,7 +2948,7 @@ const SLOT_OUTCOMES = [
   { type:'nothing', symbol:null, chance:0.945, label:'Nada, sigue intentándolo' }
 ];
 
-// Frases de Giovanni al entrar al casino — se elige una al azar cada vez.
+// Frases del Blaziken crupier al entrar al casino — se elige una al azar cada vez
 const CROUPIER_LINES = [
   'Eres un ludópata.',
   'Estoy harto de esto. Podríamos estar jugando al Valorant...',
@@ -2938,12 +2961,12 @@ const CROUPIER_LINES = [
   'Relájate, tío, solo son unos tickets... de momento.',
   'Bienvenido. Deja tu dignidad en la puerta.',
   'Como pierdas otra vez te cambio el mote a "el que siempre pierde".',
-  'Las cartas me dicen que hoy no es tu día.',
+  'Las plumas me dicen que hoy no es tu día.',
   '¿Sabes lo que mola más que las tragaperras? Nada. Absolutamente nada.',
-  'Cuidado, que aquí no es lo único que arde.',
+  'Cuidado, que aquí las llamas no son lo único que arde.',
   'Fírmame aquí que renuncias a tus tickets, es más rápido.',
   'Otra vez tú. Empiezo a pensar que vives aquí.',
-  'Confía en mí, soy el jefe del Team Rocket con corbata. ¿Qué podría salir mal?',
+  'Confía en mí, soy un gallo de fuego con corbata, ¿qué podría salir mal?',
   'El casino nunca duerme. Yo tampoco, la verdad, no tengo párpados.',
   'Hoy me siento generoso... es broma, entra y juega.',
   'Vamos, no seas gallina... digo, Pidgey.',
@@ -3515,12 +3538,20 @@ function trainerTrackerTeam(snapshot){
         eggScale: isEgg && mon.eggScale != null && Number.isFinite(Number(mon.eggScale)) ? Math.max(0.65, Math.min(1.25, Number(mon.eggScale))) : 1,
         level: isEgg || mon.level == null || !Number.isFinite(Number(mon.level)) ? null : Number(mon.level),
         fainted: !isEgg && !!mon.fainted,
-        metLocationName: null,
+        metLocationName: !isEgg && typeof mon.metLocationName === 'string' && mon.metLocationName.trim()
+          ? mon.metLocationName.trim()
+          : (!isEgg && mon.metLocationId != null ? mapTrackerLocation(mon.metLocationId) : null),
+        metLocationId: !isEgg && mon.metLocationId != null && Number.isFinite(Number(mon.metLocationId))
+          ? Number(mon.metLocationId)
+          : null,
+        metLevel: !isEgg && mon.metLevel != null && Number.isFinite(Number(mon.metLevel))
+          ? Number(mon.metLevel)
+          : null,
         isEgg,
         abilityName: !isEgg && typeof mon.abilityName === 'string' && mon.abilityName.trim()
           ? mon.abilityName.trim()
           : null,
-        shiny: false,
+        shiny: !isEgg && !!mon.shiny,
       };
     });
 }
@@ -3542,7 +3573,7 @@ async function fetchTrackerState(t){
 }
 
 function mapTrackerLocation(mapId){
-  if(mapId === null || mapId === undefined || mapId === '') return null;
+  if(mapId === null || mapId === undefined || mapId === '' || !Number.isFinite(Number(mapId)) || Number(mapId) <= 0) return null;
   const id = String(mapId);
   const place = ANIL_MAP_LOOKUP[id];
   return place ? (place.zona || place.nombre_mapa || `Zona #${id}`) : `Zona #${id}`;
@@ -3595,7 +3626,7 @@ async function loadTrackerStates(){
       }
       const team = trainerTrackerTeam(snapshot);
       const lives = Math.trunc(Number(snapshot.lives));
-      const version = JSON.stringify([snapshot.updated ?? null, snapshot.map_id ?? null, snapshot.region_id ?? null, snapshot.map_x ?? null, snapshot.map_y ?? null, snapshot.lives, snapshot.party, snapshot.badges ?? null]);
+      const version = JSON.stringify([snapshot.updated ?? null, snapshot.map_id ?? null, snapshot.region_id ?? null, snapshot.map_x ?? null, snapshot.map_y ?? null, snapshot.lives, snapshot.party, snapshot.pokemon ?? null, snapshot.badges ?? null]);
       const hasBaseline = trackerVersion[t] != null && Number.isFinite(Number(trackerLives[t]));
       if(!hasBaseline || version !== trackerVersion[t]){
         if(!hasBaseline || lives !== Number(trackerLives[t])) hearts[t] = lives;
@@ -4596,9 +4627,18 @@ function milestonesOf(t){
   return Array.from({length:GYM_COUNT}, (_,i)=>!!(raw & (1<<i)));
 }
 function milestoneCountOf(t){ return badgeCountOf(t); }
-// Level cap vigente: el del primer hito que todavía no está superado.
+// Level cap vigente: el nivel más alto del próximo líder de gimnasio.
 function currentLevelCap(t){
-  return null;
+  if(!trackerBadgesAvailable[t]) return null;
+  const badges = milestonesOf(t);
+  const nextGym = badges.findIndex(earned => !earned);
+  return nextGym < 0 ? null : ANIL_LEVEL_CAPS[nextGym];
+}
+function levelCapLabelOf(t){
+  if(!trackerBadgesAvailable[t]) return 'cap esperando medallas';
+  const cap = currentLevelCap(t);
+  if(cap) return `Cap Nv.${cap.cap} · ${cap.leader}`;
+  return `${GYM_COUNT} medallas · sin cap de gimnasio`;
 }
 // Pokémon del equipo que se pasan del level cap actual.
 function overCapMonsOf(t){
@@ -4636,6 +4676,12 @@ function availableMonsOf(t){
 }
 
 function routeAtlasMons(t){
+  const snapshotMons = trackerSnapshots[t] && trackerSnapshots[t].pokemon;
+  if(Array.isArray(snapshotMons)){
+    return trainerTrackerTeam({party:snapshotMons})
+      .filter(m=>!m.isEgg)
+      .map(m=>({...m, speciesName:m.species, nickname:m.nickname || m.species}));
+  }
   const manualMap = manualFainted[t] || {};
   const team = (teams[t] || []).map(p => ({
     pid:p.pid, nickname:p.nickname, speciesName:normalizeSpeciesName(p.species),
@@ -4652,7 +4698,7 @@ function routeAtlasMons(t){
       level:null, metLocationName:m.metLocationName || null,
       fainted:manualMap.hasOwnProperty(pid) ? manualMap[pid] : !!m.fainted,
     }));
-  return [...team, ...boxes].filter(m=>m.metLocationName);
+  return [...team, ...boxes];
 }
 
 function renderRouteAtlas(app){
@@ -4677,7 +4723,7 @@ function renderRouteAtlas(app){
         <div class="route-atlas-mons">
           ${list.map(m=>`<div class="route-atlas-mon ${m.fainted?'fainted':''}" title="${m.fainted?'Debilitado':''}">
             <img src="${m.sprite || ''}" alt="">
-            <div><b>${m.nickname || m.speciesName}</b><span>${m.speciesName}${m.level ? ` · Nv.${m.level}` : ''}${m.fainted ? ' · ☠️' : ''}</span></div>
+            <div><b>${m.nickname || m.speciesName}</b><span>${m.speciesName}${m.metLevel != null ? ` · Capturado Nv.${m.metLevel}` : m.level ? ` · Nv.${m.level}` : ''}${m.fainted ? ' · ☠️' : ''}</span></div>
           </div>`).join('')}
         </div>
       </section>`).join('')}</div>` :
@@ -4827,12 +4873,31 @@ function trackerBadgeProgress(t){
     <div class="anil-badge-grid">
       ${ANIL_BADGES.map((badge,i)=>{
         const earned = !!(raw & (1<<i));
-        return `<div class="anil-badge ${earned?'earned':''}" style="--badge-color:${badge.color};--badge-offset:${i * -48}px;--badge-sprite:url(${ANIL_BADGE_SPRITE})" title="Medalla ${badge.name}: ${earned?'conseguida':'pendiente'}">
+        const gym = ANIL_LEVEL_CAPS[i];
+        return `<button type="button" class="anil-badge ${earned?'earned':''}" style="--badge-color:${badge.color};--badge-offset:${i * -48}px;--badge-sprite:url(${ANIL_BADGE_SPRITE})" onclick="showGymBadgeDetail('${t}',${i})" aria-label="Medalla ${badge.name}, líder ${gym.leader}, nivel máximo ${gym.cap}">
           <span class="anil-badge-gem" aria-hidden="true"></span>
           <span class="anil-badge-copy"><b>${badge.name}</b><small>${earned?'CONSEGUIDA':'PENDIENTE'}</small></span>
-        </div>`;
+          <span class="badge-hover-tooltip" aria-hidden="true"><b>${gym.leader}</b><span>🎯 Cap Nv. ${gym.cap}</span></span>
+        </button>`;
       }).join('')}
     </div>`;
+}
+function showGymBadgeDetail(t,index){
+  const badge = ANIL_BADGES[index];
+  const gym = ANIL_LEVEL_CAPS[index];
+  if(!badge || !gym) return;
+  const earned = !!milestonesOf(t)[index];
+  const status = !trackerBadgesAvailable[t] ? 'Esperando medallas de Tracker Sync' : earned ? 'Medalla conseguida' : 'Medalla pendiente';
+  openModal(`
+    <div class="gym-detail" style="--badge-color:${badge.color}">
+      <h3 class="gym-detail-title">${gym.leader}</h3>
+      <div class="gym-detail-badge">Gimnasio · Medalla ${badge.name}</div>
+      <img class="gym-detail-sprite" src="${gym.sprite}" alt="Sprite de ${gym.leader}">
+      <div class="gym-detail-cap">🎯 Level cap: Nv. ${gym.cap}</div>
+      <div class="gym-detail-status">${status}</div>
+    </div>
+    <div class="modal-actions"><button class="primary" onclick="closeModal()">Cerrar</button></div>
+  `);
 }
 function segBar(h){
   const n = Math.max(0, Math.min(20, h));
@@ -4862,7 +4927,7 @@ function lbRow(t, r){
             <span class="chipx elo" title="Elo (combates + lockes)">⚡ ${eloOf(t)}</span>
             <span class="chipx">${trackerBadgesAvailable[t] ? `🏅 ${badgeCountOf(t)}/${GYM_COUNT} medallas` : '🏅 medallas: esperando actualización del Tracker Sync'}</span>
             <span class="chipx">💰 ${(money[t]||0).toLocaleString('es-ES')}</span>
-            <span class="chipx">🎯 ${cap ? 'Cap Nv.'+cap.cap : 'cap sin datos'}</span>
+            <span class="chipx" title="Nivel máximo del equipo según el próximo líder de gimnasio">🎯 ${levelCapLabelOf(t)}</span>
             ${over.length ? `<span class="chipx warn">⚠️ ${over.length} sobrepasado${over.length===1?'':'s'}</span>` : ''}
           </div>
         </div>
@@ -4908,7 +4973,7 @@ function renderHome(app){
                 ? `📍 ${locationName[t] || 'Ubicación desconocida'}${locationId[t] != null ? ` · mapa ${locationId[t]}` : ''}`
                 : trackerStatus[t] === 'error' ? '⚠️ Error al leer Tracker Sync' : '⏳ Esperando Tracker Sync'}</div>
             </div>`).join('')}
-          <div class="capline" style="margin-top:6px;opacity:.75;">${TRAINERS.every(t=>trackerBadgesAvailable[t]) ? 'Las medallas se sincronizan desde el juego; los límites de nivel aún no están configurados para Añil.' : 'Las medallas aparecerán cuando Tracker Sync actualizado publique el progreso; los límites de nivel aún no están configurados para Añil.'}</div>
+          <div class="capline" style="margin-top:6px;opacity:.75;">El cap es el nivel del Pokémon más alto del próximo líder y se calcula con las medallas de Tracker Sync.</div>
         </div>
         <div class="side-card brk">${renderRivalriesCard()}</div>
       </aside>
@@ -4974,7 +5039,7 @@ function renderProfile(app, t){
           <div class="kpi wide brk">
             <div class="kpi-label">Progreso de Añil</div>
             ${trackerBadgeProgress(t)}
-            <div class="capline">${trackerBadgesAvailable[t] ? 'Medallas sincronizadas desde la partida. Los level caps aún no están configurados para Añil.' : 'Las medallas aparecerán al actualizar Tracker Sync; los level caps aún no están configurados para Añil.'}</div>
+            <div class="capline">${trackerBadgesAvailable[t] ? 'El level cap se calcula con el nivel del Pokémon más alto del próximo líder.' : 'El level cap aparecerá cuando Tracker Sync publique las medallas de la partida.'}</div>
           </div>
           ${renderEloCard(t)}
         </div>
