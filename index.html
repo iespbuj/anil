@@ -51,7 +51,7 @@ body{
   0%{ transform: scale(1) rotate(0deg); }
   40%{ transform: scale(1.4) rotate(10deg); opacity: .6; }
   100%{ transform: scale(1) rotate(0deg); opacity: .5; }
-}
+}y 
 .pick-mon-item{
   background: var(--panel); border:1px solid var(--border); border-radius: 4px;
   padding: 8px 12px; margin-bottom:6px; transition: border-color .15s ease, background .15s ease;
@@ -2898,15 +2898,17 @@ let sancionWheelRotation = 0;
 
 /* ---------------- CASINO ---------------- */
 const LEGEND_IMAGES = {
-  'Groudon': ART_URL + '383.png', 'Kyogre': ART_URL + '382.png', 'Rayquaza': ART_URL + '384.png',
-  'Jirachi': ART_URL + '385.png', 'Deoxys': ART_URL + '386.png',
-  'Regirock': ART_URL + '377.png', 'Regice': ART_URL + '378.png', 'Registeel': ART_URL + '379.png',
+  'Moltres': ART_URL + '146.png',
+  'Articuno': ART_URL + '144.png',
+  'Zapdos': ART_URL + '145.png',
+  'Mewtwo': ART_URL + '150.png',
+  'Mew': ART_URL + '151.png',
 };
 const SLOT_MACHINES = [
-  { id:'volcan',  name:'Guardián del Volcán',  emoji:'🌋', legendaries:['Moltres'],        img:'slotTime',      line:'Isla Canela arde bajo tus pies. Tira ya.' },
-  { id:'cumbre',  name:'Guardián de la Cumbre',emoji:'❄️', legendaries:['Articuno'],       img:'slotBeasts',    line:'El frío de Cueva Celeste no perdona. Mucha suerte.' },
-  { id:'central', name:'Guardián de la Central',emoji:'⚡', legendaries:['Zapdos'],         img:'slotGuardians', line:'La Central Energía nunca se apaga del todo.' },
-  { id:'cueva',   name:'El Experimento',       emoji:'🧬', legendaries:['Mewtwo','Mew'],   img:'slotKanto',     line:'Lo que Giovanni buscaba en Cueva Celeste. El bote más gordo.' }
+  { id:'volcan',  name:'Guardián del Volcán',  emoji:'🌋', legendaries:['Moltres'],        line:'Isla Canela arde bajo tus pies. Tira ya.' },
+  { id:'cumbre',  name:'Guardián de la Cumbre',emoji:'❄️', legendaries:['Articuno'],       line:'El frío de Cueva Celeste no perdona. Mucha suerte.' },
+  { id:'central', name:'Guardián de la Central',emoji:'⚡', legendaries:['Zapdos'],         line:'La Central Energía nunca se apaga del todo.' },
+  { id:'cueva',   name:'El Experimento',       emoji:'🧬', legendaries:['Mewtwo','Mew'],   line:'Lo que Giovanni buscaba en Cueva Celeste. El bote más gordo.' }
 ];
 const SLOT_SPIN_COST = 1;
 const SLOT_FILLER_SYMBOLS = ['🍒','🔔','🍋','⭐'];
@@ -2923,7 +2925,7 @@ const SLOT_OUTCOMES = [
   { type:'nothing', symbol:null, chance:0.945, label:'Nada, sigue intentándolo' }
 ];
 
-// Frases del Blaziken crupier al entrar al casino — se elige una al azar cada vez
+// Frases de Giovanni al entrar al casino — se elige una al azar cada vez.
 const CROUPIER_LINES = [
   'Eres un ludópata.',
   'Estoy harto de esto. Podríamos estar jugando al Valorant...',
@@ -2936,12 +2938,12 @@ const CROUPIER_LINES = [
   'Relájate, tío, solo son unos tickets... de momento.',
   'Bienvenido. Deja tu dignidad en la puerta.',
   'Como pierdas otra vez te cambio el mote a "el que siempre pierde".',
-  'Las plumas me dicen que hoy no es tu día.',
+  'Las cartas me dicen que hoy no es tu día.',
   '¿Sabes lo que mola más que las tragaperras? Nada. Absolutamente nada.',
-  'Cuidado, que aquí las llamas no son lo único que arde.',
+  'Cuidado, que aquí no es lo único que arde.',
   'Fírmame aquí que renuncias a tus tickets, es más rápido.',
   'Otra vez tú. Empiezo a pensar que vives aquí.',
-  'Confía en mí, soy un gallo de fuego con corbata, ¿qué podría salir mal?',
+  'Confía en mí, soy el jefe del Team Rocket con corbata. ¿Qué podría salir mal?',
   'El casino nunca duerme. Yo tampoco, la verdad, no tengo párpados.',
   'Hoy me siento generoso... es broma, entra y juega.',
   'Vamos, no seas gallina... digo, Pidgey.',
@@ -5290,18 +5292,19 @@ function renderNormas(app){
 }
 
 /* ================= CASINO ================= */
-// Crupier y mascotas del casino: Giovanni (el Rocket Game Corner de Ciudad
-// Azulona era su tapadera en los juegos originales) y los legendarios de
-// Kanto, ligados a sitios reales del mapa de Añil.
-const CHARIZARD_IMG = {
-  hall: 'https://archives.bulbagarden.net/media/upload/a/a7/Lets_Go_Pikachu_Eevee_Giovanni.png',
-  jackpot: ART_URL + '150.png',       // Mewtwo — el bote gordo
-  loteria: 'https://archives.bulbagarden.net/media/upload/4/41/Spr_FRLG_Giovanni.png',
-  roulette: 'https://archives.bulbagarden.net/media/upload/3/3c/Spr_HGSS_Giovanni.png',
-  slotTime: ART_URL + '146.png',      // Moltres — Volcán Canela / Isla Canela
-  slotBeasts: ART_URL + '144.png',    // Articuno — Cueva Celeste / Islas Espuma
-  slotGuardians: ART_URL + '145.png', // Zapdos — Central Energía
-  slotKanto: ART_URL + '150.png',     // Mewtwo — Cueva Celeste
+// Variantes del sprite de Giovanni disponibles en Pokémon Showdown.
+const GIOVANNI_IMAGES = {
+  hall: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-masters2.png',
+  slots: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-lgpe.png',
+  volcan: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen3.png',
+  cumbre: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen1.png',
+  central: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen1rb.png',
+  cueva: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-masters.png',
+  roulette: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen3.png',
+  loteria: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen1.png',
+  blackjack: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-gen1rb.png',
+  nueve: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni-masters.png',
+  default: 'https://play.pokemonshowdown.com/sprites/trainers/giovanni.png',
 };
 
 
@@ -5356,8 +5359,8 @@ function renderCasinoFloor(){
       <div class="cz-hero">
         <div class="cz-croupier">
           <div class="cz-bubble comic-bubble">${casinoGreetingLine}</div>
-          <img class="cz-croupier-img" src="${CHARIZARD_IMG.hall}" alt="Blaziken crupier">
-          <div class="cz-nameplate">BLAZIKEN · CRUPIER</div>
+          <img class="cz-croupier-img" src="${GIOVANNI_IMAGES.hall}" alt="Giovanni, el crupier del casino">
+          <div class="cz-nameplate">GIOVANNI · CRUPIER</div>
         </div>
         <div class="cz-desk">
           <div class="cz-desk-label">Jugador en sala</div>
@@ -5448,25 +5451,22 @@ function backToCasinoFloor(){
   render();
 }
 
-// Devuelve {img, line} del Charizard que corresponde a la pantalla actual, o null si no aplica.
+// Devuelve el retrato que corresponde a la pantalla actual, o null si no aplica.
 function mascotContext(){
   if(casinoTab==='slots'){
     if(slotJackpotMachine){
-      return { img: CHARIZARD_IMG.jackpot, line: casinoModeLine };
+      return { img: ART_URL + '150.png', line: casinoModeLine };
     }
-    if(casinoMachine){
-      const m = SLOT_MACHINES.find(x=>x.id===casinoMachine);
-      return { img: CHARIZARD_IMG[m.img], line: casinoModeLine };
-    }
-    return { img: CHARIZARD_IMG.hall, line: casinoModeLine };
+    const machine = SLOT_MACHINES.find(m=>m.id===casinoMachine);
+    return { img: GIOVANNI_IMAGES[machine ? machine.id : 'slots'], line: casinoModeLine };
   }
-  if(casinoTab==='roulette') return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
-  if(casinoTab==='loteria')  return { img: CHARIZARD_IMG.loteria,  line: casinoModeLine };
-  if(casinoTab==='blackjack') return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
-  if(casinoTab==='nueve')     return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
-  if(casinoTab==='eggwheel')  return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
-  if(casinoTab==='grieta')    return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
-  if(casinoTab==='mines' || casinoTab==='crash' || casinoTab==='plinko') return { img: CHARIZARD_IMG.roulette, line: casinoModeLine };
+  if(casinoTab==='roulette') return { img: GIOVANNI_IMAGES.roulette, line: casinoModeLine };
+  if(casinoTab==='loteria')  return { img: GIOVANNI_IMAGES.loteria, line: casinoModeLine };
+  if(casinoTab==='blackjack') return { img: GIOVANNI_IMAGES.blackjack, line: casinoModeLine };
+  if(casinoTab==='nueve')     return { img: GIOVANNI_IMAGES.nueve, line: casinoModeLine };
+  if(casinoTab==='eggwheel' || casinoTab==='grieta' || casinoTab==='mines' || casinoTab==='crash' || casinoTab==='plinko'){
+    return { img: GIOVANNI_IMAGES.default, line: casinoModeLine };
+  }
   return null;
 }
 
@@ -5476,7 +5476,7 @@ function renderMascot(){
   return `
     <div class="mascot">
       <div class="mascot-bubble comic-bubble">${mc.line}</div>
-      <img class="mascot-img" src="${mc.img}" alt="Blaziken crupier">
+      <img class="mascot-img" src="${mc.img}" alt="${mc.img === ART_URL + '150.png' ? 'Mewtwo, premio legendario' : 'Giovanni, el crupier'}">
     </div>
   `;
 }
@@ -5554,7 +5554,7 @@ function renderSlotsTab(){
           <div class="machine-emoji">${m.emoji}</div>
           <div class="machine-name">${m.name}</div>
           <div class="machine-legend-imgs">
-            ${m.legendaries.map(l=>`<img loading="lazy" src="${LEGEND_IMAGES[l]}" alt="${l}" title="${l}">`).join('')}
+            ${m.legendaries.map(l=>`<img src="${LEGEND_IMAGES[l]}" alt="${l}" title="${l}">`).join('')}
           </div>
           <div class="machine-legendaries">${m.legendaries.join(' · ')}</div>
         </div>
@@ -5839,7 +5839,7 @@ function renderJackpotWheel(){
               const flip = norm > 90 && norm < 270;
               return `<div class="wheel-seg" style="transform: rotate(${angle}deg);">
                 <div class="wheel-seg-inner" style="transform: translateX(-50%) ${flip?'rotate(180deg)':''};">
-                  <img loading="lazy" src="${LEGEND_IMAGES[l]}" alt="${l}">
+                  <img src="${LEGEND_IMAGES[l]}" alt="${l}">
                   <span>${l}</span>
                 </div>
               </div>`;
