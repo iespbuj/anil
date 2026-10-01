@@ -3538,9 +3538,7 @@ function trainerTrackerTeam(snapshot){
         eggScale: isEgg && mon.eggScale != null && Number.isFinite(Number(mon.eggScale)) ? Math.max(0.65, Math.min(1.25, Number(mon.eggScale))) : 1,
         level: isEgg || mon.level == null || !Number.isFinite(Number(mon.level)) ? null : Number(mon.level),
         fainted: !isEgg && !!mon.fainted,
-        metLocationName: !isEgg && typeof mon.metLocationName === 'string' && mon.metLocationName.trim()
-          ? mon.metLocationName.trim()
-          : (!isEgg && mon.metLocationId != null ? mapTrackerLocation(mon.metLocationId) : null),
+        metLocationName: isEgg ? null : mapTrackerCaptureLocation(mon.metLocationId, mon.metLocationName),
         metLocationId: !isEgg && mon.metLocationId != null && Number.isFinite(Number(mon.metLocationId))
           ? Number(mon.metLocationId)
           : null,
@@ -3577,6 +3575,21 @@ function mapTrackerLocation(mapId){
   const id = String(mapId);
   const place = ANIL_MAP_LOOKUP[id];
   return place ? (place.zona || place.nombre_mapa || `Zona #${id}`) : `Zona #${id}`;
+}
+
+function mapTrackerCaptureLocation(mapId, locationName){
+  const customName = typeof locationName === 'string' ? locationName.trim() : '';
+  if(mapId === null || mapId === undefined || mapId === '' || !Number.isFinite(Number(mapId)) || Number(mapId) <= 0){
+    return customName || null;
+  }
+  const id = String(mapId);
+  const place = ANIL_MAP_LOOKUP[id];
+  const mapName = place && typeof place.nombre_mapa === 'string' ? place.nombre_mapa.trim() : '';
+  const zoneName = place && typeof place.zona === 'string' ? place.zona.trim() : '';
+  if(mapName && mapName !== zoneName && (!customName || customName === zoneName)){
+    return mapName;
+  }
+  return customName || mapName || zoneName || `Zona #${id}`;
 }
 
 function renderWorldMapWidget(){
