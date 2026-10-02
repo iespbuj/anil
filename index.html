@@ -152,6 +152,93 @@ body{
 .trade-link{ width:100%; height: 22px; }
 .trade-link::before, .trade-link::after{ display:none; }
 }
+.countdown-screen{
+  position:fixed; inset:0; z-index:10000; display:grid; place-items:center; overflow:hidden;
+  color:#d8d4e1; background:#010103;
+  font-family:'Outfit',sans-serif;
+  isolation:isolate;
+  transition:opacity 1.2s ease, visibility 1.2s ease;
+}
+.countdown-screen::before,.countdown-screen::after{
+  content:''; position:absolute; inset:-35%; z-index:-1; pointer-events:none;
+}
+.countdown-screen::before{
+  background:
+    radial-gradient(ellipse at 50% 52%,#000 0%,#010103 22%,rgba(4,3,9,.82) 32%,transparent 53%),
+    radial-gradient(ellipse at 50% 52%,transparent 31%,rgba(49,33,76,.09) 36%,transparent 44%),
+    radial-gradient(ellipse at 50% 52%,#05040a 0%,#010103 57%,#000 100%);
+  animation:countdown-breathe 11s ease-in-out infinite alternate;
+}
+.countdown-screen::after{
+  inset:-10%; opacity:.17;
+  background:
+    radial-gradient(1px 1px at 14% 27%,#d5c5ee 98%,transparent),
+    radial-gradient(1px 1px at 73% 18%,#a995ca 98%,transparent),
+    radial-gradient(1px 1px at 83% 69%,#d5c5ee 98%,transparent),
+    radial-gradient(1px 1px at 23% 78%,#a995ca 98%,transparent),
+    radial-gradient(1px 1px at 56% 88%,#d5c5ee 98%,transparent),
+    repeating-conic-gradient(from 0deg at 50% 52%,transparent 0deg 11deg,rgba(112,91,145,.045) 12deg,transparent 14deg 29deg);
+  background-size:31% 37%,43% 49%,37% 41%,47% 43%,39% 51%,100% 100%;
+  animation:countdown-turn 150s linear infinite;
+}
+.countdown-vortex{
+  position:absolute; width:min(88vw,900px); aspect-ratio:1; border-radius:50%; z-index:-1;
+  background:
+    radial-gradient(circle at 50% 50%,#000 0 18%,rgba(1,1,4,.98) 24%,transparent 37%),
+    radial-gradient(ellipse,transparent 37%,rgba(43,31,67,.13) 43%,rgba(122,91,158,.12) 44%,transparent 44.5%,transparent 54%,rgba(45,38,72,.13) 55%,rgba(119,93,152,.08) 56%,transparent 56.5%,transparent 67%,rgba(75,56,103,.1) 68%,transparent 68.5%);
+  filter:blur(2px); animation:countdown-turn 68s linear infinite;
+}
+.countdown-vortex::before,.countdown-vortex::after{
+  content:''; position:absolute; inset:10%; border:1px solid rgba(142,119,177,.075);
+  border-radius:42% 58% 61% 39% / 42% 38% 62% 58%;
+  box-shadow:0 0 70px rgba(68,48,99,.09),inset 0 0 70px rgba(62,44,94,.075);
+  animation:countdown-morph 20s ease-in-out infinite alternate;
+}
+.countdown-vortex::after{ inset:21%; animation-duration:28s; animation-direction:alternate-reverse; }
+.countdown-content{
+  width:min(880px,100%); padding:32px 22px; text-align:center; position:relative;
+  animation:countdown-arrive 2s cubic-bezier(.18,.72,.22,1) both;
+}
+.countdown-eyebrow{
+  color:#756a83; font:700 9px 'Space Mono',monospace; letter-spacing:.48em;
+  text-transform:uppercase; margin-bottom:26px; opacity:.82;
+}
+.countdown-title{
+  margin:0; color:#e3deeb; font:800 clamp(42px,10vw,98px) 'Unbounded',sans-serif;
+  letter-spacing:.16em; text-indent:.16em;
+  background:linear-gradient(180deg,#f3eff8 8%,#b4a9c5 56%,#6d647b 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 0 24px rgba(125,93,159,.19));
+}
+.countdown-subtitle{
+  margin:17px 0 44px; color:#777080; font:500 clamp(12px,2vw,15px) 'Chakra Petch',sans-serif;
+  letter-spacing:.38em; text-transform:uppercase;
+}
+.countdown-clock{display:flex; justify-content:center; align-items:flex-start; gap:clamp(8px,3vw,30px);}
+.countdown-unit{min-width:clamp(58px,12vw,110px);}
+.countdown-value{
+  display:block; color:#dcd6e5; font:700 clamp(31px,7vw,62px) 'Space Mono',monospace;
+  line-height:1.05; text-shadow:0 0 22px rgba(160,136,190,.18);
+}
+.countdown-label{display:block; margin-top:11px; color:#625a6c; font:700 8px 'Space Mono',monospace; letter-spacing:.25em;}
+.countdown-separator{padding-top:4px; color:#4d425d; font:700 clamp(24px,5vw,46px) 'Space Mono',monospace; opacity:.64;}
+.countdown-date{
+  display:inline-block; margin-top:38px; padding:12px 20px;
+  border-top:1px solid rgba(147,122,177,.13); color:#746c7e;
+  font:500 10px 'Chakra Petch',sans-serif; letter-spacing:.2em;
+}
+.countdown-gate{
+  position:fixed; right:0; bottom:0; z-index:2; width:52px; height:52px;
+  border:0; padding:0; background:transparent; opacity:0; cursor:pointer;
+}
+.countdown-gate:focus-visible{opacity:1; outline:2px solid #b69bd7; outline-offset:-5px; border-radius:50%;}
+.countdown-screen.unlocking{opacity:0; visibility:hidden; pointer-events:none;}
+@keyframes countdown-turn{to{transform:rotate(360deg)}}
+@keyframes countdown-breathe{from{transform:scale(.97);opacity:.78}to{transform:scale(1.035);opacity:1}}
+@keyframes countdown-morph{to{transform:rotate(24deg) scale(1.045);border-radius:58% 42% 39% 61% / 38% 62% 42% 58%}}
+@keyframes countdown-arrive{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(7px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@media(max-width:480px){.countdown-content{padding:20px 10px}.countdown-subtitle{margin-bottom:34px}.countdown-date{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.countdown-screen::before,.countdown-screen::after,.countdown-vortex,.countdown-vortex::before,.countdown-vortex::after{animation:none}}
 .modal-overlay{
   position:fixed; inset:0; background: rgba(6,7,11,0.72);
   display:flex; align-items:center; justify-content:center; z-index: 100;
@@ -1780,6 +1867,7 @@ input:focus,select:focus,textarea:focus{ outline:none; border-color:var(--sapphi
 .section-label::after{ content:""; flex:1; height:1px; margin:0; background:linear-gradient(90deg,rgba(60,203,255,.5),transparent); }
 .section-sub{ font-family:var(--f-ui); font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--sapphire); font-size:13px; margin:30px 0 12px; }
 .empty-state{ text-align:center; color:var(--silver-dim); margin:40px auto; padding:26px; font-size:14px; border:1px dashed rgba(60,203,255,.25); border-radius:var(--r); max-width:560px; }
+.load-warning{ margin:12px 20px 0; padding:11px 14px; border:1px solid rgba(255,194,51,.45); border-radius:10px; background:rgba(255,194,51,.09); color:#ffe4a0; font:600 13px var(--f-ui); }
 .mono{ font-family:var(--f-mono); }
 .back-btn{ background:none; border:0; color:var(--silver-dim); font-family:var(--f-ui); font-weight:600; letter-spacing:1.5px; text-transform:uppercase; font-size:12px; cursor:pointer; padding:0 0 12px; }
 .back-btn:hover{ color:var(--sapphire); }
@@ -2454,6 +2542,7 @@ button.primary:active{ box-shadow:0 1px 0 #202660; }
         <div class="top-vs"><span class="r">ROJO</span><span class="v">vs</span><span class="s">AZUL</span></div>
       </div>
     </div>
+    <div id="load-warning" class="load-warning" role="alert" hidden></div>
     <main id="app">
       <div class="empty-state">Cargando…</div>
     </main>
@@ -2472,6 +2561,26 @@ button.primary:active{ box-shadow:0 1px 0 #202660; }
   </div>
   <div class="settings-hint">Controla el volumen de todos los efectos: tragaperras, ruleta, lotería y más.</div>
 </div>
+
+<section class="countdown-screen" id="season-countdown" aria-label="Cuenta atrás para el comienzo de la temporada">
+  <div class="countdown-vortex" aria-hidden="true"></div>
+  <div class="countdown-content">
+    <div class="countdown-eyebrow">La espera está a punto de terminar</div>
+    <h1 class="countdown-title">AÑIL</h1>
+    <div class="countdown-subtitle">Una nueva aventura despierta</div>
+    <div class="countdown-clock" aria-live="off">
+      <div class="countdown-unit"><span class="countdown-value" id="countdown-days">00</span><span class="countdown-label">DÍAS</span></div>
+      <span class="countdown-separator">:</span>
+      <div class="countdown-unit"><span class="countdown-value" id="countdown-hours">00</span><span class="countdown-label">HORAS</span></div>
+      <span class="countdown-separator">:</span>
+      <div class="countdown-unit"><span class="countdown-value" id="countdown-minutes">00</span><span class="countdown-label">MIN</span></div>
+      <span class="countdown-separator">:</span>
+      <div class="countdown-unit"><span class="countdown-value" id="countdown-seconds">00</span><span class="countdown-label">SEG</span></div>
+    </div>
+    <div class="countdown-date" id="countdown-date">LUNES · 5 DE OCTUBRE · 18:00</div>
+  </div>
+  <button class="countdown-gate" type="button" aria-label="Cambiar la fecha de inicio" title="Cambiar fecha" onclick="changeSeasonCountdownDate()"></button>
+</section>
 
 <script>
 const ART_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
@@ -3277,6 +3386,8 @@ let duelLastArenaPhase = '';
 let duelHistory = [];
 let duelBets = { match1: [], final: [] }; // {trainer, pick, amount}[] por combate
 let challengeState = null; // {challenger, opponent, stakeId, stakeMonPid, stakeMonLabel, games:[], narration} o null si no hay ninguno activo
+let challengeActionInFlight = false;
+let challengeRevision = 0;
 const CHALLENGE_COST = 25;
 const CHALLENGE_STAKES = [
   { id:'steal_pokemon', label:'Robar un Pokémon (a elegir)', needsMonPick:true },
@@ -3301,6 +3412,7 @@ let duelCountdownInterval = null;
 let view = 'home';
 let currentTrainer = null;
 let loaded = false;
+let loadWarning = null;
 let finalState = null; // { unlocked, categories:[id,id,id], results:[{id,winner,value}], pointsAwarded } o null
 let finalPasswordInput = '';
 let finalRevealStep = 0; // 0 = nada mostrado, va subiendo con la animacion
@@ -3349,11 +3461,23 @@ async function loadNameLists(){
 
 /* ---------------- Backend: Google Sheets via Apps Script ---------------- */
 const API_URL = 'https://script.google.com/macros/s/AKfycbzUnDSmlCgrxjQO_mhesd-9fir2CY18psAq9LEXrLRzrgYVyAHUW6Zg5Iz6lfvlSuQ/exec';
+const BACKEND_REQUEST_TIMEOUT_MS = 15000;
 const TRACKER_KEYS = {
   iker: 'anil_vidas_iker',
   joel: 'anil_vidas_joel',
   alex: 'anil_vidas_alex',
 };
+
+async function fetchBackendText(url, options = {}){
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), BACKEND_REQUEST_TIMEOUT_MS);
+  try{
+    const response = await fetch(url, { ...options, signal: controller.signal });
+    return { ok: response.ok, status: response.status, text: await response.text() };
+  }finally{
+    clearTimeout(timeoutId);
+  }
+}
 
 // Valor especial: significa "la peticion ha fallado / ha vuelto algo raro",
 // NUNCA "la clave esta vacia de verdad". loadAll() comprueba esto para
@@ -3392,13 +3516,12 @@ async function storeGet(key, def){
   for(let attempt=0; attempt<attempts; attempt++){
     await _backendThrottle();
     try{
-      const res = await fetch(`${API_URL}?key=${encodeURIComponent(key)}`);
-      const text = await res.text();
+      const {text} = await fetchBackendText(`${API_URL}?key=${encodeURIComponent(key)}`);
       if(text === 'null' || text === ''){
         // no existe todavía en la hoja -> lo inicializamos con el valor por defecto
         try{
           await _backendThrottle();
-          await fetch(API_URL, {
+          await fetchBackendText(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita preflight CORS
             body: JSON.stringify({ key, value: JSON.stringify(def) })
@@ -3428,12 +3551,11 @@ async function storeSet(key, val){
   for(let attempt=0; attempt<=delays.length; attempt++){
     await _backendThrottle();
     try{
-      const res = await fetch(API_URL, {
+      const {text} = await fetchBackendText(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // evita preflight CORS
         body: JSON.stringify({ key, value: JSON.stringify(val) })
       });
-      const text = await res.text();
       if(_looksLikeChallengePage(text)) throw new Error('respuesta parece una pagina de verificacion, no JSON');
       const data = JSON.parse(text);
       if(data && data.ok) return true;
@@ -3458,8 +3580,7 @@ async function storeGetBatch(keyDefaults){
   for(let attempt=0; attempt<attempts; attempt++){
     await _backendThrottle();
     try{
-      const res = await fetch(`${API_URL}?keys=${encodeURIComponent(keys.join(','))}`);
-      const text = await res.text();
+      const {text} = await fetchBackendText(`${API_URL}?keys=${encodeURIComponent(keys.join(','))}`);
       if(_looksLikeChallengePage(text)){
         lastLookedLikeChallenge = true;
         throw new Error('respuesta parece una pagina de verificacion, no JSON');
@@ -3558,9 +3679,9 @@ async function fetchTrackerState(t){
   const key = TRACKER_KEYS[t];
   if(!key) throw new Error(`No hay clave Tracker Sync configurada para ${NAMES[t]}`);
   await _backendThrottle();
-  const response = await fetch(`${API_URL}?key=${encodeURIComponent(key)}&_=${Date.now()}`, { cache:'no-store' });
+  const response = await fetchBackendText(`${API_URL}?key=${encodeURIComponent(key)}&_=${Date.now()}`, { cache:'no-store' });
   if(!response.ok) throw new Error(`HTTP ${response.status} al consultar Tracker Sync`);
-  const text = await response.text();
+  const {text} = response;
   if(text.trim() === 'null') return null;
   const snapshot = decodeTrackerResponse(text);
   const lives = Number(snapshot.lives);
@@ -3570,11 +3691,18 @@ async function fetchTrackerState(t){
   return snapshot;
 }
 
+const ANIL_MAP_NAMES = {
+  1:'Intro', 82:'Guarida Rocket', 83:'Guarida Rocket', 84:'Guarida Rocket', 85:'Guarida Rocket',
+  103:'Intro de verdad', 104:'Intro de verdad de la buena', 179:'Guarida Rocket',
+  198:'Cueva Glaciada', 199:'Bosque Arcoiris', 201:'Bosque Arcoiris',
+  208:'Créditos', 209:'Créditos 2', 210:'Créditos 3', 211:'Créditos 4', 217:'Laboratorio'
+};
+
 function mapTrackerLocation(mapId){
   if(mapId === null || mapId === undefined || mapId === '' || !Number.isFinite(Number(mapId)) || Number(mapId) <= 0) return null;
   const id = String(mapId);
   const place = ANIL_MAP_LOOKUP[id];
-  return place ? (place.zona || place.nombre_mapa || `Zona #${id}`) : `Zona #${id}`;
+  return place ? (place.zona || place.nombre_mapa || `Zona #${id}`) : (ANIL_MAP_NAMES[id] || `Zona #${id}`);
 }
 
 function mapTrackerCaptureLocation(mapId, locationName){
@@ -3584,7 +3712,9 @@ function mapTrackerCaptureLocation(mapId, locationName){
   }
   const id = String(mapId);
   const place = ANIL_MAP_LOOKUP[id];
-  const mapName = place && typeof place.nombre_mapa === 'string' ? place.nombre_mapa.trim() : '';
+  const mapName = place && typeof place.nombre_mapa === 'string'
+    ? place.nombre_mapa.trim()
+    : String(ANIL_MAP_NAMES[id] || '').trim();
   const zoneName = place && typeof place.zona === 'string' ? place.zona.trim() : '';
   if(mapName && mapName !== zoneName && (!customName || customName === zoneName)){
     return mapName;
@@ -3641,18 +3771,18 @@ async function loadTrackerStates(){
       const lives = Math.trunc(Number(snapshot.lives));
       const version = JSON.stringify([snapshot.updated ?? null, snapshot.map_id ?? null, snapshot.region_id ?? null, snapshot.map_x ?? null, snapshot.map_y ?? null, snapshot.lives, snapshot.party, snapshot.pokemon ?? null, snapshot.badges ?? null]);
       const hasBaseline = trackerVersion[t] != null && Number.isFinite(Number(trackerLives[t]));
+      teams[t] = normalizeTeamSpecies(team);
+      locationId[t] = snapshot.map_id ?? null;
+      locationName[t] = mapTrackerLocation(snapshot.map_id);
+      locationRegion[t] = snapshot.region_id ?? null;
+      locationMapX[t] = snapshot.map_x ?? null;
+      locationMapY[t] = snapshot.map_y ?? null;
+      trackerBadgesAvailable[t] = Array.isArray(snapshot.badges) && snapshot.badges.length === 8;
+      if(trackerBadgesAvailable[t]){
+        badgeBits[t] = snapshot.badges.reduce((bits, owned, index) => owned === true ? bits | (1 << index) : bits, 0);
+      }
       if(!hasBaseline || version !== trackerVersion[t]){
         if(!hasBaseline || lives !== Number(trackerLives[t])) hearts[t] = lives;
-        teams[t] = normalizeTeamSpecies(team);
-        locationId[t] = snapshot.map_id ?? null;
-        locationName[t] = mapTrackerLocation(snapshot.map_id);
-        locationRegion[t] = snapshot.region_id ?? null;
-        locationMapX[t] = snapshot.map_x ?? null;
-        locationMapY[t] = snapshot.map_y ?? null;
-        trackerBadgesAvailable[t] = Array.isArray(snapshot.badges) && snapshot.badges.length === 8;
-        if(trackerBadgesAvailable[t]){
-          badgeBits[t] = snapshot.badges.reduce((bits, owned, index) => owned === true ? bits | (1 << index) : bits, 0);
-        }
         trackerVersion[t] = version;
         trackerLives[t] = lives;
         const saved = await saveProfile(t);
@@ -3680,6 +3810,7 @@ async function trackedStoreSet(flightKey, storageKey, value){
 }
 
 async function loadAll(){
+  const challengeRevisionAtRead = challengeRevision;
   // Antes esto era un Promise.all con ~22 storeGet sueltos (uno por clave),
   // disparados casi a la vez en cada refresco -- eso era lo que acababa
   // provocando que Google devolviera paginas de verificacion en vez de los
@@ -3706,8 +3837,21 @@ async function loadAll(){
   if(batch === STORE_FETCH_FAILED){
     console.warn('loadAll: la peticion en lote ha fallado esta vez, no se aplica nada (se reintenta en el siguiente refresco)');
     const previous = JSON.stringify({ hearts, teams, locationName, locationId, trackerStatus, trackerSnapshots });
-    await loadTrackerStates();
-    return previous !== JSON.stringify({ hearts, teams, locationName, locationId, trackerStatus, trackerSnapshots });
+    TRAINERS.forEach(t => {
+      if(!Number.isFinite(Number(hearts[t]))) hearts[t] = 20;
+      if(!Array.isArray(teams[t])) teams[t] = [];
+      if(!Number.isFinite(Number(tickets[t]))) tickets[t] = 0;
+      if(!Array.isArray(pendingPrizes[t])) pendingPrizes[t] = [];
+      if(!Number.isFinite(Number(money[t]))) money[t] = 0;
+      if(!Number.isFinite(Number(badgeBits[t]))) badgeBits[t] = 0;
+      if(!collections[t] || typeof collections[t] !== 'object') collections[t] = {pids:{}};
+      if(!Array.isArray(graveyard[t])) graveyard[t] = [];
+      if(!manualFainted[t] || typeof manualFainted[t] !== 'object') manualFainted[t] = {};
+    });
+    const wasLoaded = loaded;
+    loaded = true;
+    loadWarning = 'No se pudo cargar el estado compartido; se reintentará automáticamente. Los datos mostrados pueden estar incompletos.';
+    return !wasLoaded || previous !== JSON.stringify({ hearts, teams, locationName, locationId, trackerStatus, trackerSnapshots });
   }
 
   const profileResults = TRAINERS.map(t => batch['anil:profile:'+t]);
@@ -3757,7 +3901,10 @@ async function loadAll(){
   if(!saveInFlight['duel']) duelState = duelResult;
   if(!saveInFlight['duelHistory']) duelHistory = duelHistoryResult;
   if(!saveInFlight['duelBets']) duelBets = duelBetsResult;
-  if(!saveInFlight['challenge']) challengeState = challengeResult;
+  if(challengeRevisionAtRead === challengeRevision
+      && !saveInFlight['challenge'] && !challengeActionInFlight && !pendingSaves.has('challenge')){
+    challengeState = challengeResult;
+  }
   if(!saveInFlight['finalState']) finalState = finalResult;
   if(!saveInFlight['normas']) normas = normasResult;
   if(!saveInFlight['sancion']) sancionState = sancionResult;
@@ -3773,6 +3920,8 @@ async function loadAll(){
     manualFainted[t] = Array.isArray(raw) ? Object.fromEntries(raw.map(pid=>[pid, true])) : (raw || {});
   });
   await loadTrackerStates();
+  const hadLoadWarning = !!loadWarning;
+  loadWarning = null;
   loaded = true;
 
   // Firma exacta de todo el estado aplicado. Comparamos con la anterior para
@@ -3783,7 +3932,7 @@ async function loadAll(){
     history, tradesActive, tradesHistory, duelState, duelHistory, duelBets, challengeState,
     normas, sancionState, loteria, collections, graveyard, manualFainted,
   });
-  const changed = signature !== lastLoadSignature;
+  const changed = signature !== lastLoadSignature || hadLoadWarning;
   lastLoadSignature = signature;
   return changed;
 }
@@ -4608,6 +4757,11 @@ function render(){
   _allMonsCache = {};
   if(duelCountdownInterval){ clearInterval(duelCountdownInterval); duelCountdownInterval = null; }
   const app = document.getElementById('app');
+  const loadWarningEl = document.getElementById('load-warning');
+  if(loadWarningEl){
+    loadWarningEl.hidden = !loadWarning;
+    loadWarningEl.textContent = loadWarning || '';
+  }
   document.body.classList.toggle('casino-mode', view === 'casino');
   app.classList.toggle('in-casino', view === 'casino');
   if(!loaded){ app.innerHTML = '<div class="empty-state">Cargando…</div>'; return; }
@@ -4792,16 +4946,14 @@ const TRAINER_PAIRS = [['iker','joel'], ['iker','alex'], ['joel','alex']].filter
 
 function renderRivalryLine(a, b){
   const { wins, total } = headToHeadTally(a, b);
-  const usR = getUltraSolRecord(a, b);
   const ratings = computeElo().R;
   const pa = Math.round(100 * eloExpected(ratings[a], ratings[b]));
   const swingA = Math.round(ELO_K_COMBAT * (1 - eloExpected(ratings[a], ratings[b])));
   const swingB = Math.round(ELO_K_COMBAT * (1 - eloExpected(ratings[b], ratings[a])));
   const eloLine = `<div class="h2h-line" style="opacity:.9;">⚡ Elo: ${NAMES[a]} ${Math.round(ratings[a])} (${pa}%) · ${NAMES[b]} ${Math.round(ratings[b])} (${100 - pa}%)</div>
     <div class="h2h-line" style="opacity:.8;">En juego: gana ${NAMES[a]} +${swingA} (2-0: +${Math.round(swingA * ELO_MARGIN_20)}) · gana ${NAMES[b]} +${swingB} (2-0: +${Math.round(swingB * ELO_MARGIN_20)}); quien pierde resta lo mismo.</div>`;
-  const usLine = eloLine + (usR ? `<div class="h2h-line" style="opacity:.8;">🌞 Ultra Sol: ${NAMES[a]} ${usR[a]} - ${usR[b]} ${NAMES[b]} (sin estrellas de la final; Iker ganó con 3 Potencia)</div>` : '');
-  if(total === 0) return `<div class="h2h-line">⚔️ Primer cara a cara en Kanto entre ${NAMES[a]} y ${NAMES[b]}</div>${usLine}`;
-  return `<div class="h2h-line">⚔️ Histórico: ${NAMES[a]} ${wins[a]} - ${wins[b]} ${NAMES[b]}</div>${usLine}`;
+  if(total === 0) return `<div class="h2h-line">⚔️ Primer cara a cara en Kanto entre ${NAMES[a]} y ${NAMES[b]}</div>${eloLine}`;
+  return `<div class="h2h-line">⚔️ Histórico: ${NAMES[a]} ${wins[a]} - ${wins[b]} ${NAMES[b]}</div>${eloLine}`;
 }
 
 function renderRivalriesCard(){
@@ -4822,8 +4974,6 @@ function renderRivalriesCard(){
       ? `<div class="rivalry-kryptonite">🐍 ${NAMES[streak.winner]} es la kryptonita de ${NAMES[[a,b].find(p=>p!==streak.winner)]} (${streak.count} seguidas)</div>`
       : '';
     const leaderName = total>0 ? (wins[a]>=wins[b] ? a : b) : null;
-    const usR = getUltraSolRecord(a, b);
-    const usTag = usR ? `<div class="rivalry-tag">🌞 Ultra Sol: ${NAMES[a]} ${usR[a]}-${usR[b]} ${NAMES[b]} (sin estrellas) · Iker ganó con 3 Potencia</div>` : '';
     return `
       <div class="rivalry-card ${total>0 && wins[a]!==wins[b] ? 'has-leader':''}">
         <div class="rivalry-score">
@@ -4833,7 +4983,6 @@ function renderRivalriesCard(){
         </div>
         ${tag}
         ${kryptonite}
-        ${usTag}
       </div>
     `;
   }).join('');
@@ -7514,12 +7663,12 @@ function renderWheelAndBracket(){
 
   if(phase.key === 'match1'){
     return `${renderArenaPhaseHeader()}<div class="bracket">${match1Card}</div>
-      ${m1Games.length>0 ? `<div class="bo3-narration">${duelState.match1Narration || 'Resultado registrado.'}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
+      ${m1Games.length>0 ? `<div class="bo3-narration">${currentSeasonNarration(duelState.match1Narration)}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
       ${renderDuelBetPanel('match1', match1.p1, match1.p2)}`;
   }
   if(phase.key === 'final'){
     return `${renderArenaPhaseHeader()}${match1Summary}<div class="bracket">${finalCard}</div>
-      ${fGames.length>0 ? `<div class="bo3-narration">${duelState.finalNarration || 'Resultado registrado.'}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
+      ${fGames.length>0 ? `<div class="bo3-narration">${currentSeasonNarration(duelState.finalNarration)}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
       ${renderDuelBetPanel('final', match1Winner, bye)}`;
   }
   if(phase.key === 'rewards'){
@@ -8094,25 +8243,15 @@ function renderEloCard(t){
     </div>`;
 }
 
-// Frases sueltas que se cuelan al final de la narración de cualquier juego del
-// combate entre Iker y Alex (recordatorio del 6-3 de Ultra Sol y de las 3 Potencias).
-const ULTRASOL_CALLBACKS = [
-  '🌞 Y quien crea que esto está decidido que recuerde Ultra Sol: acabó 6-3 para Iker (sin contar las estrellas de la final), y solo porque le salieron 3 Pokémon con Potencia.',
-  '🌞 Ojo al precedente: en Ultra Sol Iker ganó 6-3 (sin estrellas de la final) con 3 Potencia repartidas por el equipo. Las habilidades también cuentan.',
-  '🌞 Ultra Sol terminó 6-3 a favor de Iker sin contar las estrellas finales — y con 3 Pokémon con Potencia en su equipo, todo sea dicho.',
-  '🌞 Que nadie se olvide del 6-3 de Ultra Sol: Iker ganó, sí, pero porque le tocaron 3 Potencias. Aquí, en Añil, la lotería de habilidades empieza de cero.',
-  '🌞 El marcador de Ultra Sol (Iker 6-3, sin estrellas de la final) sigue ahí como recordatorio. Eso y las 3 Potencias que le salieron a Iker.',
-  '🌞 Dicen que en Ultra Sol la diferencia fueron 3 Pokémon con Potencia. Marcador final: 6-3 para Iker, sin contar las estrellas. En Añil, a ver qué reparte el azar.',
-];
-// Envoltorio: ejecuta la narración de siempre y, a veces, le añade un recordatorio
-// de Ultra Sol (solo si el cruce es Iker-Alex).
 function bo3Narration(games, p1, p2, isFinal){
-  let text = bo3NarrationCore(games, p1, p2, isFinal);
-  const pair = [p1, p2].sort().join('-');
-  if(ULTRASOL_CALLBACKS.length && pair === 'alex-iker' && Math.random() < 0.55){
-    text += ' ' + pickNarrationVariant('us_callback', ULTRASOL_CALLBACKS.map(s => () => s))();
-  }
-  return text;
+  return bo3NarrationCore(games, p1, p2, isFinal);
+}
+
+function currentSeasonNarration(text){
+  if(typeof text !== 'string') return 'Resultado registrado en esta temporada.';
+  return /ultra\s*sol|pok[eé]mon\s*x|kalos|soulsilver|johto|3\s*(?:pok[eé]mon(?:es)?\s+con\s+)?potencias?/i.test(text)
+    ? 'Resultado registrado en esta temporada.'
+    : text;
 }
 
 function bo3NarrationCore(games, p1, p2, isFinal){
@@ -8126,6 +8265,14 @@ function bo3NarrationCore(games, p1, p2, isFinal){
   const wMon = pickTeamMon(winner), lMon = pickTeamMon(loser);
 
   if(gameNum === 1){
+    const openingVariants = [
+      () => `🎬 Empieza un nuevo cruce entre ${P1} y ${P2}. Sin marcadores anteriores en la mesa: este primer asalto es de <strong>${W}</strong>, y ahora le toca responder a ${L}.`,
+      () => `⚔️ Primer punto de la serie. <strong>${W}</strong> se adelanta ante ${L}; queda partido por delante y todo lo demás está por decidir.`,
+      () => `✨ Temporada nueva, combate nuevo. El primer juego cae del lado de <strong>${W}</strong>, pero ${L} aún tiene oportunidad de igualar la serie.`,
+      ...(wMon ? [() => `🎬 El primer golpe lo da <strong>${W}</strong>, con ${wMon.nickname} (${wMon.species}) como protagonista. ${L} tendrá que reaccionar en el siguiente juego.`] : []),
+    ];
+    return pickNarrationVariant('g1_new_season', openingVariants)();
+
     const { wins: priorWins, total } = headToHeadTally(p1, p2);
     if(total === 0){
       const us = getUltraSolRecord(p1, p2);
@@ -8359,9 +8506,11 @@ async function confirmChallenge(targetTrainer){
   }
   await addTickets(challenger, -CHALLENGE_COST, `Desafío contra ${NAMES[targetTrainer]}`);
   challengeState = {
+    id: crypto.randomUUID(),
     challenger, opponent: targetTrainer, stakeId, stakeMonPid, stakeMonLabel,
     games: [], narration: null,
   };
+  challengeRevision++;
   pushHistory(`⚔️ ${NAMES[challenger]} ha desafiado a ${NAMES[targetTrainer]} — en juego: ${stake.label}${stakeMonLabel ? ` (${stakeMonLabel})` : ''}`);
   closeModal();
   render();
@@ -8379,61 +8528,90 @@ function renderChallengeSection(){
   const winner = wins[challenger]===2 ? challenger : (wins[opponent]===2 ? opponent : null);
   return `
     <div class="section-label" style="margin-top:24px;">⚔️ Desafío en marcha</div>
-    <div class="bracket-match ${decided?'':'active'}">
+    <div class="bracket-match ${decided || challengeActionInFlight ? '' : 'active'}">
       <div class="match-label">${stake.label}${stakeMonLabel ? ` — ${stakeMonLabel}` : ''} ${games.length>0 && !decided ? `· Juego ${Math.min(games.length+1,3)} de 3` : ''}</div>
       <div class="bracket-vs">
-        <div class="bracket-player ${winner===challenger?'winner':''} ${decided?'locked':''}" ${decided?'':`onclick="recordChallengeGame('${challenger}')"`}>${NAMES[challenger]}</div>
+        <div class="bracket-player ${winner===challenger?'winner':''} ${decided || challengeActionInFlight?'locked':''}" ${decided || challengeActionInFlight?'':`onclick="recordChallengeGame('${challenger}')"`}>${NAMES[challenger]}</div>
         <div class="bracket-vs-sep">VS</div>
-        <div class="bracket-player ${winner===opponent?'winner':''} ${decided?'locked':''}" ${decided?'':`onclick="recordChallengeGame('${opponent}')"`}>${NAMES[opponent]}</div>
+        <div class="bracket-player ${winner===opponent?'winner':''} ${decided || challengeActionInFlight?'locked':''}" ${decided || challengeActionInFlight?'':`onclick="recordChallengeGame('${opponent}')"`}>${NAMES[opponent]}</div>
       </div>
       ${games.length>0 ? `<div class="bo3-score">${NAMES[challenger]} ${wins[challenger]} - ${wins[opponent]} ${NAMES[opponent]}</div>` : ''}
     </div>
-    ${games.length>0 ? `<div class="bo3-narration">${challengeState.narration || 'Resultado registrado.'}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
-    ${decided ? `<div class="modal-actions" style="justify-content:center;"><button class="primary" onclick="closeChallenge()">Cerrar desafío</button></div>` : `<div class="modal-actions" style="justify-content:center;"><button class="ghost" onclick="cancelChallenge()">✖️ Cancelar desafío</button></div>`}
+    ${games.length>0 ? `<div class="bo3-narration">${currentSeasonNarration(challengeState.narration)}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
+    ${challengeActionInFlight ? `<div class="bo3-reader-note">Guardando resultado y recompensa…</div>` : decided ? `<div class="modal-actions" style="justify-content:center;"><button class="primary" onclick="closeChallenge()">Cerrar desafío</button></div>` : `<div class="modal-actions" style="justify-content:center;"><button class="ghost" onclick="cancelChallenge()">✖️ Cancelar desafío</button></div>`}
   `;
 }
 async function cancelChallenge(){
-  if(!challengeState) return;
+  if(!challengeState || challengeActionInFlight) return;
+  challengeActionInFlight = true;
+  challengeRevision++;
   const { challenger, opponent } = challengeState;
-  await addTickets(challenger, CHALLENGE_COST, `Desafío contra ${NAMES[opponent]} cancelado (devolución)`);
-  challengeState = null;
-  render();
-  const ok = await saveChallengeState();
-  if(!ok) queueRetry('challenge', saveChallengeState);
+  try{
+    await addTickets(challenger, CHALLENGE_COST, `Desafío contra ${NAMES[opponent]} cancelado (devolución)`);
+    challengeState = null;
+    render();
+    const ok = await saveChallengeState();
+    if(!ok) queueRetry('challenge', saveChallengeState);
+  }finally{
+    challengeActionInFlight = false;
+    challengeRevision++;
+    render();
+  }
 }
 
 async function recordChallengeGame(gameWinner){
-  if(!challengeState) return;
+  if(!challengeState || challengeActionInFlight) return;
   const { challenger, opponent } = challengeState;
-  challengeState.games = [...(challengeState.games||[]), gameWinner];
+  if(gameWinner !== challenger && gameWinner !== opponent) return;
+  const currentGames = challengeState.games || [];
+  const currentWins = currentGames.reduce((wins, game) => {
+    if(game === challenger || game === opponent) wins[game]++;
+    return wins;
+  }, { [challenger]:0, [opponent]:0 });
+  if(currentWins[challenger] >= 2 || currentWins[opponent] >= 2 || currentGames.length >= 3) return;
+
+  challengeActionInFlight = true;
+  challengeRevision++;
+  challengeState.games = [...currentGames, gameWinner];
   const games = challengeState.games;
   const wins = { [challenger]:0, [opponent]:0 };
-  games.forEach(g=>wins[g]++);
+  games.forEach(g=>{ if(g === challenger || g === opponent) wins[g]++; });
   const decided = wins[challenger]===2 || wins[opponent]===2;
   const winner = wins[challenger]===2 ? challenger : (wins[opponent]===2 ? opponent : null);
-
   challengeState.narration = bo3Narration(games, challenger, opponent, false);
+  if(decided && !challengeState.id) challengeState.id = crypto.randomUUID();
 
   playSound(decided ? 'win' : 'reelStop');
   if(decided) fireConfetti({ count: 90 });
   render();
 
-  if(decided){
-    const loser = winner===challenger ? opponent : challenger;
-    duelHistory.unshift({
-      id: crypto.randomUUID(),
-      name: `Desafío: ${NAMES[challenger]} vs ${NAMES[opponent]}`,
-      date: new Date().toISOString(),
-      match1: { p1: challenger, p2: opponent, winner },
-      final: null,
-      champion: winner,
-      isChallenge: true,
-    });
-    await saveDuelHistory();
-    await resolveChallengeReward(winner, loser);
+  try{
+    const challengeSaved = await saveChallengeState();
+    if(!challengeSaved) queueRetry('challenge', saveChallengeState);
+
+    if(decided){
+      const loser = winner===challenger ? opponent : challenger;
+      const challengeId = challengeState.id;
+      if(!duelHistory.some(entry => entry.isChallenge && entry.id === challengeId)){
+        duelHistory.unshift({
+          id: challengeId,
+          name: `Desafío: ${NAMES[challenger]} vs ${NAMES[opponent]}`,
+          date: new Date().toISOString(),
+          match1: { p1: challenger, p2: opponent, winner },
+          final: null,
+          champion: winner,
+          isChallenge: true,
+        });
+        const historySaved = await saveDuelHistory();
+        if(!historySaved) queueRetry('duelHistory', saveDuelHistory);
+      }
+      await resolveChallengeReward(winner, loser);
+    }
+  }finally{
+    challengeActionInFlight = false;
+    challengeRevision++;
+    render();
   }
-  const ok = await saveChallengeState();
-  if(!ok) queueRetry('challenge', saveChallengeState);
 }
 
 async function resolveChallengeReward(winner, loser){
@@ -8465,10 +8643,19 @@ async function resolveChallengeReward(winner, loser){
   }
 }
 async function closeChallenge(){
+  if(challengeActionInFlight) return;
+  challengeActionInFlight = true;
+  challengeRevision++;
   challengeState = null;
   render();
-  const ok = await saveChallengeState();
-  if(!ok) queueRetry('challenge', saveChallengeState);
+  try{
+    const ok = await saveChallengeState();
+    if(!ok) queueRetry('challenge', saveChallengeState);
+  }finally{
+    challengeActionInFlight = false;
+    challengeRevision++;
+    render();
+  }
 }
 
 function spinFinalWheel(role){
@@ -10012,6 +10199,106 @@ async function deleteTradeRecord(id){
   const ok = await saveTrades();
   if(!ok) queueRetry('trades', saveTrades);
 }
+
+/* ---------------- Cuenta atrás de inicio de temporada ---------------- */
+const SEASON_COUNTDOWN_STORAGE_KEY = 'anil_season_countdown_target';
+const DEFAULT_SEASON_COUNTDOWN_TARGET = new Date(2026, 9, 5, 18, 0, 0, 0);
+let seasonCountdownTarget = DEFAULT_SEASON_COUNTDOWN_TARGET;
+let seasonCountdownInterval = null;
+
+function getSeasonCountdownTarget(){
+  const saved = localStorage.getItem(SEASON_COUNTDOWN_STORAGE_KEY);
+  if(!saved) return DEFAULT_SEASON_COUNTDOWN_TARGET;
+  const parsed = new Date(saved);
+  return Number.isFinite(parsed.getTime()) ? parsed : DEFAULT_SEASON_COUNTDOWN_TARGET;
+}
+
+function formatSeasonCountdownDate(date){
+  return new Intl.DateTimeFormat('es-ES', {
+    weekday:'long', day:'numeric', month:'long', hour:'2-digit', minute:'2-digit',
+  }).format(date).replace(',', ' ·').toUpperCase();
+}
+
+function releaseSeasonCountdown(){
+  const screen = document.getElementById('season-countdown');
+  if(!screen || screen.classList.contains('unlocking')) return;
+  screen.classList.add('unlocking');
+  document.body.classList.remove('countdown-open');
+  document.querySelector('.shell')?.removeAttribute('inert');
+  document.querySelector('.shell')?.removeAttribute('aria-hidden');
+  document.getElementById('settings-fab')?.removeAttribute('inert');
+  document.getElementById('settings-panel')?.removeAttribute('inert');
+  if(seasonCountdownInterval){
+    clearInterval(seasonCountdownInterval);
+    seasonCountdownInterval = null;
+  }
+  setTimeout(()=>screen.remove(), 1300);
+}
+
+function updateSeasonCountdown(){
+  const remaining = seasonCountdownTarget.getTime() - Date.now();
+  if(remaining <= 0){
+    releaseSeasonCountdown();
+    return;
+  }
+  const totalSeconds = Math.floor(remaining / 1000);
+  const values = {
+    'countdown-days': Math.floor(totalSeconds / 86400),
+    'countdown-hours': Math.floor((totalSeconds % 86400) / 3600),
+    'countdown-minutes': Math.floor((totalSeconds % 3600) / 60),
+    'countdown-seconds': totalSeconds % 60,
+  };
+  Object.entries(values).forEach(([id, value])=>{
+    const element = document.getElementById(id);
+    if(element) element.textContent = String(value).padStart(2, '0');
+  });
+}
+
+function startSeasonCountdown(){
+  seasonCountdownTarget = getSeasonCountdownTarget();
+  const dateLabel = document.getElementById('countdown-date');
+  if(dateLabel) dateLabel.textContent = formatSeasonCountdownDate(seasonCountdownTarget);
+  if(seasonCountdownTarget.getTime() <= Date.now()){
+    releaseSeasonCountdown();
+    return;
+  }
+  document.body.classList.add('countdown-open');
+  const shell = document.querySelector('.shell');
+  if(shell){
+    shell.setAttribute('inert', '');
+    shell.setAttribute('aria-hidden', 'true');
+  }
+  document.getElementById('settings-fab')?.setAttribute('inert', '');
+  document.getElementById('settings-panel')?.setAttribute('inert', '');
+  updateSeasonCountdown();
+  seasonCountdownInterval = setInterval(updateSeasonCountdown, 1000);
+}
+
+function changeSeasonCountdownDate(){
+  const current = `${seasonCountdownTarget.getFullYear()}-${String(seasonCountdownTarget.getMonth()+1).padStart(2,'0')}-${String(seasonCountdownTarget.getDate()).padStart(2,'0')} ${String(seasonCountdownTarget.getHours()).padStart(2,'0')}:${String(seasonCountdownTarget.getMinutes()).padStart(2,'0')}`;
+  const value = prompt('Nueva fecha y hora local (formato AAAA-MM-DD HH:mm):', current);
+  if(value === null) return;
+  const match = value.trim().match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/);
+  if(!match){
+    alert('Formato no válido. Usa AAAA-MM-DD HH:mm, por ejemplo: 2026-10-05 18:00');
+    return;
+  }
+  const [, year, month, day, hour, minute] = match;
+  const next = new Date(Number(year), Number(month)-1, Number(day), Number(hour), Number(minute), 0, 0);
+  if(next.getFullYear() !== Number(year) || next.getMonth() !== Number(month)-1
+      || next.getDate() !== Number(day) || next.getHours() !== Number(hour)
+      || next.getMinutes() !== Number(minute)){
+    alert('Esa fecha y hora no existen. Revísalas e inténtalo otra vez.');
+    return;
+  }
+  seasonCountdownTarget = next;
+  localStorage.setItem(SEASON_COUNTDOWN_STORAGE_KEY, next.toISOString());
+  const dateLabel = document.getElementById('countdown-date');
+  if(dateLabel) dateLabel.textContent = formatSeasonCountdownDate(next);
+  updateSeasonCountdown();
+}
+
+startSeasonCountdown();
 
 /* ---------------- INIT + polling ---------------- */
 let dashboardPolling = false;
