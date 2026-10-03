@@ -839,6 +839,84 @@ body{
 .champion-glow{
   box-shadow: 0 0 34px rgba(255,150,70,0.5), inset 0 0 0 1px rgba(255,200,140,0.5) !important;
 }
+.final-page{max-width:1040px;margin:0 auto;padding:4px 0 36px;animation:floatIn .35s ease both}
+.final-page-head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 22px;padding:0 2px 16px;
+  border-bottom:1px solid rgba(60,203,255,.17)
+}
+.final-page-kicker{color:var(--neon-cyan);font:800 10px var(--f-mono);letter-spacing:.22em;text-transform:uppercase}
+.final-page-title{margin:5px 0 0;color:var(--silver-bright);font:800 clamp(24px,5vw,38px) var(--f-display);letter-spacing:.015em}
+.final-page-subtitle{margin:6px 0 0;color:var(--silver-dim);font-size:12px;line-height:1.5}
+.final-page-status{flex:none;padding:8px 11px;border:1px solid rgba(60,203,255,.22);border-radius:999px;background:rgba(60,203,255,.055);color:var(--neon-cyan);font:700 9px var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
+.final-page .final-gate{
+  max-width:760px;margin:30px auto 0;padding:clamp(28px,6vw,54px) clamp(20px,5vw,48px);
+  border-color:rgba(60,203,255,.24);border-radius:18px;
+  background:radial-gradient(ellipse at 50% 0,rgba(60,203,255,.13),transparent 54%),radial-gradient(ellipse at 50% 100%,rgba(100,57,177,.11),transparent 60%),linear-gradient(155deg,#0b1423,#070a12 68%,#090712);
+  box-shadow:0 30px 90px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.04)
+}
+.final-page .final-gate::after{content:'';position:absolute;inset:12px;border:1px solid rgba(255,255,255,.045);border-radius:12px;pointer-events:none}
+.final-page .final-gate-eyebrow{letter-spacing:.24em;font-size:9px;color:#91dfff}
+.final-page .final-gate-icon{font-size:clamp(50px,9vw,78px);filter:drop-shadow(0 0 24px rgba(60,203,255,.5))}
+.final-page .final-gate-title{font-size:clamp(40px,8vw,66px);letter-spacing:.12em;text-shadow:0 0 34px rgba(60,203,255,.16)}
+.final-page .final-gate-sub{max-width:460px;font-size:14px}
+.final-page .final-gate-hype{gap:clamp(8px,2vw,18px);font-size:9px}
+.final-access-note{margin:18px auto 0;color:var(--silver-dim);font-size:10px;line-height:1.5}
+.final-page .final-header{
+  margin:0 auto 22px;padding:24px 16px 20px;max-width:760px;border:1px solid rgba(60,203,255,.16);border-radius:16px;
+  background:radial-gradient(ellipse at 50% 0,rgba(60,203,255,.1),transparent 65%),linear-gradient(150deg,rgba(14,23,38,.94),rgba(7,10,17,.96))
+}
+.final-page .final-header .final-gate-icon{font-size:35px;color:#d5f4ff}
+.final-page .final-header .final-gate-title{font-size:clamp(30px,5vw,44px);letter-spacing:.1em}
+.final-page .final-header .final-gate-sub{max-width:none;margin-top:7px}
+.final-page .final-intro-card,.final-page .final-cat-card,.final-page .final-champion-wrap{
+  max-width:720px;border-radius:15px;border-color:rgba(60,203,255,.2);
+  background:radial-gradient(ellipse at 50% 0,rgba(60,203,255,.1),transparent 64%),linear-gradient(150deg,#0d1727,#080c15);
+  box-shadow:0 20px 55px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.035)
+}
+.final-page .final-intro-card{padding:clamp(25px,5vw,42px) 22px}
+.final-page .final-intro-title{color:#a7e8ff;letter-spacing:.14em}
+.final-page .final-cat-card{padding:clamp(18px,4vw,28px);border-color:rgba(255,255,255,.1)}
+.final-page .final-cat-card::before{height:2px;background:linear-gradient(90deg,transparent,#3ccbff,#9b7bff,transparent)}
+.final-page .final-cat-label{color:#d5f4ff;font-size:20px}
+.final-page .final-cat-winner-line{color:#8fe8c1}
+.final-page .final-cat-row.winner .final-cat-bar{background:linear-gradient(90deg,#338fb6,#7ce3ff);box-shadow:0 0 12px rgba(60,203,255,.32)}
+.final-page .final-cat-row.winner .final-cat-name{color:#a7e8ff}
+.final-page .final-cat-value{color:var(--silver-bright)}
+.final-page .final-mentions-grid{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.final-page .final-mention-badge{border-radius:10px;background:linear-gradient(150deg,#101827,#090d15);border-color:rgba(255,255,255,.08)}
+.final-page .final-mention-winner{color:#a7e8ff}
+.final-page .final-podium-wrap{margin:20px auto;max-width:900px;padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:linear-gradient(150deg,rgba(13,20,32,.85),rgba(7,9,15,.9))}
+.final-page .final-podium-card{border-radius:12px}
+.final-page .final-champion-wrap{padding:clamp(30px,6vw,56px) 22px;border-color:rgba(255,204,112,.34);background:radial-gradient(ellipse at 50% 0,rgba(255,194,51,.17),transparent 58%),linear-gradient(155deg,#19172a,#090b14)}
+.final-page .final-champion-eyebrow{color:#d2c8ec;letter-spacing:.2em}
+.final-page .final-champion-name{color:#ffdb8a;text-shadow:0 0 22px rgba(255,194,51,.38);font-size:clamp(27px,6vw,40px)}
+.final-page .final-controls{margin:22px 0 8px}
+.final-page .final-done-note{color:#8fe8c1;font-weight:700}
+.final-stage-content{
+  min-height:clamp(360px,calc(100vh - 350px),560px);display:grid;place-items:center;
+  animation:final-stage-in .42s cubic-bezier(.2,.8,.2,1) both
+}
+.final-stage-content > *{width:100%;max-width:760px;margin-left:auto;margin-right:auto}
+.final-page .final-stage-content .final-intro-card{margin:0 auto;padding:clamp(25px,5vw,48px) 24px}
+.final-page .final-stage-content .final-cat-card{margin:0 auto}
+.final-page .final-stage-content .final-mentions-wrap{width:100%;max-width:900px}
+.final-page .final-stage-content .final-mentions-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:10px}
+.final-page .final-stage-content .final-mention-badge{padding:11px 8px}
+.final-page .final-stage-content .final-mention-icon{font-size:20px;margin-bottom:3px}
+.final-page .final-stage-content .final-mention-label{font-size:10px}
+.final-page .final-stage-content .final-mention-winner{font-size:12px;margin-top:4px}
+.final-page .final-stage-content .final-mention-value{font-size:9px}
+.final-page .final-stage-content .final-podium-wrap{width:100%;max-width:900px;margin:0 auto;padding:14px}
+.final-page .final-stage-content .final-podium{margin:8px auto 0}
+.final-page .final-stage-content .final-summary-note{margin-top:10px;font-size:10px}
+.final-page .final-stage-content .final-champion-wrap{margin:0 auto}
+.final-auto-toggle{margin-left:8px}
+@keyframes final-stage-in{from{opacity:0;transform:translateY(12px) scale(.99);filter:blur(3px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.final-ceremony-progress{max-width:720px;height:4px;margin:-10px auto 8px;overflow:hidden;border-radius:9px;background:rgba(255,255,255,.09)}
+.final-ceremony-progress span{display:block;width:var(--final-progress);height:100%;border-radius:inherit;background:linear-gradient(90deg,#3ccbff,#9b7bff);box-shadow:0 0 12px rgba(60,203,255,.38);transition:width .45s ease}
+.final-stage-counter{margin:0 auto 18px;text-align:center;color:var(--silver-dim);font:700 9px var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
+@media(max-width:700px){.final-stage-content{min-height:clamp(380px,calc(100vh - 320px),560px)}.final-page .final-stage-content .final-mentions-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.final-page-head{align-items:flex-start;flex-direction:column}.final-page-status{align-self:flex-start}.final-page .final-gate-hype{flex-wrap:wrap}.final-page .final-podium-wrap{padding:12px}.final-stage-content{min-height:0;padding:12px 0 20px}.final-page .final-stage-content .final-mentions-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.final-auto-toggle{margin:10px 0 0}}
 /* ---- El bracket ahora es una GRIETA DE MAGMA que conecta las losas ---- */
 .bracket{
   position:relative;
@@ -930,6 +1008,85 @@ body{
 }
 .arena-completed summary{ padding:11px 14px; cursor:pointer; color:var(--ember); font-weight:700; }
 .arena-completed-body{ padding:0 14px 12px; font-size:13px; line-height:1.6; }
+.arena-journey{
+  --journey-accent:var(--lava-hot);
+  margin:0 auto 26px; max-width:920px; padding:clamp(18px,3vw,28px);
+  border:1px solid rgba(255,179,71,.2); border-radius:14px;
+  background:radial-gradient(ellipse at 50% -30%,rgba(255,106,44,.14),transparent 62%),linear-gradient(155deg,rgba(20,15,14,.98),rgba(8,8,12,.98));
+  box-shadow:0 18px 55px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.035);
+}
+.arena-journey-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-bottom:18px}
+.arena-journey-kicker{color:var(--journey-accent);font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.arena-journey-title{margin:4px 0 0;color:var(--silver-bright);font-family:var(--f-display);font-size:clamp(19px,3vw,27px)}
+.arena-journey-count{flex:none;color:var(--silver-dim);font:700 11px var(--f-mono)}
+.arena-journey-count strong{color:var(--journey-accent);font-size:15px}
+.arena-readiness{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 20px}
+.arena-ready-player{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;border:1px solid rgba(255,255,255,.075);border-radius:8px;background:rgba(255,255,255,.025);color:var(--silver)}
+.arena-ready-player span{font-size:12px;font-weight:700}
+.arena-ready-player strong{color:var(--silver-bright);font:700 11px var(--f-mono);white-space:nowrap}
+.arena-ready-player strong.ready{color:var(--neon-green)}
+.arena-journey-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative}
+.arena-journey-stage{
+  min-width:0;position:relative;padding:14px 12px 13px;border:1px solid rgba(255,255,255,.085);border-radius:10px;
+  background:linear-gradient(155deg,rgba(255,255,255,.035),rgba(255,255,255,.012));transition:border-color .2s,transform .2s,background .2s;
+}
+.arena-journey-stage:not(:last-child)::after{content:'';position:absolute;z-index:1;top:25px;left:calc(100% + 1px);width:8px;height:1px;background:rgba(255,255,255,.14)}
+.arena-journey-stage.unlocked{border-color:rgba(255,179,71,.42);background:linear-gradient(155deg,rgba(255,106,44,.12),rgba(255,255,255,.015))}
+.arena-journey-stage.active{border-color:var(--lava-hot);box-shadow:0 0 22px rgba(255,120,60,.13)}
+.arena-journey-stage.completed{border-color:rgba(97,218,153,.35);background:linear-gradient(155deg,rgba(44,171,111,.09),rgba(255,255,255,.012))}
+.arena-stage-medal{color:var(--silver-dim);font:700 9px var(--f-mono);letter-spacing:.08em;text-transform:uppercase}
+.arena-stage-title{margin:7px 0 8px;color:var(--silver-bright);font-size:13px;font-weight:800}
+.arena-stage-status{min-height:30px;color:var(--silver-dim);font-size:10px;line-height:1.45}
+.arena-stage-status strong{color:var(--silver)}
+.arena-stage-action{width:100%;margin-top:11px;padding:8px 7px!important;font-size:10px!important}
+.arena-stage-state{display:inline-flex;align-items:center;gap:5px;color:var(--silver-dim);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.arena-stage-state.ready{color:var(--lava-hot)}
+.arena-stage-state.done{color:var(--neon-green)}
+.arena-postleague{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:12px;padding:14px 16px;
+  border:1px solid rgba(174,135,255,.26);border-radius:10px;background:linear-gradient(110deg,rgba(120,81,184,.11),rgba(255,255,255,.018));
+}
+.arena-postleague h4{margin:0 0 4px;color:var(--silver-bright);font-family:var(--f-display);font-size:14px}
+.arena-postleague p{margin:0;color:var(--silver-dim);font-size:11px;line-height:1.45}
+.arena-postleague .primary{flex:none;background:linear-gradient(135deg,#8264c9,#57408f);border-color:#9c7de0}
+.arena-sync-note{margin:12px 0 0;color:var(--silver-dim);font-size:10px;line-height:1.5}
+.arena-challenge-card{
+  width:100%;max-width:620px;margin:10px auto 18px;padding:0;overflow:hidden;position:relative;
+  border:1px solid rgba(255,179,71,.3);border-radius:14px;
+  background:radial-gradient(ellipse at 50% 0,rgba(255,106,44,.12),transparent 55%),linear-gradient(160deg,var(--panel),var(--bg-elev));
+  box-shadow:0 16px 42px rgba(0,0,0,.24);
+}
+.arena-challenge-card::before{content:'';display:block;height:3px;background:linear-gradient(90deg,transparent,var(--lava-hot),var(--lava),transparent)}
+.arena-challenge-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:17px 18px 8px}
+.arena-challenge-kicker{color:var(--lava-hot);font-size:9px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}
+.arena-challenge-stake{margin-top:5px;color:var(--silver-bright);font-size:15px;font-weight:800}
+.arena-challenge-game{flex:none;padding:6px 8px;border:1px solid var(--border);border-radius:7px;color:var(--silver-dim);font:700 9px var(--f-mono);white-space:nowrap}
+.arena-challenge-score{display:flex;align-items:center;justify-content:center;gap:13px;padding:5px 16px 15px;color:var(--silver-bright);font:800 23px var(--f-mono)}
+.arena-challenge-score .score-dash{color:var(--lava-hot);font-size:13px}
+.arena-challenge-score .score-name{color:var(--silver);font:700 10px var(--f-ui);letter-spacing:.04em}
+.arena-contenders{display:grid;grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr);align-items:stretch;gap:8px;padding:0 16px}
+.arena-contender{
+  min-width:0;min-height:78px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(255,255,255,.025);color:var(--silver-bright);
+  font-family:var(--f-ui);font-weight:800;transition:transform .16s,border-color .16s,background .16s,box-shadow .16s;
+}
+button.arena-contender:not(:disabled){cursor:pointer}
+button.arena-contender:not(:disabled):hover{transform:translateY(-2px);border-color:var(--lava-hot);background:rgba(255,106,44,.09);box-shadow:0 8px 20px rgba(255,106,44,.1)}
+.arena-contender:disabled{opacity:.8}
+.arena-contender.winner{border-color:var(--lava-hot);background:rgba(255,150,70,.11);color:var(--lava-hot);box-shadow:inset 0 0 22px rgba(255,150,70,.07)}
+.arena-contender-name{font-size:13px}
+.arena-contender-hint{color:var(--silver-dim);font-size:9px;font-weight:600}
+.arena-contender.winner .arena-contender-hint{color:var(--lava-hot)}
+.arena-contenders-vs{display:grid;place-items:center;color:var(--lava-hot);font:800 10px var(--f-mono);letter-spacing:.08em}
+.arena-game-pips{display:flex;justify-content:center;gap:6px;margin:14px 0 0}
+.arena-game-pip{width:29px;height:4px;border-radius:9px;background:rgba(255,255,255,.12)}
+.arena-game-pip.won{background:var(--lava-hot);box-shadow:0 0 8px rgba(255,179,71,.45)}
+.arena-challenge-note{margin:13px 17px 0;padding:12px 14px;border-left:2px solid var(--lava);border-radius:0 7px 7px 0;background:rgba(0,0,0,.16);color:var(--ember);font-size:12px;line-height:1.6}
+.arena-challenge-reader{margin:9px 17px 0;text-align:center;color:var(--ash);font-size:10px;font-style:italic}
+.arena-challenge-actions{display:flex;justify-content:center;gap:8px;margin:14px 0 17px}
+.arena-challenge-saving{padding:10px;color:var(--silver-dim);text-align:center;font-size:11px}
+@media(max-width:700px){.arena-journey-track{grid-template-columns:repeat(2,minmax(0,1fr))}.arena-journey-stage:last-child{grid-column:1/-1}.arena-journey-stage::after{display:none}}
+@media(max-width:480px){.arena-readiness{grid-template-columns:1fr}.arena-ready-player{padding:8px 10px}.arena-journey-heading{align-items:flex-start}.arena-journey-count{font-size:9px}.arena-postleague{align-items:flex-start;flex-direction:column}.arena-postleague .primary{width:100%}.arena-challenge-top{padding:14px 13px 7px}.arena-contenders{padding:0 12px;gap:5px}.arena-contender{min-height:70px}.arena-challenge-score{gap:8px}.arena-challenge-score .score-name{font-size:9px}}
 /* ---- Marcador BO3 → medidor de erupción ---- */
 .bo3-score{
   text-align:center; font-family:var(--f-mono); font-weight:700; font-size:15px;
@@ -3385,6 +3542,8 @@ let duelState = { scheduled:null, picks:[], bye:null, match1:null, match1Games:[
 let duelLastArenaPhase = '';
 let duelHistory = [];
 let duelBets = { match1: [], final: [] }; // {trainer, pick, amount}[] por combate
+let arenaJourneyState = { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null };
+let duelScheduleProgressionKey = null;
 let challengeState = null; // {challenger, opponent, stakeId, stakeMonPid, stakeMonLabel, games:[], narration} o null si no hay ninguno activo
 let challengeActionInFlight = false;
 let challengeRevision = 0;
@@ -3418,6 +3577,8 @@ let finalPasswordInput = '';
 let finalRevealStep = 0; // 0 = nada mostrado, va subiendo con la animacion
 let finalCatRevealed = {}; // idx (categoria estrella) -> bool, revelado en dos fases (misterio -> abierta)
 let finalChampionRevealed = false; // el nombre del Campeón Absoluto se revela en dos fases igual
+let finalAutoPlay = false;
+let finalAutoInterval = null;
 const FINAL_PASSWORD = 'w alets';
 const LIFE_BUTTON_PASSWORD = 'w ruleta';
 const FINAL_CATEGORY_POOL = [
@@ -3823,6 +3984,7 @@ async function loadAll(){
     { key: 'anil:duel', def: { scheduled:null, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null } },
     { key: 'anil:duelHistory', def: [] },
     { key: 'anil:duelBets', def: { match1: [], final: [] } },
+    { key: 'anil:arenaJourney', def: { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null } },
     { key: 'anil:challenge', def: null },
     { key: 'anil:finalState', def: null },
     { key: 'anil:normas', def: [] },
@@ -3860,6 +4022,7 @@ async function loadAll(){
   const duelResult = batch['anil:duel'];
   const duelHistoryResult = batch['anil:duelHistory'];
   const duelBetsResult = batch['anil:duelBets'];
+  const arenaJourneyResult = batch['anil:arenaJourney'];
   const challengeResult = batch['anil:challenge'];
   const finalResult = batch['anil:finalState'];
   const normasResult = batch['anil:normas'];
@@ -3901,6 +4064,21 @@ async function loadAll(){
   if(!saveInFlight['duel']) duelState = duelResult;
   if(!saveInFlight['duelHistory']) duelHistory = duelHistoryResult;
   if(!saveInFlight['duelBets']) duelBets = duelBetsResult;
+  if(!saveInFlight['arenaJourney']){
+    const completed = Array.isArray(arenaJourneyResult?.completed)
+      ? arenaJourneyResult.completed.filter(value=>[2,4,6,8].includes(Number(value))).map(Number)
+      : [];
+    arenaJourneyState = {
+      completed:[...new Set(completed)].sort((a,b)=>a-b),
+      winners:ARENA_MEDAL_MILESTONES.reduce((winners, medals)=>{
+        const winner = arenaJourneyResult?.winners?.[String(medals)];
+        if(TRAINERS.includes(winner)) winners[String(medals)] = winner;
+        return winners;
+      }, {}),
+      postLeagueDone:arenaJourneyResult?.postLeagueDone === true,
+      postLeagueWinner:TRAINERS.includes(arenaJourneyResult?.postLeagueWinner) ? arenaJourneyResult.postLeagueWinner : null,
+    };
+  }
   if(challengeRevisionAtRead === challengeRevision
       && !saveInFlight['challenge'] && !challengeActionInFlight && !pendingSaves.has('challenge')){
     challengeState = challengeResult;
@@ -3929,7 +4107,7 @@ async function loadAll(){
   // ahorrarse el render() (que es caro: reconstruye toda la pantalla).
   const signature = JSON.stringify({
     hearts, teams, tickets, pendingPrizes, dailyBonusDate, money, badgeBits, locationName, locationId, trackerStatus, trackerSnapshots,
-    history, tradesActive, tradesHistory, duelState, duelHistory, duelBets, challengeState,
+    history, tradesActive, tradesHistory, duelState, duelHistory, duelBets, arenaJourneyState, challengeState,
     normas, sancionState, loteria, collections, graveyard, manualFainted,
   });
   const changed = signature !== lastLoadSignature || hadLoadWarning;
@@ -3967,6 +4145,9 @@ async function saveDuelHistory(){
 }
 async function saveDuelBets(){
   return await trackedStoreSet('duelBets', 'anil:duelBets', duelBets);
+}
+async function saveArenaJourney(){
+  return await trackedStoreSet('arenaJourney', 'anil:arenaJourney', arenaJourneyState);
 }
 async function saveChallengeState(){
   return await trackedStoreSet('challenge', 'anil:challenge', challengeState);
@@ -4054,11 +4235,59 @@ function advanceFinalReveal(){
   finalRevealStep = (finalRevealStep||0) + 1;
   _finalJustRevealed = true;
   render();
+  if(finalAutoPlay) autoRevealCurrentFinalStage();
+}
+function toggleFinalAutoPlay(){
+  finalAutoPlay = !finalAutoPlay;
+  if(finalAutoInterval){
+    clearInterval(finalAutoInterval);
+    finalAutoInterval = null;
+  }
+  if(finalAutoPlay) finalAutoInterval = setInterval(autoAdvanceFinal, 5000);
+  render();
+  if(finalAutoPlay) autoRevealCurrentFinalStage();
+}
+function autoRevealCurrentFinalStage(){
+  if(!finalState?.unlocked) return;
+  const step = finalRevealStep || 0;
+  const categoryIndex = step - 1;
+  if(categoryIndex >= 0 && categoryIndex < finalState.categories.length && !finalCatRevealed[categoryIndex]){
+    revealFinalCategory(categoryIndex);
+    return;
+  }
+  if(step === finalState.categories.length + 3 && !finalChampionRevealed) revealFinalChampion();
+}
+function autoAdvanceFinal(){
+  if(view !== 'final' || !finalState?.unlocked){
+    finalAutoPlay = false;
+    clearInterval(finalAutoInterval);
+    finalAutoInterval = null;
+    return;
+  }
+  const step = finalRevealStep || 0;
+  const championStep = finalState.categories.length + 3;
+  if(step === championStep && finalChampionRevealed){
+    finalAutoPlay = false;
+    clearInterval(finalAutoInterval);
+    finalAutoInterval = null;
+    render();
+    return;
+  }
+  if(step === championStep && !finalChampionRevealed){
+    autoRevealCurrentFinalStage();
+    return;
+  }
+  if(step < championStep) advanceFinalReveal();
 }
 function repeatFinalCeremony(){
   // no re-genera nada (los resultados de LA FINAL son fijos para siempre),
   // solo vuelve a reproducir la puesta en escena desde el principio para
   // quien le apetezca revivirla.
+  if(finalAutoInterval){
+    clearInterval(finalAutoInterval);
+    finalAutoInterval = null;
+  }
+  finalAutoPlay = false;
   finalRevealStep = 0;
   finalCatRevealed = {};
   finalChampionRevealed = false;
@@ -4236,17 +4465,24 @@ function renderFinalChampionCard(){
 function renderFinal(app){
   if(!finalState || !finalState.unlocked){
     app.innerHTML = `
-      <div class="final-gate">
+      <div class="final-page">
+        <header class="final-page-head">
+          <div><div class="final-page-kicker">Añil · Último acto</div><h1 class="final-page-title">La Final</h1><p class="final-page-subtitle">El cierre de temporada y el reparto de las estrellas especiales.</p></div>
+          <span class="final-page-status">🔒 Sellada</span>
+        </header>
+        <section class="final-gate" aria-labelledby="final-gate-title">
         <div class="final-gate-eyebrow">⚡ Se acabaron los rounds de clasificación ⚡</div>
         <div class="final-gate-icon">🏆</div>
-        <div class="final-gate-title">LA FINAL</div>
-        <div class="final-gate-sub">Todo lo que habéis jugado hasta aquí llega a esto. Una sola contraseña separa el marcador actual del reparto de estrellas definitivo. En cuanto se abra, se abre para todos a la vez.</div>
+        <div class="final-gate-title" id="final-gate-title">LA FINAL</div>
+        <div class="final-gate-sub">Todo lo que habéis conseguido durante Añil llega a este momento. Al desbloquearla se sortearán tres categorías y sus estrellas quedarán fijas para todos.</div>
         <div class="final-gate-hype"><span>◆</span> ÚLTIMA PARADA <span>◆</span> SIN VUELTA ATRÁS <span>◆</span></div>
         <div class="field" style="max-width:260px;margin:20px auto 0;">
           <input type="password" id="final-password-input" placeholder="Contraseña" autocomplete="off" onkeydown="if(event.key==='Enter') submitFinalPassword();">
         </div>
         <div class="err-msg" id="final-password-err"></div>
         <button class="primary" onclick="submitFinalPassword()">Desbloquear LA FINAL</button>
+        <div class="final-access-note">El resultado se guardará una sola vez y aparecerá igual para todos.</div>
+        </section>
       </div>
     `;
     const inp = document.getElementById('final-password-input');
@@ -4255,56 +4491,64 @@ function renderFinal(app){
   }
 
   const cats = finalState.categories;
-  // 1 intro + N categorías + 1 menciones + 1 podio + 1 campeón
-  const totalSteps = 1 + cats.length + 1 + 1 + 1;
-  const step = Math.min(finalRevealStep||0, totalSteps);
+  const totalSteps = cats.length + 4;
+  const championStep = cats.length + 3;
+  const step = Math.min(finalRevealStep||0, championStep);
+  const ceremonyComplete = step === championStep && finalChampionRevealed;
+  let stageContent = '';
+  if(step === 0) stageContent = renderFinalIntroCard();
+  else if(step <= cats.length) stageContent = renderFinalCategoryCard(cats[step-1], step-1);
+  else if(step === cats.length+1) stageContent = renderFinalMentionsCard();
+  else if(step === cats.length+2) stageContent = renderFinalPodium();
+  else stageContent = renderFinalChampionCard();
 
   let html = `
-    <div class="final-header">
-      <div class="final-gate-icon">🏁</div>
-      <div class="final-gate-title">La Final</div>
-      <div class="final-gate-sub">Estrellas especiales — se suman directo al marcador de combates</div>
-    </div>
+    <div class="final-page">
+      <header class="final-page-head">
+        <div><div class="final-page-kicker">Añil · Último acto</div><h1 class="final-page-title">La Final</h1><p class="final-page-subtitle">Ceremonia de estrellas y campeón absoluto de la temporada.</p></div>
+        <span class="final-page-status">${ceremonyComplete ? '✓ Ceremonia completa' : `Acto ${step+1} / ${totalSteps}`}</span>
+      </header>
+      <div class="final-ceremony-progress" role="progressbar" aria-label="Progreso de la ceremonia" aria-valuemin="0" aria-valuemax="${totalSteps}" aria-valuenow="${step}">
+        <span style="--final-progress:${Math.round(step/totalSteps*100)}%"></span>
+      </div>
+      <div class="final-stage-counter">${ceremonyComplete ? totalSteps : step} de ${totalSteps} etapas</div>
+      <div class="final-stage-content" aria-live="polite">${stageContent}</div>
   `;
-  if(step >= 1) html += renderFinalIntroCard();
-  for(let i=0;i<cats.length;i++){
-    if(step >= 2+i) html += renderFinalCategoryCard(cats[i], i);
-  }
-  if(step >= 2+cats.length) html += renderFinalMentionsCard();
-  if(step >= 3+cats.length) html += renderFinalPodium();
-  if(step >= 4+cats.length) html += renderFinalChampionCard();
 
   html += `<div class="final-controls">`;
   if(step === 0){
-    html += `<button class="primary" onclick="advanceFinalReveal()">🏁 Empezar</button>`;
-  } else if(step >= 2 && step < 2+cats.length && !finalCatRevealed[step-2]){
-    // la categoría actual está en modo misterio: hay que revelarla (el botón
-    // ya está dentro de la propia tarjeta) antes de poder avanzar a la siguiente.
-  } else if(step >= 3+cats.length && step < 4+cats.length){
-    // estamos en el paso del podio: hace falta ver el campeón después
-    html += `<button class="primary" onclick="advanceFinalReveal()">👑 Coronar al campeón</button>`;
-  } else if(step >= 4+cats.length){
-    if(!finalChampionRevealed){
-      // el botón de revelar ya está dentro de la propia tarjeta del campeón
-    } else {
-      html += `<div class="final-done-note">🎉 ¡Ceremonia completada!</div>`;
-      html += `<button class="ghost" style="margin-top:10px;" onclick="repeatFinalCeremony()">🔁 Repetir la ceremonia</button>`;
-    }
-  } else if(step < totalSteps){
-    const isLastCatStep = step === 1+cats.length;
-    const label = isLastCatStep ? '🎖️ Ver menciones especiales' : (step === 2+cats.length ? '🏆 Ver podio final' : 'Siguiente ▶');
+    html += `<button class="primary" onclick="advanceFinalReveal()">🏁 Empezar ceremonia</button>`;
+  } else if(step <= cats.length && !finalCatRevealed[step-1]){
+    // La categoría se revela desde su tarjeta antes de pasar a la siguiente etapa.
+  } else if(step === championStep && !finalChampionRevealed){
+    // El campeón se revela desde su tarjeta.
+  } else if(ceremonyComplete){
+    html += `<div class="final-done-note">🎉 ¡Ceremonia completada!</div>`;
+    html += `<button class="ghost" style="margin-top:10px;" onclick="repeatFinalCeremony()">🔁 Repetir la ceremonia</button>`;
+  } else {
+    const label = step === cats.length+2
+      ? '👑 Coronar al campeón'
+      : step === cats.length+1
+        ? '🏆 Ver podio final'
+        : step === cats.length
+          ? '🎖️ Ver menciones especiales'
+          : 'Siguiente ▶';
     html += `<button class="primary" onclick="advanceFinalReveal()">${label}</button>`;
   }
+  if(step > 0 && !ceremonyComplete){
+    html += `<button class="ghost final-auto-toggle" type="button" onclick="toggleFinalAutoPlay()" aria-pressed="${finalAutoPlay}">${finalAutoPlay?'⏸ Pausar avance automático':'▶ Avanzar cada 5 segundos'}</button>`;
+  }
+  html += `</div>`;
   html += `</div>`;
 
   app.innerHTML = html;
 
   if(_finalJustRevealed){
     _finalJustRevealed = false;
-    if(step >= 2+cats.length && step < 3+cats.length){
+    if(step === cats.length+1){
       playSound('bonus');
       fireConfetti({count: 90});
-    } else if(step >= 3+cats.length && step < 4+cats.length){
+    } else if(step === cats.length+2){
       playSound('bigwin');
       fireConfetti({count: 200});
     }
@@ -4755,6 +4999,11 @@ function render(){
   renderRailStatus();
   renderTopbar();
   _allMonsCache = {};
+  if(view !== 'final' && finalAutoInterval){
+    clearInterval(finalAutoInterval);
+    finalAutoInterval = null;
+    finalAutoPlay = false;
+  }
   if(duelCountdownInterval){ clearInterval(duelCountdownInterval); duelCountdownInterval = null; }
   const app = document.getElementById('app');
   const loadWarningEl = document.getElementById('load-warning');
@@ -7444,14 +7693,98 @@ function duelArenaPhase(){
   return { key:'complete', label:'Torneo cerrado', index:4 };
 }
 
+const ARENA_MEDAL_MILESTONES = [2, 4, 6, 8];
+function arenaMilestoneKey(medals){ return `medals-${medals}`; }
+function arenaReadyForMilestone(medals){
+  const index = ARENA_MEDAL_MILESTONES.indexOf(medals);
+  if(index < 0 || (index > 0 && !arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1]))) return false;
+  return TRAINERS.every(t=>trackerBadgesAvailable[t] && badgeCountOf(t) >= medals);
+}
+function arenaPostLeagueReady(){
+  return arenaJourneyState.completed.includes(8) && arenaReadyForMilestone(8);
+}
+function renderArenaJourney(){
+  const counts = Object.fromEntries(TRAINERS.map(t=>[
+    t,
+    trackerBadgesAvailable[t] ? badgeCountOf(t) : null,
+  ]));
+  const completedCount = arenaJourneyState.completed.length;
+  const players = TRAINERS.map(t=>`
+    <div class="arena-ready-player">
+      <span>${NAMES[t]}</span>
+      <strong class="${counts[t] !== null && counts[t] >= 2 ? 'ready' : ''}">
+        ${counts[t] === null ? 'Esperando Tracker Sync' : `🏅 ${counts[t]}/8`}
+      </strong>
+    </div>`).join('');
+  const stages = ARENA_MEDAL_MILESTONES.map((medals, index)=>{
+    const key = arenaMilestoneKey(medals);
+    const done = arenaJourneyState.completed.includes(medals);
+    const winner = arenaJourneyState.winners[String(medals)]
+      || duelHistory.find(entry=>entry.progressionKey === key)?.champion;
+    const active = !!duelState.scheduled && duelState.progressionKey === key;
+    const ready = arenaReadyForMilestone(medals);
+    const blockers = TRAINERS.filter(t=>counts[t] === null || counts[t] < medals);
+    let status;
+    if(done) status = `<span class="arena-stage-state done">✓ Ganador: ${winner ? NAMES[winner] : 'completado'}</span>`;
+    else if(active) status = `<span class="arena-stage-state ready">◷ Torneo programado</span><div>${fmtTime(new Date(duelState.scheduled.datetime).getTime())}</div>`;
+    else if(index > 0 && !arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1])){
+      status = `<span class="arena-stage-state">🔒 Completa el combate anterior</span>`;
+    }else if(blockers.length){
+      const waitingSync = blockers.filter(t=>counts[t] === null);
+      const notThereYet = blockers.filter(t=>counts[t] !== null);
+      const messages = [];
+      if(waitingSync.length) messages.push(`esperando Tracker Sync: ${waitingSync.map(t=>NAMES[t]).join(', ')}`);
+      if(notThereYet.length) messages.push(`${notThereYet.map(t=>`${NAMES[t]} ${counts[t]}/${medals}`).join(' · ')}`);
+      status = `<span class="arena-stage-state">🔒 Faltan medallas</span><div>${messages.join('<br>')}</div>`;
+    }else if(duelState.scheduled) status = `<span class="arena-stage-state">🔒 Termina el torneo actual</span>`;
+    else status = `<span class="arena-stage-state ready">● Desbloqueado</span><div>Los tres han llegado a ${medals} medallas.</div>`;
+    const canStart = ready && !done && !active && !duelState.scheduled;
+    return `
+      <article class="arena-journey-stage ${done?'completed':''} ${active?'active':''} ${canStart?'unlocked':''}">
+        <div class="arena-stage-medal">${medals} medallas</div>
+        <div class="arena-stage-title">Combate ${index+1}</div>
+        <div class="arena-stage-status">${status}</div>
+        ${canStart ? `<button class="primary arena-stage-action" type="button" onclick="openScheduleDuel('${key}')">Programar torneo</button>` : ''}
+      </article>`;
+  }).join('');
+  const postActive = !!duelState.scheduled && duelState.progressionKey === 'post-league';
+  let postStatus;
+  if(arenaJourneyState.postLeagueDone){
+    const winner = arenaJourneyState.postLeagueWinner
+      || duelHistory.find(entry=>entry.progressionKey === 'post-league')?.champion;
+    postStatus = `✓ Ganador: ${winner ? NAMES[winner] : 'completado'}`;
+  }
+  else if(postActive) postStatus = `Torneo programado · ${fmtTime(new Date(duelState.scheduled.datetime).getTime())}`;
+  else if(!arenaJourneyState.completed.includes(8)) postStatus = 'Se habilita al completar el torneo de 8 medallas.';
+  else if(!arenaPostLeagueReady()) postStatus = 'Esperando a que los tres tengan las 8 medallas.';
+  else if(duelState.scheduled) postStatus = 'Termina el torneo actual para abrir Post-liga.';
+  else postStatus = 'Los tres tienen 8 medallas. Ya podéis abrir el último torneo.';
+  const canStartPostLeague = arenaPostLeagueReady() && !arenaJourneyState.postLeagueDone && !postActive && !duelState.scheduled;
+  return `
+    <section class="arena-journey" aria-labelledby="arena-journey-title">
+      <div class="arena-journey-heading">
+        <div><div class="arena-journey-kicker">Camino de la Liga · Añil</div><h2 class="arena-journey-title" id="arena-journey-title">El recorrido de los tres</h2></div>
+        <div class="arena-journey-count"><strong>${completedCount}/4</strong> torneos</div>
+      </div>
+      <div class="arena-readiness">${players}</div>
+      <div class="arena-journey-track">${stages}</div>
+      <div class="arena-postleague">
+        <div><h4>🏆 Post-liga</h4><p>${postStatus}</p></div>
+        ${canStartPostLeague ? `<button class="primary" type="button" onclick="openScheduleDuel('post-league')">Post-liga</button>` : ''}
+        ${arenaJourneyState.postLeagueDone ? `<span class="arena-stage-state done">✓ Completada</span>` : ''}
+      </div>
+      <p class="arena-sync-note">Cada torneo se desbloquea cuando los tres alcanzáis el hito y el anterior está completado. El torneo de Post-liga requiere que los tres tengáis las 8 medallas.</p>
+    </section>`;
+}
+
 function renderDuel(app){
   if(!duelState.scheduled){
     duelLastArenaPhase = '';
     app.innerHTML = `
-      <div class="duel-empty">
+      ${renderArenaJourney()}
+      <div class="duel-empty arena-waiting">
         <div class="duel-empty-icon">⏳</div>
-        <p>No hay ningún combate programado esta semana.</p>
-        <button class="primary" onclick="openScheduleDuel()">＋ Temporizador</button>
+        <p>No hay ningún combate en curso. El siguiente torneo aparecerá al desbloquearse el próximo hito de medallas.</p>
       </div>
       ${renderChallengeSection()}
       ${renderDuelTallyAndHistory()}
@@ -7465,8 +7798,10 @@ function renderDuel(app){
   const phaseChanged = phaseKey !== duelLastArenaPhase;
   duelLastArenaPhase = phaseKey;
   app.innerHTML = `
+    ${renderArenaJourney()}
     <div class="duel-card">
       <div class="duel-name">${scheduled.name}</div>
+      ${duelState.progressionKey ? `<div class="arena-stage-state ready">${duelState.progressionKey==='post-league'?'Post-liga':`Hito de ${duelState.progressionKey.replace('medals-','')} medallas`}</div>` : ''}
       <div class="duel-date">${fmtTime(new Date(scheduled.datetime).getTime())}</div>
       <div class="countdown" id="duel-countdown"></div>
       <div class="duel-top-actions">
@@ -7832,15 +8167,42 @@ function renderDuelTallyAndHistory(){
   `;
 }
 
-function openScheduleDuel(){
+function openScheduleDuel(progressionKey){
+  if(!progressionKey){
+    toast('Los torneos de Arena solo se abren desde el recorrido de medallas.');
+    return;
+  }
+  if(duelState.scheduled){
+    toast('Termina o reinicia el torneo actual antes de programar otro.');
+    return;
+  }
+  if(progressionKey && progressionKey !== 'post-league'){
+    const medals = Number(progressionKey.replace('medals-',''));
+    if(!arenaReadyForMilestone(medals) || arenaJourneyState.completed.includes(medals)){
+      toast('Este torneo todavía no está desbloqueado para los tres.');
+      render();
+      return;
+    }
+  }
+  if(progressionKey === 'post-league' && (!arenaPostLeagueReady() || arenaJourneyState.postLeagueDone)){
+    toast('Post-liga todavía no está desbloqueada.');
+    render();
+    return;
+  }
+  duelScheduleProgressionKey = progressionKey;
   const now = new Date();
   const minStr = toLocalInputValue(now);
   const maxStr = toLocalInputValue(endOfWeek());
+  const defaultName = progressionKey === 'post-league'
+    ? 'Post-liga'
+    : progressionKey
+      ? `Combate ${ARENA_MEDAL_MILESTONES.indexOf(Number(progressionKey.replace('medals-','')))+1} · ${progressionKey.replace('medals-','')} medallas`
+      : '';
   openModal(`
-    <h3>Nuevo Temporizador</h3>
+    <h3>Programar torneo</h3>
     <div class="field">
-      <label>Nombre del combate</label>
-      <input type="text" id="duel-name" placeholder="ej: Combate semana 3">
+      <label>Nombre del torneo</label>
+      <input type="text" id="duel-name" value="${defaultName}" placeholder="ej: Combate 1 · 2 medallas">
     </div>
     <div class="field">
       <label>Fecha y hora (esta semana)</label>
@@ -7848,19 +8210,37 @@ function openScheduleDuel(){
     </div>
     <div class="err-msg" id="duel-err"></div>
     <div class="modal-actions">
-      <button class="ghost" onclick="closeModal()">Cancelar</button>
+      <button class="ghost" onclick="cancelScheduleDuel()">Cancelar</button>
       <button class="primary" onclick="submitScheduleDuel()">Programar</button>
     </div>
   `);
+}
+function cancelScheduleDuel(){
+  duelScheduleProgressionKey = null;
+  closeModal();
 }
 async function submitScheduleDuel(){
   const name = document.getElementById('duel-name').value.trim();
   const dt = document.getElementById('duel-datetime').value;
   const err = document.getElementById('duel-err');
   if(!name || !dt){ err.textContent = 'Rellena el nombre y la fecha.'; return; }
+  if(duelState.scheduled){ err.textContent = 'Ya hay un torneo en marcha.'; return; }
+  const progressionKey = duelScheduleProgressionKey;
+  if(progressionKey && progressionKey !== 'post-league'){
+    const medals = Number(progressionKey.replace('medals-',''));
+    if(!arenaReadyForMilestone(medals) || arenaJourneyState.completed.includes(medals)){
+      err.textContent = 'El hito ya no está desbloqueado para los tres.';
+      return;
+    }
+  }
+  if(progressionKey === 'post-league' && (!arenaPostLeagueReady() || arenaJourneyState.postLeagueDone)){
+    err.textContent = 'Post-liga ya no está desbloqueada.';
+    return;
+  }
   // Torneo de 3: sortea quién juega el Combate 1 (dos jugadores); el tercero pasa
   // directo a la final ("bye"). El sorteo se hace en la propia pantalla (spinWheel).
-  duelState = { scheduled: { name, datetime: dt }, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null };
+  duelState = { scheduled: { name, datetime: dt }, progressionKey, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null };
+  duelScheduleProgressionKey = null;
   duelWheelRotation = 0;
   finalWheelRotationWinner = 0;
   finalWheelRotationLoser = 0;
@@ -8521,24 +8901,46 @@ async function confirmChallenge(targetTrainer){
 function renderChallengeSection(){
   if(!challengeState) return '';
   const { challenger, opponent, games, stakeId, stakeMonLabel } = challengeState;
-  const stake = CHALLENGE_STAKES.find(s=>s.id===stakeId);
+  const stake = CHALLENGE_STAKES.find(s=>s.id===stakeId) || { label:'Recompensa del desafío' };
   const wins = { [challenger]:0, [opponent]:0 };
   (games||[]).forEach(g=>wins[g]++);
   const decided = wins[challenger]===2 || wins[opponent]===2;
   const winner = wins[challenger]===2 ? challenger : (wins[opponent]===2 ? opponent : null);
+  const playing = !decided && !challengeActionInFlight;
+  const gameNumber = Math.min((games||[]).length + 1, 3);
+  const narration = games.length ? currentSeasonNarration(challengeState.narration) : '';
   return `
-    <div class="section-label" style="margin-top:24px;">⚔️ Desafío en marcha</div>
-    <div class="bracket-match ${decided || challengeActionInFlight ? '' : 'active'}">
-      <div class="match-label">${stake.label}${stakeMonLabel ? ` — ${stakeMonLabel}` : ''} ${games.length>0 && !decided ? `· Juego ${Math.min(games.length+1,3)} de 3` : ''}</div>
-      <div class="bracket-vs">
-        <div class="bracket-player ${winner===challenger?'winner':''} ${decided || challengeActionInFlight?'locked':''}" ${decided || challengeActionInFlight?'':`onclick="recordChallengeGame('${challenger}')"`}>${NAMES[challenger]}</div>
-        <div class="bracket-vs-sep">VS</div>
-        <div class="bracket-player ${winner===opponent?'winner':''} ${decided || challengeActionInFlight?'locked':''}" ${decided || challengeActionInFlight?'':`onclick="recordChallengeGame('${opponent}')"`}>${NAMES[opponent]}</div>
+    <section class="arena-challenge-section" aria-labelledby="arena-challenge-heading">
+      <div class="section-label" id="arena-challenge-heading" style="margin-top:28px;">⚔️ Desafío 1 vs 1</div>
+      <div class="arena-challenge-card">
+        <div class="arena-challenge-top">
+          <div><div class="arena-challenge-kicker">${decided ? 'Desafío resuelto' : 'Serie al mejor de tres'}</div>
+            <div class="arena-challenge-stake">${stake.label}${stakeMonLabel ? ` · ${stakeMonLabel}` : ''}</div></div>
+          <div class="arena-challenge-game">${decided ? 'FINALIZADO' : `JUEGO ${gameNumber} / 3`}</div>
+        </div>
+        <div class="arena-challenge-score">
+          <span class="score-name">${NAMES[challenger]}</span><span>${wins[challenger]}</span>
+          <span class="score-dash">—</span><span>${wins[opponent]}</span><span class="score-name">${NAMES[opponent]}</span>
+        </div>
+        <div class="arena-contenders">
+          <button type="button" class="arena-contender ${winner===challenger?'winner':''}" ${playing?`onclick="recordChallengeGame('${challenger}')"`:'disabled'} aria-label="Registrar victoria de ${NAMES[challenger]}">
+            <span class="arena-contender-name">${NAMES[challenger]}</span><span class="arena-contender-hint">${winner===challenger?'Ganador':'Registrar punto'}</span>
+          </button>
+          <div class="arena-contenders-vs">VS</div>
+          <button type="button" class="arena-contender ${winner===opponent?'winner':''}" ${playing?`onclick="recordChallengeGame('${opponent}')"`:'disabled'} aria-label="Registrar victoria de ${NAMES[opponent]}">
+            <span class="arena-contender-name">${NAMES[opponent]}</span><span class="arena-contender-hint">${winner===opponent?'Ganador':'Registrar punto'}</span>
+          </button>
+        </div>
+        <div class="arena-game-pips" aria-label="${games.length} de 3 juegos registrados">
+          ${[0,1,2].map(i=>`<span class="arena-game-pip ${i<games.length?'won':''}"></span>`).join('')}
+        </div>
+        ${narration ? `<div class="arena-challenge-note">${narration}</div><div class="arena-challenge-reader">🎙️ Lo lee quien no está jugando</div>` : ''}
+        ${challengeActionInFlight ? `<div class="arena-challenge-saving">Guardando el punto y sincronizando el resultado…</div>` : ''}
+        <div class="arena-challenge-actions">
+          ${challengeActionInFlight ? '' : decided ? `<button class="primary" onclick="closeChallenge()">Cerrar desafío</button>` : `<button class="ghost" onclick="cancelChallenge()">Cancelar desafío</button>`}
+        </div>
       </div>
-      ${games.length>0 ? `<div class="bo3-score">${NAMES[challenger]} ${wins[challenger]} - ${wins[opponent]} ${NAMES[opponent]}</div>` : ''}
-    </div>
-    ${games.length>0 ? `<div class="bo3-narration">${currentSeasonNarration(challengeState.narration)}<div class="bo3-reader-note">🎙️ Lo tiene que leer el que no está combatiendo</div></div>` : ''}
-    ${challengeActionInFlight ? `<div class="bo3-reader-note">Guardando resultado y recompensa…</div>` : decided ? `<div class="modal-actions" style="justify-content:center;"><button class="primary" onclick="closeChallenge()">Cerrar desafío</button></div>` : `<div class="modal-actions" style="justify-content:center;"><button class="ghost" onclick="cancelChallenge()">✖️ Cancelar desafío</button></div>`}
+    </section>
   `;
 }
 async function cancelChallenge(){
@@ -8703,9 +9105,9 @@ function spinFinalWheel(role){
 }
 
 async function finishDuel(){
-  const { scheduled, bye, match1, match1Winner, match1LoserPrize, finalWinner, finalWinnerPrize, finalLoserPrize } = duelState;
+  const { scheduled, bye, match1, match1Winner, match1LoserPrize, finalWinner, finalWinnerPrize, finalLoserPrize, progressionKey } = duelState;
   const finalLoser = finalLoserOf();
-  duelHistory.unshift({
+  const historyEntry = {
     id: crypto.randomUUID(),
     name: scheduled.name,
     date: scheduled.datetime,
@@ -8720,7 +9122,22 @@ async function finishDuel(){
     finalLoserPrize,
     finalLoser,
     ts: Date.now()
-  });
+  };
+  if(progressionKey) historyEntry.progressionKey = progressionKey;
+  duelHistory.unshift(historyEntry);
+  let journeyChanged = false;
+  if(progressionKey === 'post-league' && !arenaJourneyState.postLeagueDone){
+    arenaJourneyState.postLeagueDone = true;
+    arenaJourneyState.postLeagueWinner = finalWinner;
+    journeyChanged = true;
+  }else if(progressionKey && progressionKey.startsWith('medals-')){
+    const medals = Number(progressionKey.replace('medals-',''));
+    if(ARENA_MEDAL_MILESTONES.includes(medals) && !arenaJourneyState.completed.includes(medals)){
+      arenaJourneyState.completed = [...arenaJourneyState.completed, medals].sort((a,b)=>a-b);
+      arenaJourneyState.winners = { ...(arenaJourneyState.winners||{}), [String(medals)]:finalWinner };
+      journeyChanged = true;
+    }
+  }
   duelState = { scheduled:null, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null };
   duelWheelRotation = 0;
   finalWheelRotationWinner = 0;
@@ -8734,6 +9151,10 @@ async function finishDuel(){
   if(!ok1) queueRetry('duelHistory', saveDuelHistory);
   const ok2 = await saveDuelState();
   if(!ok2) queueRetry('duel', saveDuelState);
+  if(journeyChanged){
+    const journeySaved = await saveArenaJourney();
+    if(!journeySaved) queueRetry('arenaJourney', saveArenaJourney);
+  }
 }
 
 /* ---------------- ACTIONS: hearts / team ---------------- */
