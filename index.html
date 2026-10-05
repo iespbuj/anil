@@ -2657,6 +2657,50 @@ body.casino-mode main{ max-width:1320px; }
 .tc-ko-note.never{ color:#fff0f0; background:rgba(255,46,99,.75); }
 .tc-ko-note.maybe{ color:#241b00; background:var(--neon-yellow); }
 .tc-sub{ margin-top:12px; display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; font-size:12px; color:var(--silver-dim); }
+.contest-page{max-width:1040px;margin:0 auto;padding:18px 0 40px}
+.contest-countdown{min-height:min(82vh,860px);display:grid;place-items:center;text-align:center;position:relative;overflow:hidden;border:1px solid rgba(124,160,255,.12);border-radius:24px;background:radial-gradient(ellipse at 50% 48%,rgba(20,22,48,.65),rgba(3,4,10,.99) 61%);isolation:isolate}
+.contest-countdown::before,.contest-countdown::after{content:'';position:absolute;inset:-30%;z-index:-1;pointer-events:none}
+.contest-countdown::before{background:radial-gradient(ellipse at 50% 50%,transparent 19%,rgba(77,68,157,.11) 20%,transparent 21%),radial-gradient(ellipse at 50% 50%,transparent 37%,rgba(97,89,183,.1) 37.2%,transparent 37.6%),radial-gradient(ellipse at 50% 50%,transparent 56%,rgba(64,80,143,.08) 56.2%,transparent 56.6%);animation:contestPulse 18s linear infinite}
+.contest-countdown::after{background:radial-gradient(ellipse at 50% 52%,rgba(13,13,30,.15),#020308 72%);box-shadow:inset 0 0 120px #000}
+@keyframes contestPulse{to{transform:rotate(360deg)}}
+.contest-countdown-content{position:relative;z-index:1;padding:28px}
+.contest-countdown-kicker,.contest-kicker{font:700 10px var(--f-mono);letter-spacing:.28em;text-transform:uppercase;color:#77729e}
+.contest-countdown-title{font:800 clamp(28px,6vw,54px) var(--f-display);color:#e2e0f0;margin:18px 0 12px;text-shadow:0 0 35px rgba(132,119,255,.3)}
+.contest-countdown-copy{color:#77778e;font-size:13px;letter-spacing:.04em}
+.contest-clock{display:flex;justify-content:center;gap:clamp(9px,3vw,25px);margin:36px 0 20px}
+.contest-clock-unit strong{display:block;font:700 clamp(28px,6vw,50px) var(--f-mono);color:#fff;text-shadow:0 0 24px rgba(124,160,255,.5)}
+.contest-clock-unit span{font:700 9px var(--f-mono);letter-spacing:.15em;color:#777b9b}
+.contest-intro{padding:24px;border:1px solid rgba(124,160,255,.22);border-radius:18px;background:linear-gradient(145deg,rgba(28,31,59,.92),rgba(14,15,27,.96));margin-bottom:18px}
+.contest-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.contest-title{font:800 clamp(24px,4vw,36px) var(--f-display);color:#fff;margin:8px 0}
+.contest-subtitle{color:var(--silver-dim);line-height:1.6}
+.contest-badge{border:1px solid rgba(255,221,130,.34);border-radius:999px;padding:8px 12px;color:#ffdc83;background:rgba(255,201,81,.08);font:700 11px var(--f-mono);white-space:nowrap}
+.contest-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(250px,.8fr);gap:16px}
+.contest-card{border:1px solid rgba(255,255,255,.1);border-radius:16px;background:linear-gradient(145deg,rgba(29,30,43,.96),rgba(17,18,28,.98));padding:22px}
+.contest-question{font:700 clamp(19px,3vw,25px) var(--f-ui);line-height:1.4;color:#fff;margin:12px 0 20px}
+.contest-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.contest-option{min-height:52px;border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(255,255,255,.035);color:var(--silver-bright);font:600 14px var(--f-ui);cursor:pointer;transition:.16s}
+.contest-option:hover:not(:disabled){border-color:#8a83ff;background:rgba(105,91,255,.14);transform:translateY(-1px)}
+.contest-option:disabled{opacity:.6;cursor:default}
+.contest-option.selected{border-color:#a69fff;background:rgba(105,91,255,.22)}
+.contest-answer-form{display:flex;gap:9px;flex-wrap:wrap}
+.contest-answer-form input{min-width:180px;flex:1;padding:12px 14px;border-radius:10px}
+.contest-footnote{margin-top:16px;color:#999bb3;font-size:11px;line-height:1.55}
+.contest-score-title{font:700 12px var(--f-mono);letter-spacing:.1em;color:#c5c5db;margin:0 0 14px}
+.contest-player{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid rgba(255,255,255,.08)}
+.contest-player:first-of-type{border-top:0}
+.contest-player-name{font-weight:700;color:#fff}
+.contest-pieces{display:flex;gap:3px;margin-top:7px}
+.contest-piece{width:12px;height:12px;border:1px solid rgba(255,255,255,.15);border-radius:3px;background:rgba(255,255,255,.04)}
+.contest-piece.earned{background:linear-gradient(135deg,#ffd779,#ff9f46);border-color:#ffd779;box-shadow:0 0 8px rgba(255,190,75,.25)}
+.contest-stars{color:#ffd779;font:700 12px var(--f-mono);white-space:nowrap}
+.contest-result{padding:12px 14px;border-radius:10px;margin-top:14px;font-size:13px;line-height:1.5}
+.contest-result.success{background:rgba(43,170,115,.13);border:1px solid rgba(77,220,158,.26);color:#a8f1ce}
+.contest-result.closed{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#d6d4e4}
+.contest-result.error{background:rgba(255,77,99,.1);border:1px solid rgba(255,77,99,.22);color:#ffafb9}
+.contest-next{margin-top:12px;color:#999bb3;font:11px var(--f-mono)}
+@media(max-width:740px){.contest-layout{grid-template-columns:1fr}.contest-card{padding:17px}}
+@media(max-width:450px){.contest-options{grid-template-columns:1fr}.contest-head{display:block}.contest-badge{display:inline-flex;margin-top:10px}}
 
 /* Acentos índigo y cian para que la interfaz herede la identidad de Añil. */
 ::selection{ background:var(--accent-dim); color:#fff; }
@@ -2686,6 +2730,7 @@ button.primary:active{ box-shadow:0 1px 0 #202660; }
       <button class="nav-btn" data-nav="duel" onclick="go('duel')"><span class="ni">⚔️</span><span class="nl">Arena</span></button>
       <button class="nav-btn" data-nav="types" onclick="go('types')"><span class="ni">🥊</span><span class="nl">Tipos</span></button>
       <button class="nav-btn" data-nav="routes" onclick="go('routes')"><span class="ni">🗺️</span><span class="nl">Pokémon de ruta</span></button>
+      <button class="nav-btn" data-nav="contest" onclick="go('contest')"><span class="ni">◉</span><span class="nl">???</span></button>
       <button class="nav-btn" data-nav="normas" onclick="go('normas')"><span class="ni">📕</span><span class="nl">Normas</span></button>
       <button class="nav-btn" data-nav="casino" onclick="go('casino')"><span class="ni">🎰</span><span class="nl">Casino</span></button>
       <button class="nav-btn n-final" data-nav="final" onclick="go('final')"><span class="ni">🏆</span><span class="nl">Final</span></button>
@@ -3127,6 +3172,10 @@ const MERGED_LOSER_WHEEL = [
 let hearts = {}, teams = {}, history = [], tradesActive = [], tradesHistory = [];
 let tickets = {}, pendingPrizes = {};
 let dailyBonusDate = {}; // último día (YYYY-MM-DD) en que cada entrenador reclamó su bonus diario
+let dailyContestRewardClaims = {};
+let dailyContestState = { date:null, winner:null, starAwarded:false, attempts:{}, pieces:{iker:0,joel:0,alex:0}, stars:{iker:0,joel:0,alex:0} };
+let contestCountdownInterval = null;
+let contestSubmitting = false;
 let money = {}, badgeBits = {};
 let locationName = {};
 let locationId = {};
@@ -3978,7 +4027,7 @@ async function loadAll(){
   // datos. Ahora es UNA sola peticion HTTP (?keys=...) que trae todo de
   // golpe; el backend hace un unico candado + una unica lectura de la hoja.
   const keyDefaults = [
-    ...TRAINERS.map(t => ({ key: 'anil:profile:'+t, def: {hearts:20, team:[], tickets:0, pendingPrizes:[], dailyBonusDate:null, money:0, badges:0, locationName:null} })),
+    ...TRAINERS.map(t => ({ key: 'anil:profile:'+t, def: {hearts:20, team:[], tickets:0, pendingPrizes:[], dailyBonusDate:null, dailyContestRewardClaims:[], money:0, badges:0, locationName:null} })),
     { key: 'anil:history', def: [] },
     { key: 'anil:trades', def: {active:[], history:[]} },
     { key: 'anil:duel', def: { scheduled:null, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null } },
@@ -3986,6 +4035,7 @@ async function loadAll(){
     { key: 'anil:duelBets', def: { match1: [], final: [] } },
     { key: 'anil:arenaJourney', def: { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null } },
     { key: 'anil:challenge', def: null },
+    { key: 'anil:dailyContest', def: { date:null, winner:null, attempts:{}, pieces:{iker:0,joel:0,alex:0}, stars:{iker:0,joel:0,alex:0} } },
     { key: 'anil:finalState', def: null },
     { key: 'anil:normas', def: [] },
     { key: 'anil:sancion', def: { offender: null, prize: null } },
@@ -4024,6 +4074,7 @@ async function loadAll(){
   const duelBetsResult = batch['anil:duelBets'];
   const arenaJourneyResult = batch['anil:arenaJourney'];
   const challengeResult = batch['anil:challenge'];
+  const dailyContestResult = batch['anil:dailyContest'];
   const finalResult = batch['anil:finalState'];
   const normasResult = batch['anil:normas'];
   const sancionResult = batch['anil:sancion'];
@@ -4052,6 +4103,7 @@ async function loadAll(){
     tickets[t] = profileResults[i].tickets || 0;
     pendingPrizes[t] = profileResults[i].pendingPrizes || [];
     dailyBonusDate[t] = profileResults[i].dailyBonusDate || null;
+    dailyContestRewardClaims[t] = Array.isArray(profileResults[i].dailyContestRewardClaims) ? profileResults[i].dailyContestRewardClaims.filter(id=>typeof id === 'string') : [];
     money[t] = profileResults[i].money || 0;
     badgeBits[t] = profileResults[i].badges || 0;
     locationName[t] = profileResults[i].locationName || null;
@@ -4083,6 +4135,7 @@ async function loadAll(){
       && !saveInFlight['challenge'] && !challengeActionInFlight && !pendingSaves.has('challenge')){
     challengeState = challengeResult;
   }
+  if(!saveInFlight['dailyContest']) dailyContestState = normalizeDailyContestState(dailyContestResult);
   if(!saveInFlight['finalState']) finalState = finalResult;
   if(!saveInFlight['normas']) normas = normasResult;
   if(!saveInFlight['sancion']) sancionState = sancionResult;
@@ -4107,7 +4160,7 @@ async function loadAll(){
   // ahorrarse el render() (que es caro: reconstruye toda la pantalla).
   const signature = JSON.stringify({
     hearts, teams, tickets, pendingPrizes, dailyBonusDate, money, badgeBits, locationName, locationId, trackerStatus, trackerSnapshots,
-    history, tradesActive, tradesHistory, duelState, duelHistory, duelBets, arenaJourneyState, challengeState,
+    history, tradesActive, tradesHistory, duelState, duelHistory, duelBets, arenaJourneyState, challengeState, dailyContestState,
     normas, sancionState, loteria, collections, graveyard, manualFainted,
   });
   const changed = signature !== lastLoadSignature || hadLoadWarning;
@@ -4116,7 +4169,316 @@ async function loadAll(){
 }
 async function saveProfile(t){
   teams[t] = normalizeTeamSpecies(teams[t]);
-  return await trackedStoreSet('profile:'+t, 'anil:profile:'+t, { hearts: hearts[t], team: teams[t], tickets: tickets[t]||0, pendingPrizes: pendingPrizes[t]||[], dailyBonusDate: dailyBonusDate[t]||null, money: money[t]||0, badges: badgeBits[t]||0, locationName: locationName[t]||null, trackerVersion: trackerVersion[t]||null, trackerLives: trackerLives[t]??null, trackerBadges: trackerBadgesAvailable[t] ? Array.from({length:GYM_COUNT}, (_,i)=>!!(badgeBits[t] & (1<<i))) : null });
+  return await trackedStoreSet('profile:'+t, 'anil:profile:'+t, { hearts: hearts[t], team: teams[t], tickets: tickets[t]||0, pendingPrizes: pendingPrizes[t]||[], dailyBonusDate: dailyBonusDate[t]||null, dailyContestRewardClaims: dailyContestRewardClaims[t]||[], money: money[t]||0, badges: badgeBits[t]||0, locationName: locationName[t]||null, trackerVersion: trackerVersion[t]||null, trackerLives: trackerLives[t]??null, trackerBadges: trackerBadgesAvailable[t] ? Array.from({length:GYM_COUNT}, (_,i)=>!!(badgeBits[t] & (1<<i))) : null });
+}
+
+const DAILY_CONTEST_START = new Date('2026-10-06T22:00:00Z');
+const DAILY_CONTEST_TICKETS = 25;
+const DAILY_CONTEST_SECRET_TICKETS = 50;
+const DAILY_CONTEST_ATTEMPT_SECONDS = 30;
+const DAILY_CONTEST_PUZZLES = [
+  { title:'Piedra elemental', prompt:'Resuelve la evolución: Eevee + Piedra Fuego = ¿qué Pokémon?', options:['Vaporeon','Flareon','Jolteon','Espeon'], answer:1 },
+  { title:'Inmunidad fantasma', mode:'binary', prompt:'Verdadero o falso: los ataques de tipo Fantasma no afectan a los Pokémon de tipo Normal.', options:['Verdadero','Falso'], answer:0 },
+  { title:'El fósil correcto', prompt:'En el Museo de Isla Canela, ¿qué Pokémon sale del Fósil Domo?', options:['Omanyte','Aerodactyl','Kabuto','Lileep'], answer:2 },
+  { title:'Cadena evolutiva', prompt:'Ordena mentalmente la línea de Bulbasaur: ¿cuál es su última evolución?', options:['Ivysaur','Venusaur','Meganium','Vileplume'], answer:1 },
+  { title:'El primer gimnasio', mode:'binary', prompt:'Verdadero o falso: el equipo de Brock en Kanto se especializa en Pokémon de tipo Roca.', options:['Verdadero','Falso'], answer:0 },
+  { title:'Una categoría Pokédex', mode:'typed', prompt:'Sin opciones: escribe la categoría Pokédex de Pikachu (una palabra).', answer:'raton' },
+  { title:'Otra piedra, otra evolución', prompt:'Eevee + Piedra Agua da lugar a…', options:['Leafeon','Vaporeon','Glaceon','Jolteon'], answer:1 },
+  { title:'Doble tipo', prompt:'¿Qué combinación de tipos tiene Charizard?', options:['Fuego / Dragón','Fuego / Volador','Volador / Normal','Fuego / Lucha'], answer:1 },
+  { title:'Pista de combate', prompt:'¿Qué tipo de movimiento es supereficaz contra Pokémon de tipo Agua?', options:['Eléctrico','Hielo','Acero','Fuego'], answer:0 },
+  { title:'El fósil espiral', mode:'typed', prompt:'Responde escribiendo el Pokémon que se obtiene del Fósil Helix.', answer:'omanyte' },
+  { title:'Evolución eléctrica', prompt:'¿Qué objeto se usa para evolucionar a Pikachu en Raichu?', options:['Piedra Lunar','Piedra Trueno','Piedra Alba','Piedra Solar'], answer:1 },
+  { title:'Equipo de Kanto', prompt:'¿Cuál de estos es uno de los tres Pokémon iniciales de Kanto?', options:['Cyndaquil','Mudkip','Bulbasaur','Piplup'], answer:2 },
+];
+const DAILY_CONTEST_TIME_FORMAT = new Intl.DateTimeFormat('en', { timeZone:'Europe/Madrid', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hourCycle:'h23' });
+function contestSpainParts(date){
+  return Object.fromEntries(DAILY_CONTEST_TIME_FORMAT.formatToParts(date).filter(part=>part.type!=='literal').map(part=>[part.type, Number(part.value)]));
+}
+function contestSpainDateKey(date){
+  const p = contestSpainParts(date);
+  return `${p.year}-${String(p.month).padStart(2,'0')}-${String(p.day).padStart(2,'0')}`;
+}
+function contestSpainMidnightUtc(year, month, day){
+  const target = Date.UTC(year, month-1, day);
+  let guess = target;
+  for(let i=0;i<3;i++){
+    const p = contestSpainParts(new Date(guess));
+    guess += target - Date.UTC(p.year, p.month-1, p.day, p.hour, p.minute, p.second);
+  }
+  return new Date(guess);
+}
+function contestNextReset(now=new Date()){
+  const p = contestSpainParts(now);
+  const next = new Date(Date.UTC(p.year, p.month-1, p.day+1));
+  return contestSpainMidnightUtc(next.getUTCFullYear(), next.getUTCMonth()+1, next.getUTCDate());
+}
+function contestPuzzleForToday(){
+  const p = contestSpainParts(new Date());
+  const day = Math.floor((Date.UTC(p.year,p.month-1,p.day) - Date.UTC(2026,9,7)) / 86400000);
+  return DAILY_CONTEST_PUZZLES[((day % DAILY_CONTEST_PUZZLES.length)+DAILY_CONTEST_PUZZLES.length)%DAILY_CONTEST_PUZZLES.length];
+}
+function normalizeDailyContestState(raw){
+  const value = raw && typeof raw === 'object' ? raw : {};
+  const countMap = key => Object.fromEntries(TRAINERS.map(t=>[t, Math.max(0, Math.floor(Number(value[key]?.[t])||0))]));
+  const attempts = {};
+  if(value.attempts && typeof value.attempts === 'object'){
+    for(const trainer of TRAINERS){
+      const attempt = value.attempts[trainer];
+      if(attempt === true){ attempts[trainer] = true; continue; }
+      if(attempt && ['active','wrong','expired','correct'].includes(attempt.status)
+          && Number.isFinite(Number(attempt.startedAt))){
+        attempts[trainer] = { status:attempt.status, startedAt:Number(attempt.startedAt) };
+      }
+    }
+  }
+  return {
+    date: typeof value.date === 'string' ? value.date : null,
+    winner: TRAINERS.includes(value.winner) ? value.winner : null,
+    starAwarded: value.starAwarded === true,
+    attempts,
+    pieces: countMap('pieces'),
+    stars: countMap('stars'),
+  };
+}
+async function saveDailyContest(){
+  return await trackedStoreSet('dailyContest', 'anil:dailyContest', dailyContestState);
+}
+function ensureContestDay(){
+  const today = contestSpainDateKey(new Date());
+  if(dailyContestState.date === today) return;
+  dailyContestState = { ...dailyContestState, date:today, winner:null, starAwarded:false, attempts:{} };
+  saveDailyContest().then(ok=>{
+    if(!ok) queueRetry('dailyContest', saveDailyContest);
+  });
+}
+function contestCountdownText(ms){
+  const seconds = Math.max(0, Math.floor(ms/1000));
+  const days = Math.floor(seconds/86400);
+  const hours = Math.floor((seconds%86400)/3600);
+  const minutes = Math.floor((seconds%3600)/60);
+  const secs = seconds%60;
+  return { days:String(days).padStart(2,'0'), hours:String(hours).padStart(2,'0'), minutes:String(minutes).padStart(2,'0'), seconds:String(secs).padStart(2,'0') };
+}
+function contestClockMarkup(ms){
+  const t = contestCountdownText(ms);
+  return `<div class="contest-clock" aria-label="Tiempo restante">
+    <div class="contest-clock-unit"><strong>${t.days}</strong><span>DÍAS</span></div>
+    <div class="contest-clock-unit"><strong>${t.hours}</strong><span>HORAS</span></div>
+    <div class="contest-clock-unit"><strong>${t.minutes}</strong><span>MIN</span></div>
+    <div class="contest-clock-unit"><strong>${t.seconds}</strong><span>SEG</span></div>
+  </div>`;
+}
+function updateContestCountdown(){
+  const now = new Date();
+  const beforeLaunch = now < DAILY_CONTEST_START;
+  const target = beforeLaunch ? DAILY_CONTEST_START : contestNextReset(now);
+  const clock = contestClockMarkup(target.getTime()-now.getTime());
+  const targetEl = document.getElementById('contest-clock');
+  if(targetEl) targetEl.innerHTML = clock;
+  const activeTrainer = TRAINERS.find(t=>dailyContestState.attempts?.[t]?.status === 'active');
+  const activeAttempt = dailyContestState.attempts?.[activeTrainer];
+  if(activeAttempt?.status === 'active'){
+    const remaining = Math.max(0, DAILY_CONTEST_ATTEMPT_SECONDS - Math.floor((Date.now()-activeAttempt.startedAt)/1000));
+    document.querySelectorAll('.contest-attempt-timer').forEach(timer=>timer.textContent = `${remaining}s`);
+    if(remaining === 0) expireDailyContestAttempt(activeTrainer);
+  }
+  if(beforeLaunch !== !!document.getElementById('contest-countdown')){
+    ensureContestDay();
+    render();
+  }else if(!beforeLaunch && contestSpainDateKey(now) !== dailyContestState.date){
+    ensureContestDay();
+    render();
+  }
+}
+function contestOptionOrder(puzzle, dayKey){
+  const order = (puzzle.options||[]).map((_,i)=>i);
+  let seed = Array.from(dayKey).reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
+  for(let i=order.length-1;i>0;i--){
+    seed = (seed*9301+49297)%233280;
+    const j = Math.floor((seed/233280)*(i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  return order;
+}
+function renderContest(app){
+  if(!contestCountdownInterval) contestCountdownInterval = setInterval(updateContestCountdown, 1000);
+  if(new Date() < DAILY_CONTEST_START){
+    app.innerHTML = `<section class="contest-page"><div class="contest-countdown" id="contest-countdown">
+      <div class="contest-countdown-content"><div class="contest-countdown-kicker">FRECUENCIA DESCONOCIDA</div>
+        <h1 class="contest-countdown-title">Algo está por llegar</h1>
+        <div class="contest-countdown-copy">Por ahora, solo queda esperar.</div>
+        <div id="contest-clock">${contestClockMarkup(DAILY_CONTEST_START-Date.now())}</div>
+      </div></div></section>`;
+    updateContestCountdown();
+    return;
+  }
+  ensureContestDay();
+  const puzzle = contestPuzzleForToday();
+  const order = contestOptionOrder(puzzle, dailyContestState.date);
+  const chosen = window.dailyContestSelections || (window.dailyContestSelections={});
+  const winner = dailyContestState.winner;
+  const selectedTrainer = TRAINERS.includes(chosen.trainer) ? chosen.trainer : null;
+  const activeTrainer = TRAINERS.find(t=>dailyContestState.attempts?.[t]?.status === 'active');
+  const activeAttempt = dailyContestState.attempts[activeTrainer];
+  const attempt = selectedTrainer ? dailyContestState.attempts[selectedTrainer] : null;
+  const attempted = !!attempt && (attempt === true || attempt.status !== 'active');
+  const attemptActive = attempt?.status === 'active';
+  const result = chosen.result || null;
+  const pieces = Object.fromEntries(TRAINERS.map(t=>[t,Math.min(8,dailyContestState.pieces[t]%8)]));
+  const board = TRAINERS.map(t=>`<div class="contest-player">
+    <div><div class="contest-player-name">${NAMES[t]}</div><div class="contest-pieces" aria-label="${pieces[t]} de 8 aciertos">${Array.from({length:8},(_,i)=>`<i class="contest-piece ${i<pieces[t]?'earned':''}"></i>`).join('')}</div></div>
+    <div class="contest-stars">${'⭐'.repeat(Math.min(12,dailyContestState.stars[t])) || '☆'} <small>${dailyContestState.stars[t]} estrella${dailyContestState.stars[t]===1?'':'s'}</small></div>
+  </div>`).join('');
+  const feedback = winner
+    ? `<div class="contest-result closed">🔒 Reto cerrado: <b>${NAMES[winner]}</b> llegó primero y se lleva ${DAILY_CONTEST_TICKETS} tickets.</div>`
+    : result === 'correct'
+      ? '<div class="contest-result success">¡Respuesta correcta! Comprobando y guardando tu victoria…</div>'
+      : result === 'wrong'
+        ? '<div class="contest-result error">Respuesta incorrecta. Tu intento de hoy queda gastado; el reto sigue abierto para los demás.</div>'
+        : attempt?.status === 'expired'
+          ? '<div class="contest-result error">⏱ Se acabó el tiempo. Ese intento queda gastado; el reto sigue abierto para los demás.</div>'
+        : selectedTrainer && attempted
+          ? '<div class="contest-result closed">Ya usaste tu único intento de hoy. El reto continúa abierto mientras nadie acierte.</div>'
+          : '';
+  const controls = winner || !selectedTrainer || attempted || !attemptActive || result === 'correct'
+    ? ''
+    : puzzle.mode === 'typed'
+      ? `<form class="contest-answer-form" onsubmit="event.preventDefault();submitDailyContest('${selectedTrainer}',document.getElementById('contest-answer').value)"><input id="contest-answer" class="input" type="text" autocomplete="off" maxlength="40" placeholder="Tu respuesta" required><button class="primary" type="submit">Enviar respuesta</button></form>`
+      : `<div class="contest-options">${order.map((optionIndex,i)=>`<button class="contest-option" type="button" onclick="submitDailyContest('${selectedTrainer}',${optionIndex})">${String.fromCharCode(65+i)} · ${puzzle.options[optionIndex]}</button>`).join('')}</div>`;
+  app.innerHTML = `<section class="contest-page">
+    <div class="contest-intro"><div class="contest-head"><div><div class="contest-kicker">Desafío diario · ${new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',day:'numeric',month:'long'}).format(new Date())}</div>
+      <h1 class="contest-title">El concurso de Añil</h1><div class="contest-subtitle">Un acertijo Pokémon nuevo cada día. Solo hay una victoria y el primero en acertar cierra el reto para todos.</div></div>
+      <div class="contest-badge">🏆 8 aciertos = ⭐</div></div>
+      <div class="contest-next">Siguiente desafío en <span id="contest-clock">${contestClockMarkup(contestNextReset()-Date.now())}</span></div>
+    </div>
+    <div class="contest-layout"><article class="contest-card">
+      <div class="contest-kicker">${selectedTrainer && attemptActive ? `${puzzle.title} · ${DAILY_CONTEST_ATTEMPT_SECONDS} segundos` : 'Reto oculto · un intento por entrenador'}</div><h2 class="contest-question">${selectedTrainer && attemptActive ? puzzle.prompt : winner ? puzzle.prompt : 'Elige entrenador para revelar el reto e iniciar el cronómetro.'}</h2>
+      ${winner ? '' : `<div class="contest-subtitle" style="margin-bottom:12px">${selectedTrainer && attemptActive?`Jugando como ${NAMES[selectedTrainer]} · tiempo: <b class="contest-attempt-timer">${DAILY_CONTEST_ATTEMPT_SECONDS}s</b>.`:activeTrainer?`${NAMES[activeTrainer]} está resolviendo el reto · quedan <b class="contest-attempt-timer">${Math.max(0,DAILY_CONTEST_ATTEMPT_SECONDS-Math.floor((Date.now()-activeAttempt.startedAt)/1000))}s</b>.`:'Elige quién va a participar:'}</div>
+      ${selectedTrainer || activeTrainer ? '' : `<div class="contest-options">${TRAINERS.map(t=>`<button type="button" class="contest-option" onclick="selectDailyContestTrainer('${t}')">${NAMES[t]}</button>`).join('')}</div>`}
+      ${selectedTrainer && attempted && !winner ? `<button class="ghost" type="button" style="margin:0 0 12px" onclick="selectDailyContestTrainer('')">Elegir otro entrenador</button>` : ''}
+      ${controls}`}
+      ${feedback}<div class="contest-footnote">Los formatos y datos cambian entre retos. Tienes un intento por persona; no se muestran pistas ni la solución antes de cerrar. La primera respuesta correcta gana ${DAILY_CONTEST_TICKETS} tickets.${selectedTrainer && !attempted && !winner ? ' El orden de las opciones cambia cada día.' : ''}</div>
+    </article><aside class="contest-card"><h2 class="contest-score-title">PIEZAS REUNIDAS · 8 PARA LA ESTRELLA</h2>${board}
+      <div class="contest-footnote">Cada victoria añade una pieza a quien la consigue. Al reunir ocho, obtiene una estrella permanente del concurso y una recompensa secreta de ${DAILY_CONTEST_SECRET_TICKETS} tickets.</div>
+    </aside></div></section>`;
+  updateContestCountdown();
+}
+async function selectDailyContestTrainer(trainer){
+  if(trainer !== '' && !TRAINERS.includes(trainer)) return;
+  if(trainer === ''){ window.dailyContestSelections = {}; render(); return; }
+  if(dailyContestState.winner || dailyContestState.attempts[trainer]) return;
+  const activeOther = TRAINERS.find(t=>t!==trainer && dailyContestState.attempts[t]?.status === 'active');
+  if(activeOther){
+    toast(`${NAMES[activeOther]} tiene un reto activo; esperad a que termine su cronómetro.`);
+    return;
+  }
+  dailyContestState.attempts[trainer] = { status:'active', startedAt:Date.now() };
+  window.dailyContestSelections = { trainer, result:null };
+  const saved = await saveDailyContest();
+  if(!saved){
+    delete dailyContestState.attempts[trainer];
+    window.dailyContestSelections = {};
+    toast('No se pudo iniciar el intento compartido. Comprueba la conexión e inténtalo otra vez.');
+  }
+  render();
+}
+async function expireDailyContestAttempt(trainer){
+  const attempt = dailyContestState.attempts?.[trainer];
+  if(!attempt || attempt.status !== 'active') return;
+  attempt.status = 'expired';
+  const saved = await saveDailyContest();
+  if(!saved) queueRetry('dailyContest', saveDailyContest);
+  if(window.dailyContestSelections?.trainer === trainer) window.dailyContestSelections.result = 'expired';
+  render();
+}
+async function submitDailyContest(trainer, answer){
+  if(contestSubmitting || !TRAINERS.includes(trainer) || new Date() < DAILY_CONTEST_START) return;
+  ensureContestDay();
+  const attempt = dailyContestState.attempts[trainer];
+  if(dailyContestState.winner || attempt?.status !== 'active') return;
+  if(Date.now()-attempt.startedAt >= DAILY_CONTEST_ATTEMPT_SECONDS*1000){
+    await expireDailyContestAttempt(trainer);
+    return;
+  }
+  contestSubmitting = true;
+  const puzzle = contestPuzzleForToday();
+  const correct = puzzle.mode === 'typed'
+    ? String(answer).normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase() === puzzle.answer
+    : Number(answer) === puzzle.answer;
+  if(!correct){
+    attempt.status = 'wrong';
+    window.dailyContestSelections = { trainer, result:'wrong' };
+    const ok = await saveDailyContest();
+    contestSubmitting = false;
+    if(!ok) queueRetry('dailyContest', saveDailyContest);
+    render();
+    return;
+  }
+  dailyContestState.winner = trainer;
+  attempt.status = 'correct';
+  dailyContestState.pieces[trainer] = (dailyContestState.pieces[trainer]||0)+1;
+  const earnedStar = dailyContestState.pieces[trainer] % 8 === 0;
+  dailyContestState.starAwarded = earnedStar;
+  if(earnedStar) dailyContestState.stars[trainer] = (dailyContestState.stars[trainer]||0)+1;
+  window.dailyContestSelections = { trainer, result:'correct' };
+  const saved = await saveDailyContest();
+  if(!saved){
+    dailyContestState.winner = null;
+    dailyContestState.starAwarded = false;
+    dailyContestState.pieces[trainer] = Math.max(0,dailyContestState.pieces[trainer]-1);
+    if(earnedStar) dailyContestState.stars[trainer] = Math.max(0,dailyContestState.stars[trainer]-1);
+    attempt.status = 'active';
+    window.dailyContestSelections = { trainer, result:null };
+    contestSubmitting = false;
+    toast('No se pudo guardar el resultado compartido; no se han concedido tickets. Inténtalo de nuevo.');
+    render();
+    return;
+  }
+  await new Promise(resolve=>setTimeout(resolve,900));
+  const confirmed = await storeGet('anil:dailyContest', null);
+  if(confirmed === STORE_FETCH_FAILED){
+    contestSubmitting = false;
+    toast('No se pudo confirmar el resultado con el servidor; no se han concedido tickets todavía.');
+    render();
+    return;
+  }
+  dailyContestState = normalizeDailyContestState(confirmed);
+  if(dailyContestState.winner !== trainer){
+    contestSubmitting = false;
+    window.dailyContestSelections = { trainer, result:null };
+    toast('Otro entrenador registró antes su acierto. El servidor ha cerrado el reto.');
+    render();
+    return;
+  }
+  window.dailyContestSelections = { trainer, result:'correct' };
+  await grantDailyContestReward(trainer, dailyContestState.date, earnedStar);
+  pushHistory(`🧩 ${NAMES[trainer]} ganó el concurso Pokémon diario${earnedStar?' y consiguió una estrella':''}`);
+  playSound('bonus');
+  fireConfetti({count:earnedStar?150:80});
+  contestSubmitting = false;
+  render();
+}
+async function grantDailyContestReward(trainer, date, starAwarded){
+  if(!TRAINERS.includes(trainer) || !/^\d{4}-\d{2}-\d{2}$/.test(date||'')) return false;
+  const claimId = `daily-contest:${date}`;
+  dailyContestRewardClaims[trainer] = dailyContestRewardClaims[trainer] || [];
+  if(dailyContestRewardClaims[trainer].includes(claimId)) return true;
+  const amount = DAILY_CONTEST_TICKETS + (starAwarded ? DAILY_CONTEST_SECRET_TICKETS : 0);
+  tickets[trainer] = (tickets[trainer]||0) + amount;
+  dailyContestRewardClaims[trainer] = [...dailyContestRewardClaims[trainer], claimId].slice(-200);
+  const ok = await saveProfile(trainer);
+  if(!ok){
+    queueRetry('profile:'+trainer, ()=>saveProfile(trainer));
+    toast(`No se pudo confirmar el premio del concurso (+${amount} tickets). Se reintentará automáticamente.`);
+    return false;
+  }
+  pushHistory(`🎟️ ${NAMES[trainer]} recibió ${amount} tickets por el concurso diario${starAwarded?' y la estrella':''}`);
+  return true;
+}
+async function reconcileDailyContestReward(){
+  const state = normalizeDailyContestState(dailyContestState);
+  if(!state.winner || !state.date || dailyContestRewardClaims[state.winner]?.includes(`daily-contest:${state.date}`)) return;
+  await grantDailyContestReward(state.winner, state.date, state.starAwarded);
 }
 
 
@@ -4984,6 +5346,8 @@ function setActiveNav(){
   document.querySelectorAll('.nav-btn').forEach(b=>{
     b.classList.toggle('active', b.dataset.nav === (view==='profile' ? 'home' : view));
   });
+  const contestNavLabel = document.querySelector('[data-nav="contest"] .nl');
+  if(contestNavLabel) contestNavLabel.textContent = new Date() >= DAILY_CONTEST_START ? 'Concurso diario' : '???';
   const badge = document.getElementById('history-badge');
   if(badge){
     const n = unreadNewsCount();
@@ -5005,6 +5369,7 @@ function render(){
     finalAutoPlay = false;
   }
   if(duelCountdownInterval){ clearInterval(duelCountdownInterval); duelCountdownInterval = null; }
+  if(view !== 'contest' && contestCountdownInterval){ clearInterval(contestCountdownInterval); contestCountdownInterval = null; }
   const app = document.getElementById('app');
   const loadWarningEl = document.getElementById('load-warning');
   if(loadWarningEl){
@@ -5022,6 +5387,7 @@ function render(){
   if(view === 'duel') return renderDuel(app);
   if(view === 'types') return renderTypeCalc(app);
   if(view === 'routes') return renderRouteAtlas(app);
+  if(view === 'contest') return renderContest(app);
   if(view === 'normas') return renderNormas(app);
   if(view === 'casino') return renderCasino(app);
   if(view === 'final') return renderFinal(app);
@@ -5245,7 +5611,7 @@ function renderRivalriesCard(){
 /* ===================== NAVEGACIÓN / CARRIL LATERAL ===================== */
 const VIEW_TITLES = {
   home: 'Cuadro de mando', profile: 'Ficha de entrenador', history: 'Diario de la Liga', trade: 'Intercambios',
-  duel: 'Arena', routes: 'Pokémon de ruta', normas: 'Reglamento', casino: 'Game Corner Azulona', final: 'La Final',
+  duel: 'Arena', routes: 'Pokémon de ruta', contest: '???', normas: 'Reglamento', casino: 'Game Corner Azulona', final: 'La Final',
 };
 function renderRailStatus(){
   const el = document.getElementById('rail-status');
@@ -5264,7 +5630,7 @@ function renderRailStatus(){
 function renderTopbar(){
   const el = document.getElementById('crumb');
   if(!el) return;
-  const name = view==='profile' && currentTrainer ? `${NAMES[currentTrainer]}` : (VIEW_TITLES[view] || '');
+  const name = view==='profile' && currentTrainer ? `${NAMES[currentTrainer]}` : view==='contest' && new Date()>=DAILY_CONTEST_START ? 'Concurso diario' : (VIEW_TITLES[view] || '');
   el.innerHTML = `Añil <b>/ ${name}</b>`;
 }
 
@@ -10730,6 +11096,7 @@ let dashboardPolling = false;
   if(muteBtn) muteBtn.textContent = soundMuted ? '🔇' : '🔊';
   loadNameLists();
   await loadAll();
+  await reconcileDailyContestReward();
   await seedDefaultNormasIfMissing();
   render();
   showNewsPopupIfAny();
@@ -10739,6 +11106,7 @@ let dashboardPolling = false;
     dashboardPolling = true;
     try{
       const changed = await loadAll();
+      await reconcileDailyContestReward();
       if(changed) render(); // si no ha cambiado nada, nos ahorramos reconstruir toda la pantalla
     }finally{
       dashboardPolling = false;
