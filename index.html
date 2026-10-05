@@ -10988,8 +10988,8 @@ async function deleteTradeRecord(id){
 }
 
 /* ---------------- Cuenta atrás de inicio de temporada ---------------- */
-const SEASON_COUNTDOWN_STORAGE_KEY = 'anil_season_countdown_target';
-const DEFAULT_SEASON_COUNTDOWN_TARGET = new Date(2026, 9, 5, 18, 0, 0, 0);
+const SEASON_COUNTDOWN_STORAGE_KEY = 'anil_season_countdown_target_v2';
+const DEFAULT_SEASON_COUNTDOWN_TARGET = new Date('2026-10-06T16:00:00Z');
 let seasonCountdownTarget = DEFAULT_SEASON_COUNTDOWN_TARGET;
 let seasonCountdownInterval = null;
 
@@ -11067,7 +11067,7 @@ function changeSeasonCountdownDate(){
   if(value === null) return;
   const match = value.trim().match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/);
   if(!match){
-    alert('Formato no válido. Usa AAAA-MM-DD HH:mm, por ejemplo: 2026-10-05 18:00');
+    alert('Formato no válido. Usa AAAA-MM-DD HH:mm, por ejemplo: 2026-10-06 18:00');
     return;
   }
   const [, year, month, day, hour, minute] = match;
