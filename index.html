@@ -4172,7 +4172,7 @@ async function saveProfile(t){
   return await trackedStoreSet('profile:'+t, 'anil:profile:'+t, { hearts: hearts[t], team: teams[t], tickets: tickets[t]||0, pendingPrizes: pendingPrizes[t]||[], dailyBonusDate: dailyBonusDate[t]||null, dailyContestRewardClaims: dailyContestRewardClaims[t]||[], money: money[t]||0, badges: badgeBits[t]||0, locationName: locationName[t]||null, trackerVersion: trackerVersion[t]||null, trackerLives: trackerLives[t]??null, trackerBadges: trackerBadgesAvailable[t] ? Array.from({length:GYM_COUNT}, (_,i)=>!!(badgeBits[t] & (1<<i))) : null });
 }
 
-const DAILY_CONTEST_START = new Date('2026-10-06T22:00:00Z');
+const DAILY_CONTEST_START = new Date('2026-10-07T10:00:00Z');
 const DAILY_CONTEST_TICKETS = 25;
 const DAILY_CONTEST_SECRET_TICKETS = 50;
 const DAILY_CONTEST_ATTEMPT_SECONDS = 30;
@@ -4196,10 +4196,11 @@ function contestSpainParts(date){
 }
 function contestSpainDateKey(date){
   const p = contestSpainParts(date);
-  return `${p.year}-${String(p.month).padStart(2,'0')}-${String(p.day).padStart(2,'0')}`;
+  const contestDate = new Date(Date.UTC(p.year,p.month-1,p.day-(p.hour<12?1:0)));
+  return `${contestDate.getUTCFullYear()}-${String(contestDate.getUTCMonth()+1).padStart(2,'0')}-${String(contestDate.getUTCDate()).padStart(2,'0')}`;
 }
-function contestSpainMidnightUtc(year, month, day){
-  const target = Date.UTC(year, month-1, day);
+function contestSpainMiddayUtc(year, month, day){
+  const target = Date.UTC(year, month-1, day, 12);
   let guess = target;
   for(let i=0;i<3;i++){
     const p = contestSpainParts(new Date(guess));
@@ -4209,12 +4210,13 @@ function contestSpainMidnightUtc(year, month, day){
 }
 function contestNextReset(now=new Date()){
   const p = contestSpainParts(now);
-  const next = new Date(Date.UTC(p.year, p.month-1, p.day+1));
-  return contestSpainMidnightUtc(next.getUTCFullYear(), next.getUTCMonth()+1, next.getUTCDate());
+  const next = new Date(Date.UTC(p.year, p.month-1, p.day+(p.hour>=12?1:0)));
+  return contestSpainMiddayUtc(next.getUTCFullYear(), next.getUTCMonth()+1, next.getUTCDate());
 }
 function contestPuzzleForToday(){
-  const p = contestSpainParts(new Date());
-  const day = Math.floor((Date.UTC(p.year,p.month-1,p.day) - Date.UTC(2026,9,7)) / 86400000);
+  const key = contestSpainDateKey(new Date());
+  const [year,month,date] = key.split('-').map(Number);
+  const day = Math.floor((Date.UTC(year,month-1,date) - Date.UTC(2026,9,7)) / 86400000);
   return DAILY_CONTEST_PUZZLES[((day % DAILY_CONTEST_PUZZLES.length)+DAILY_CONTEST_PUZZLES.length)%DAILY_CONTEST_PUZZLES.length];
 }
 function normalizeDailyContestState(raw){
@@ -4347,7 +4349,7 @@ function renderContest(app){
       : `<div class="contest-options">${order.map((optionIndex,i)=>`<button class="contest-option" type="button" onclick="submitDailyContest('${selectedTrainer}',${optionIndex})">${String.fromCharCode(65+i)} · ${puzzle.options[optionIndex]}</button>`).join('')}</div>`;
   app.innerHTML = `<section class="contest-page">
     <div class="contest-intro"><div class="contest-head"><div><div class="contest-kicker">Desafío diario · ${new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',day:'numeric',month:'long'}).format(new Date())}</div>
-      <h1 class="contest-title">El concurso de Añil</h1><div class="contest-subtitle">Un acertijo Pokémon nuevo cada día. Solo hay una victoria y el primero en acertar cierra el reto para todos.</div></div>
+      <h1 class="contest-title">El Enigma de Añil</h1><div class="contest-subtitle">Un acertijo Pokémon nuevo cada día. Solo hay una victoria y el primero en acertar cierra el reto para todos.</div></div>
       <div class="contest-badge">🏆 8 aciertos = ⭐</div></div>
       <div class="contest-next">Siguiente desafío en <span id="contest-clock">${contestClockMarkup(contestNextReset()-Date.now())}</span></div>
     </div>
@@ -5347,7 +5349,7 @@ function setActiveNav(){
     b.classList.toggle('active', b.dataset.nav === (view==='profile' ? 'home' : view));
   });
   const contestNavLabel = document.querySelector('[data-nav="contest"] .nl');
-  if(contestNavLabel) contestNavLabel.textContent = new Date() >= DAILY_CONTEST_START ? 'Concurso diario' : '???';
+  if(contestNavLabel) contestNavLabel.textContent = new Date() >= DAILY_CONTEST_START ? 'El Enigma' : '???';
   const badge = document.getElementById('history-badge');
   if(badge){
     const n = unreadNewsCount();
@@ -5630,7 +5632,7 @@ function renderRailStatus(){
 function renderTopbar(){
   const el = document.getElementById('crumb');
   if(!el) return;
-  const name = view==='profile' && currentTrainer ? `${NAMES[currentTrainer]}` : view==='contest' && new Date()>=DAILY_CONTEST_START ? 'Concurso diario' : (VIEW_TITLES[view] || '');
+  const name = view==='profile' && currentTrainer ? `${NAMES[currentTrainer]}` : view==='contest' && new Date()>=DAILY_CONTEST_START ? 'El Enigma de Añil' : (VIEW_TITLES[view] || '');
   el.innerHTML = `Añil <b>/ ${name}</b>`;
 }
 
