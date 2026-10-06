@@ -51,7 +51,7 @@ body{
   0%{ transform: scale(1) rotate(0deg); }
   40%{ transform: scale(1.4) rotate(10deg); opacity: .6; }
   100%{ transform: scale(1) rotate(0deg); opacity: .5; }
-}y 
+}
 .pick-mon-item{
   background: var(--panel); border:1px solid var(--border); border-radius: 4px;
   padding: 8px 12px; margin-bottom:6px; transition: border-color .15s ease, background .15s ease;
@@ -3969,6 +3969,16 @@ function toggleWorldMap(){
   render();
 }
 
+function hashStr(s){
+  let h = 5381;
+  for(let i=0;i<s.length;i++) h = ((h<<5)+h+s.charCodeAt(i))|0;
+  return (h>>>0)+':'+s.length;
+}
+let trackerStatesPromise = null;
+function loadTrackerStatesOnce(){
+  if(!trackerStatesPromise) trackerStatesPromise = loadTrackerStates().finally(()=>{ trackerStatesPromise = null; });
+  return trackerStatesPromise;
+}
 async function loadTrackerStates(){
   await Promise.all(TRAINERS.map(async t => {
     try{
@@ -3979,7 +3989,7 @@ async function loadTrackerStates(){
       }
       const team = trainerTrackerTeam(snapshot);
       const lives = Math.trunc(Number(snapshot.lives));
-      const version = JSON.stringify([snapshot.updated ?? null, snapshot.map_id ?? null, snapshot.region_id ?? null, snapshot.map_x ?? null, snapshot.map_y ?? null, snapshot.lives, snapshot.party, snapshot.pokemon ?? null, snapshot.badges ?? null]);
+      const version = hashStr(JSON.stringify([snapshot.updated ?? null, snapshot.map_id ?? null, snapshot.region_id ?? null, snapshot.map_x ?? null, snapshot.map_y ?? null, snapshot.lives, snapshot.party, snapshot.pokemon ?? null, snapshot.badges ?? null]));
       const hasBaseline = trackerVersion[t] != null && Number.isFinite(Number(trackerLives[t]));
       teams[t] = normalizeTeamSpecies(team);
       locationId[t] = snapshot.map_id ?? null;
@@ -3995,8 +4005,7 @@ async function loadTrackerStates(){
         if(!hasBaseline || lives !== Number(trackerLives[t])) hearts[t] = lives;
         trackerVersion[t] = version;
         trackerLives[t] = lives;
-        const saved = await saveProfile(t);
-        if(!saved) queueRetry('profile:'+t, ()=>saveProfile(t));
+        saveProfile(t).then(ok=>{ if(!ok) queueRetry('profile:'+t, ()=>saveProfile(t)); });
       }
       trackerSnapshots[t] = snapshot;
       trackerStatus[t] = 'conectado';
@@ -4150,7 +4159,8 @@ async function loadAll(){
     // sentido). Si lo que llega es un array, lo convertimos sobre la marcha.
     manualFainted[t] = Array.isArray(raw) ? Object.fromEntries(raw.map(pid=>[pid, true])) : (raw || {});
   });
-  await loadTrackerStates();
+  if(!loaded){ loadTrackerStatesOnce().then(()=>render()); }
+  else { await loadTrackerStatesOnce(); }
   const hadLoadWarning = !!loadWarning;
   loadWarning = null;
   loaded = true;
@@ -11222,11 +11232,11 @@ let dashboardPolling = false;
   if(muteBtn) muteBtn.textContent = soundMuted ? '🔇' : '🔊';
   loadNameLists();
   await loadAll();
-  await reconcileDailyContestReward();
-  await seedDefaultNormasIfMissing();
   render();
   showNewsPopupIfAny();
   showTombPopupIfAny();
+  reconcileDailyContestReward().catch(()=>{});
+  seedDefaultNormasIfMissing().then(()=>render()).catch(()=>{});
   setInterval(async ()=>{
     if(dashboardPolling || document.getElementById('modal-overlay') || duelSpinning || rouletteSpinning || slotSpinning || slotJackpotSpinning || loteriaDrawing || bjDealing || nineDealing || finalWheelSpinningWinner || finalWheelSpinningLoser || match1LoserWheelSpinning || sancionWheelSpinning || eggWheelSpinning || cemeteryAnimating || plinkoDropping || (crashState && crashState.phase === 'running') || (view==='final' && finalState && finalState.unlocked)) return; // don't refresh mid-edit, mid-spin, o mientras se está revelando LA FINAL
     dashboardPolling = true;
