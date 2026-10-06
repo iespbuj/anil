@@ -3827,6 +3827,45 @@ function eggSpriteAttributes(mon){
   return `class="egg-sprite" style="--egg-scale:${scale}"`;
 }
 
+// Fallback: especies fuera de SPECIES_NAMES (#1–807) -> número de Pokédex vía PokeAPI por nombre
+const SPECIES_ID_CACHE = {};
+const SPECIES_ID_PENDING = {};
+function speciesSlug(name){
+  return String(name || '').toLowerCase()
+    .replace(/♀/g,'-f').replace(/♂/g,'-m')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[’'.:]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+function speciesIdFromCache(name){
+  const id = SPECIES_ID_CACHE[speciesSlug(name)];
+  return id > 0 ? id : null;
+}
+function resolveSpeciesIdByName(name){
+  const slug = speciesSlug(name);
+  if(!slug || slug in SPECIES_ID_CACHE || SPECIES_ID_PENDING[slug]) return;
+  SPECIES_ID_PENDING[slug] = true;
+  fetch(`https://pokeapi.co/api/v2/pokemon-species/${slug}`)
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP '+r.status)))
+    .then(d => {
+      const id = Number(d && d.id);
+      if(!(id > 0)) throw new Error('sin id');
+      SPECIES_ID_CACHE[slug] = id;
+      let changed = false;
+      Object.keys(teams || {}).forEach(t => {
+        (teams[t] || []).forEach(m => {
+          if(m && !m.isEgg && !m.sprite && speciesSlug(m.species) === slug){
+            m.sprite = pokedexSpriteUrl(id);
+            changed = true;
+          }
+        });
+      });
+      if(changed && typeof render === 'function') render();
+    })
+    .catch(() => { SPECIES_ID_CACHE[slug] = 0; delete SPECIES_ID_PENDING[slug]; });
+}
+
 function trainerTrackerTeam(snapshot){
   if(!Array.isArray(snapshot.party)){
     throw new Error('Tracker Sync no incluye una party válida');
@@ -3837,9 +3876,15 @@ function trainerTrackerTeam(snapshot){
     .map(mon => {
       const isEgg = mon.isEgg === true;
       const species = isEgg ? 'Huevo' : normalizeSpeciesName(mon.species || mon.speciesName || '');
-      const speciesId = Object.keys(SPECIES_NAMES).find(id =>
+      let speciesId = isEgg ? null : Object.keys(SPECIES_NAMES).find(id =>
         SPECIES_NAMES[id].toLowerCase() === species.toLowerCase()
       );
+      if(!speciesId && !isEgg){
+        const direct = Number(mon.speciesId ?? mon.dexId ?? mon.dex);
+        if(Number.isFinite(direct) && direct > 0) speciesId = direct;
+        else speciesId = speciesIdFromCache(species) || null;
+        if(!speciesId) resolveSpeciesIdByName(species);
+      }
       const pid = String(mon.pid ?? `${mon.slot}-${species}`);
       return {
         pid,
