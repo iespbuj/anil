@@ -2764,26 +2764,6 @@ button.primary:active{ box-shadow:0 1px 0 #202660; }
   <div class="settings-hint">Controla el volumen de todos los efectos: tragaperras, ruleta, lotería y más.</div>
 </div>
 
-<section class="countdown-screen" id="season-countdown" aria-label="Cuenta atrás para el comienzo de la temporada">
-  <div class="countdown-vortex" aria-hidden="true"></div>
-  <div class="countdown-content">
-    <div class="countdown-eyebrow">La espera está a punto de terminar</div>
-    <h1 class="countdown-title">AÑIL</h1>
-    <div class="countdown-subtitle">Una nueva aventura despierta</div>
-    <div class="countdown-clock" aria-live="off">
-      <div class="countdown-unit"><span class="countdown-value" id="countdown-days">00</span><span class="countdown-label">DÍAS</span></div>
-      <span class="countdown-separator">:</span>
-      <div class="countdown-unit"><span class="countdown-value" id="countdown-hours">00</span><span class="countdown-label">HORAS</span></div>
-      <span class="countdown-separator">:</span>
-      <div class="countdown-unit"><span class="countdown-value" id="countdown-minutes">00</span><span class="countdown-label">MIN</span></div>
-      <span class="countdown-separator">:</span>
-      <div class="countdown-unit"><span class="countdown-value" id="countdown-seconds">00</span><span class="countdown-label">SEG</span></div>
-    </div>
-    <div class="countdown-date" id="countdown-date">LUNES · 5 DE OCTUBRE · 18:00</div>
-  </div>
-  <button class="countdown-gate" type="button" aria-label="Cambiar la fecha de inicio" title="Cambiar fecha" onclick="changeSeasonCountdownDate()"></button>
-</section>
-
 <script>
 const ART_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
 /* ================================================================
@@ -11221,7 +11201,6 @@ function changeSeasonCountdownDate(){
   updateSeasonCountdown();
 }
 
-startSeasonCountdown();
 
 /* ---------------- INIT + polling ---------------- */
 let dashboardPolling = false;
