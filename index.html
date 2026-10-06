@@ -6396,6 +6396,8 @@ const GIOVANNI_QUIZ = [
   { id:'ik8', type:'iker', q:'¿Qué estudia Iker?', o:['DAW','DAM','ASIX','Chapa y Valorant'], c:0 },
   { id:'ik9', type:'iker', q:'¿Cuántas veces han baneado a Iker 2 semanas de Valorant?', o:['1','Ninguna','2','3'], c:2 },
   { id:'ik10', type:'iker', q:'¿Dónde está el móvil de Alex?', o:['En Ceuta','En Francia','En su casa','Se lo robó su hermano'], c:0 },
+  { id:'ik11', type:'iker', q:'¿Cuándo es el cumpleaños de Iker?', o:['17 de octubre','27 de octubre','27 de noviembre','7 de octubre'], c:1 },
+  { id:'jo1', type:'joel', q:'¿Cuándo es el cumpleaños de Joel?', o:['6 de noviembre','16 de octubre','26 de septiembre','6 de octubre'], c:3 },
   // --- Funciones de la pagina (opinion, sin respuesta correcta) ---
   // Opinion BUENA (sin respuesta correcta, sin tickets)
   { id:'ob1', type:'opinion_buena', q:'¿Qué función de la página te gusta más?', o:['El casino','Los duelos','La colección','El tracker en directo'], },
@@ -6458,7 +6460,7 @@ async function maybeShowGiovanniQuiz(t){
     <img src="${GIOVANNI_IMAGES.hall}" alt="Giovanni, el crupier">
     <div class="gq-tag">Giovanni quiere saber una cosa</div>
     <div class="gq-q">${q.q}</div>
-    ${q.type==='cultura' ? `<div class="gq-tag">Sin IA ni buscadores · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : q.type==='iker' ? `<div class="gq-tag">¿Cuánto conoces a Iker? · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : ''}
+    ${q.type==='cultura' ? `<div class="gq-tag">Sin IA ni buscadores · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : q.type==='joel' ? `<div class="gq-tag">¿Cuánto conoces a Joel? · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : q.type==='iker' ? `<div class="gq-tag">¿Cuánto conoces a Iker? · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : ''}
     <div class="gq-opts">${q.o.map((o,i)=>`<button onclick="answerGiovanniQuiz(${i})">${o}</button>`).join('')}</div>`;
   document.body.appendChild(el);
   return new Promise(resolve => { window._gqResolve = resolve; });
