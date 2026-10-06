@@ -6491,7 +6491,7 @@ function openCasinoProfileModal(){
 
 /* ---------------- Cuestionario sorpresa de Giovanni ---------------- */
 const GIOVANNI_QUIZ_TICKETS = 5; // premio por acertar una de cultura general
-const GIOVANNI_QUIZ_CHANCE = 0.1; // 1 de cada 10 veces que eliges perfil en el casino
+const GIOVANNI_QUIZ_CHANCE = 0.1; // 1 de cada 10, con UNA sola tirada al día por perfil
 const GIOVANNI_QUIZ = [
   // --- Cultura general (dificil) ---
   { id:'cg1', type:'cultura', q:'¿Cuál es la capital de Burkina Faso?', o:['Bamako','Uagadugú','Niamey','Acra'], c:1 },
@@ -6563,8 +6563,26 @@ async function pickGiovanniQuestion(t){
   return { question: left[Math.floor(Math.random() * left.length)], done };
 }
 
+// Máximo una tirada al día por perfil (día natural en hora de Madrid): se gaste o no
+// la pregunta, ese día no se vuelve a tirar. Se guarda en el backend para que valga
+// desde cualquier dispositivo.
+function quizTodayKey(){
+  return new Intl.DateTimeFormat('sv-SE', { timeZone:'Europe/Madrid' }).format(new Date());
+}
+async function giovanniDailyRoll(t){
+  const key = 'anil:quizRoll:' + t;
+  const today = quizTodayKey();
+  const last = await storeGet(key, null);
+  if(last === STORE_FETCH_FAILED) return false; // sin saber si ya tiró hoy, mejor no tirar
+  if(last === today) return false;
+  await storeSet(key, today);
+  return Math.random() < GIOVANNI_QUIZ_CHANCE;
+}
+
 async function maybeShowGiovanniQuiz(t){
-  if(Math.random() >= GIOVANNI_QUIZ_CHANCE) return false;
+  let roll = false;
+  try{ roll = await giovanniDailyRoll(t); }catch(e){}
+  if(!roll) return false;
   let pick = null;
   try{ pick = await pickGiovanniQuestion(t); }catch(e){}
   if(!pick) return false;
