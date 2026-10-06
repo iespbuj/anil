@@ -3157,6 +3157,7 @@ let dailyContestState = { date:null, winner:null, starAwarded:false, attempts:{}
 let contestCountdownInterval = null;
 let contestSubmitting = false;
 let money = {}, badgeBits = {};
+let medalLog = {}; // por entrenador: { nºMedalla: vidas que tenía al conseguirla (null = dato desconocido) }
 let locationName = {};
 let locationId = {};
 let locationRegion = {}, locationMapX = {}, locationMapY = {};
@@ -4004,6 +4005,60 @@ function loadTrackerStatesOnce(){
   if(!trackerStatesPromise) trackerStatesPromise = loadTrackerStates().finally(()=>{ trackerStatesPromise = null; });
   return trackerStatesPromise;
 }
+// Historial automático a partir de Tracker Sync: capturas y muertes (y vidas, más abajo).
+// Se apoya en un registro por entrenador (collections[t]) con todo lo que ya se ha visto,
+// así que solo se anuncia lo NUEVO. La primera vez (registro vacío) solo se rellena en
+// silencio. Los ids son fijos (cap:/dead:/life:), así que si dos páginas lo detectan a la
+// vez no se duplica.
+function pushHistoryEvents(list){
+  const fresh = list.filter(e => !history.some(h => h.id === e.id));
+  if(!fresh.length) return;
+  fresh.forEach(e => history.unshift({ id:e.id, text:e.text, ts:Date.now() }));
+  history = history.slice(0, 300);
+  trackedStoreSet('history', 'anil:history', history).then(ok=>{ if(!ok) queueRetry('history', ()=>trackedStoreSet('history', 'anil:history', history)); });
+}
+function syncTrackerEvents(t, snapshot, team){
+  try{
+    if(['collection:'+t, 'graveyard:'+t, 'history'].some(k => saveInFlight[k] > 0)) return;
+    const reg = (collections[t] && typeof collections[t] === 'object') ? collections[t] : {};
+    const baseline = Object.keys(reg).length === 0;
+    const partyPids = new Set(team.map(m => String(m.pid)));
+    const boxMons = trainerTrackerTeam({ party: Array.isArray(snapshot.pokemon) ? snapshot.pokemon : [] })
+      .filter(m => !partyPids.has(String(m.pid)));
+    const all = [...team.map(m => ({ m, inTeam:true })), ...boxMons.map(m => ({ m, inTeam:false }))].filter(x => !x.m.isEgg);
+    const grave = Array.isArray(graveyard[t]) ? graveyard[t] : [];
+    const newReg = { ...reg };
+    const events = [], tombs = [];
+    let regChanged = false;
+    const now = Date.now();
+    all.forEach(({ m, inTeam }) => {
+      const pid = String(m.pid);
+      const prev = reg[pid];
+      const rec = { nickname:m.nickname, speciesName:m.species, sprite:m.sprite || '', level:m.level, metLocationName:m.metLocationName || null,
+        metLevel:m.metLevel, fainted:!!m.fainted, inTeam, shiny:!!m.shiny, abilityName:m.abilityName || null };
+      const cmp = o => JSON.stringify({ ...o, level:null });
+      if(!prev || cmp(prev) !== cmp(rec)){ newReg[pid] = rec; regChanged = true; }
+      if(!prev && !baseline){
+        events.push({ id:`cap:${t}:${pid}`, text:`${m.shiny ? '✨' : '🆕'} ${NAMES[t]} capturó a ${m.nickname}${m.nickname !== m.species ? ` (${m.species})` : ''}${m.metLocationName ? ` en ${m.metLocationName}` : ''}` });
+      }
+      if(m.fainted && !grave.some(g => (g.pid != null && String(g.pid) === pid) || (g.pid == null && g.nickname === m.nickname && g.speciesName === m.species))){
+        tombs.push({ pid, nickname:m.nickname, speciesName:m.species, sprite:m.sprite || '', level:m.level || 1, diedAt:now });
+        if(!baseline) events.push({ id:`dead:${t}:${pid}`, text:`💔 ${NAMES[t]} perdió a ${m.nickname}${m.nickname !== m.species ? ` (${m.species})` : ''}${m.level ? ` · Nv.${m.level}` : ''}` });
+      }
+    });
+    if(regChanged){
+      collections[t] = newReg;
+      trackedStoreSet('collection:'+t, 'anil:collection:'+t, { pids:newReg }).then(ok=>{ if(!ok) queueRetry('collection:'+t, ()=>trackedStoreSet('collection:'+t, 'anil:collection:'+t, { pids:collections[t] })); });
+    }
+    if(tombs.length){
+      graveyard[t] = [...grave, ...tombs];
+      trackedStoreSet('graveyard:'+t, 'anil:graveyard:'+t, graveyard[t]).then(ok=>{ if(!ok) queueRetry('graveyard:'+t, ()=>trackedStoreSet('graveyard:'+t, 'anil:graveyard:'+t, graveyard[t])); });
+    }
+    if(events.length) pushHistoryEvents(events);
+  }catch(error){
+    console.error(`Historial Tracker Sync (${NAMES[t]}):`, error);
+  }
+}
 async function loadTrackerStates(){
   await Promise.all(TRAINERS.map(async t => {
     try{
@@ -4023,11 +4078,29 @@ async function loadTrackerStates(){
       locationMapX[t] = snapshot.map_x ?? null;
       locationMapY[t] = snapshot.map_y ?? null;
       trackerBadgesAvailable[t] = Array.isArray(snapshot.badges) && snapshot.badges.length === 8;
+      const prevLivesForEvents = Number(trackerLives[t]);
       if(snapshot.money != null && Number.isFinite(Number(snapshot.money))) money[t] = Math.max(0, Math.trunc(Number(snapshot.money)));
       if(trackerBadgesAvailable[t]){
         badgeBits[t] = snapshot.badges.reduce((bits, owned, index) => owned === true ? bits | (1 << index) : bits, 0);
       }
-      if(!hasBaseline || version !== trackerVersion[t]){
+      let medalLogChanged = false;
+      if(trackerBadgesAvailable[t]){
+        // Vidas con las que llegó a cada medalla (para el Elo). Lo que ya tenía antes de
+        // existir este registro queda en null (se desconoce) y no puntúa.
+        const count = badgeCountOf(t);
+        const firstTime = !medalLog[t];
+        const log = medalLog[t] = medalLog[t] || {};
+        if(firstTime) medalLogChanged = true;
+        for(let n = 1; n <= count; n++){
+          if(!(n in log)){ log[n] = firstTime ? null : lives; medalLogChanged = true; }
+        }
+      }
+      if(hasBaseline && Number.isFinite(prevLivesForEvents) && lives < prevLivesForEvents && version !== trackerVersion[t]){
+        const d = prevLivesForEvents - lives;
+        pushHistoryEvents([{ id:`life:${t}:${snapshot.updated ?? Date.now()}`, text:`💔 ${NAMES[t]} perdió ${d} vida${d>1?'s':''} (${lives}/20)` }]);
+      }
+      syncTrackerEvents(t, snapshot, team);
+      if(!hasBaseline || version !== trackerVersion[t] || medalLogChanged){
         if(!hasBaseline || lives !== Number(trackerLives[t])) hearts[t] = lives;
         trackerVersion[t] = version;
         trackerLives[t] = lives;
@@ -4140,13 +4213,23 @@ async function loadAll(){
     dailyBonusDate[t] = profileResults[i].dailyBonusDate || null;
     dailyContestRewardClaims[t] = Array.isArray(profileResults[i].dailyContestRewardClaims) ? profileResults[i].dailyContestRewardClaims.filter(id=>typeof id === 'string') : [];
     money[t] = profileResults[i].money || 0;
+    medalLog[t] = (profileResults[i].medalLog && typeof profileResults[i].medalLog === 'object')
+      ? { ...(medalLog[t] || {}), ...profileResults[i].medalLog }
+      : (medalLog[t] || null);
     badgeBits[t] = profileResults[i].badges || 0;
     locationName[t] = profileResults[i].locationName || null;
     trackerVersion[t] = profileResults[i].trackerVersion ?? null;
     trackerLives[t] = profileResults[i].trackerLives ?? null;
     trackerBadgesAvailable[t] = Array.isArray(profileResults[i].trackerBadges) && profileResults[i].trackerBadges.length === 8;
   });
-  if(!saveInFlight['history']) history = historyResult;
+  if(!saveInFlight['history']){
+    const seenIds = new Set();
+    history = (Array.isArray(historyResult) ? historyResult : []).filter(h => {
+      if(!h || !h.id) return true;
+      if(seenIds.has(h.id)) return false;
+      seenIds.add(h.id); return true;
+    });
+  }
   if(!saveInFlight['trades']){ tradesActive = tradesResult.active; tradesHistory = tradesResult.history; }
   if(!saveInFlight['duel']) duelState = duelResult;
   if(!saveInFlight['duelHistory']) duelHistory = duelHistoryResult;
@@ -4175,8 +4258,8 @@ async function loadAll(){
   if(!saveInFlight['normas']) normas = normasResult;
   if(!saveInFlight['sancion']) sancionState = sancionResult;
   if(!saveInFlight['loteria']) loteria = loteriaResult;
-  TRAINERS.forEach((t, i) => { collections[t] = collectionResults[i].pids || {}; });
-  TRAINERS.forEach((t, i) => { graveyard[t] = graveyardResults[i] || []; });
+  TRAINERS.forEach((t, i) => { if(!(saveInFlight['collection:'+t] > 0)) collections[t] = collectionResults[i].pids || {}; });
+  TRAINERS.forEach((t, i) => { if(!(saveInFlight['graveyard:'+t] > 0)) graveyard[t] = graveyardResults[i] || []; });
   TRAINERS.forEach((t, i) => {
     if(saveInFlight['manualFainted:'+t] > 0) return;
     const raw = manualFaintedResults[i];
@@ -4205,7 +4288,7 @@ async function loadAll(){
 }
 async function saveProfile(t){
   teams[t] = normalizeTeamSpecies(teams[t]);
-  return await trackedStoreSet('profile:'+t, 'anil:profile:'+t, { hearts: hearts[t], team: teams[t], tickets: tickets[t]||0, pendingPrizes: pendingPrizes[t]||[], dailyBonusDate: dailyBonusDate[t]||null, dailyContestRewardClaims: dailyContestRewardClaims[t]||[], money: money[t]||0, badges: badgeBits[t]||0, locationName: locationName[t]||null, trackerVersion: trackerVersion[t]||null, trackerLives: trackerLives[t]??null, trackerBadges: trackerBadgesAvailable[t] ? Array.from({length:GYM_COUNT}, (_,i)=>!!(badgeBits[t] & (1<<i))) : null });
+  return await trackedStoreSet('profile:'+t, 'anil:profile:'+t, { hearts: hearts[t], team: teams[t], tickets: tickets[t]||0, pendingPrizes: pendingPrizes[t]||[], dailyBonusDate: dailyBonusDate[t]||null, dailyContestRewardClaims: dailyContestRewardClaims[t]||[], money: money[t]||0, medalLog: medalLog[t]||null, badges: badgeBits[t]||0, locationName: locationName[t]||null, trackerVersion: trackerVersion[t]||null, trackerLives: trackerLives[t]??null, trackerBadges: trackerBadgesAvailable[t] ? Array.from({length:GYM_COUNT}, (_,i)=>!!(badgeBits[t] & (1<<i))) : null });
 }
 
 const DAILY_CONTEST_START = new Date('2026-10-07T10:00:00Z');
@@ -8894,6 +8977,18 @@ function getUltraSolRecord(){ return null; }
 // Un K alto hace que cada combate pese y que una victoria sorpresa mueva mucho
 // más el rating que una victoria esperada; el cambio siempre es simétrico.
 const ELO_START = 1000, ELO_K_COMBAT = 200, ELO_K_LOCKE = 80, ELO_MARGIN_20 = 1.3;
+// Partida en curso (Añil): cada vida perdida resta un poco y llegar a una medalla con
+// muchas vidas suma un poco. No es de suma cero: solo depende de cada uno.
+const ELO_LIVES_MAX = 20;
+const ELO_LIFE_LOSS = 3; // Elo por vida perdida (de las 20)
+function eloMedalBonus(livesAtMedal){
+  const l = Number(livesAtMedal);
+  if(livesAtMedal == null || !Number.isFinite(l)) return 0; // dato desconocido
+  if(l >= 20) return 8;  // sin perder ni una vida
+  if(l >= 15) return 5;
+  if(l >= 10) return 3;
+  return 0;
+}
 
 // Orden cronológico de las partidas anteriores a Añil.
 const ELO_LEGACY_GAMES = [];
@@ -9009,14 +9104,14 @@ function eloScoreOf(games, a, b){
 let _eloCache = null, _eloKey = '';
 function computeElo(){
   const hist = duelHistory || [];
-  const key = hist.length + ':' + (hist[0] ? hist[0].id : '') + ':' + (hist[hist.length - 1] ? hist[hist.length - 1].id : '');
+  const key = hist.length + ':' + (hist[0] ? hist[0].id : '') + ':' + (hist[hist.length - 1] ? hist[hist.length - 1].id : '') + ':' + JSON.stringify([hearts, medalLog]);
   if(_eloCache && _eloKey === key) return _eloCache;
 
   const R = {}, series = {}, st = {};
   TRAINERS.forEach(t => {
     R[t] = ELO_START;
     series[t] = [{ elo: ELO_START, label: 'Inicio', type: 'start' }];
-    st[t] = { w: 0, l: 0, streak: 0, best: 0, streakVs: {}, peak: ELO_START, lockes: 0, fromCombats: 0, fromLockes: 0, curW: 0, curL: 0 };
+    st[t] = { w: 0, l: 0, streak: 0, best: 0, streakVs: {}, peak: ELO_START, lockes: 0, fromCombats: 0, fromLockes: 0, fromRun: 0, curW: 0, curL: 0 };
   });
   const h2h = {}; // 'a-b' (ordenado) -> { a: n, b: n }
 
@@ -9088,6 +9183,19 @@ function computeElo(){
     one(h.final, h.finalScore);
   });
 
+  // Vidas perdidas (resta) y medallas conseguidas con vidas de sobra (suma).
+  TRAINERS.forEach(t => {
+    const h = Number(hearts[t]);
+    const lost = Number.isFinite(h) ? Math.min(Math.max(ELO_LIVES_MAX - h, 0), ELO_LIVES_MAX + 1) : 0;
+    let bonus = 0;
+    Object.values(medalLog[t] || {}).forEach(v => { bonus += eloMedalBonus(v); });
+    const d = bonus - lost * ELO_LIFE_LOSS;
+    if(!d) return;
+    R[t] += d; st[t].fromRun += d;
+    st[t].peak = Math.max(st[t].peak, R[t]);
+    series[t].push({ elo: R[t], label: `Añil: vidas y medallas (${d > 0 ? '+' : ''}${Math.round(d)})`, type: 'run', d });
+  });
+
   _eloCache = { R, series, st, h2h };
   _eloKey = key;
   return _eloCache;
@@ -9144,7 +9252,7 @@ function renderEloCard(t){
         <div class="elo-stat"><b>${st.lockes}</b><span>lockes ganados</span></div>
         <div class="elo-stat"><b>${Math.round(st.peak)}</b><span>Elo máximo</span></div>
         <div class="elo-stat"><b>${streakTxt}</b><span>racha ganadora (mejor: ${st.best})</span></div>
-        <div class="elo-stat"><b>${sign(st.fromCombats)} / ${sign(st.fromLockes)}</b><span>de combates / de lockes</span></div>
+        <div class="elo-stat"><b>${sign(st.fromCombats)} / ${sign(st.fromLockes)} / ${sign(st.fromRun)}</b><span>combates / lockes / vidas y medallas</span></div>
       </div>
       <div class="elo-h2h-wrap">${h2hRows}</div>
       ${ELO_LEGACY_PROVISIONAL ? `<div class="elo-note">Ultra Sol y Pokémon X ya usan el historial real combate a combate. Solo SoulSilver sigue siendo provisional (repartido a partir del marcador total) hasta tener el registro real.</div>` : ''}
