@@ -6385,12 +6385,30 @@ const GIOVANNI_QUIZ = [
   { id:'cg8', type:'cultura', q:'¿Qué elemento químico tiene el símbolo Sb?', o:['Estaño','Antimonio','Azufre','Selenio'], c:1 },
   { id:'cg9', type:'cultura', q:'¿Qué emperador unificó China en el 221 a. C.?', o:['Han Wudi','Kublai Kan','Qin Shi Huang','Kangxi'], c:2 },
   { id:'cg10', type:'cultura', q:'¿Qué tratado de 1648 puso fin a la Guerra de los Treinta Años?', o:['Paz de Westfalia','Tratado de Utrecht','Congreso de Viena','Paz de Augsburgo'], c:0 },
+  // --- ¿Cuánto conoces a Iker? (+5 si aciertas, -5 si fallas) ---
+  { id:'ik1', type:'iker', q:'¿Cuál es la comida favorita de Iker?', o:['Pizza','Hamburguesa','Pasta','Sushi'], c:2 },
+  { id:'ik2', type:'iker', q:'¿Cuál es el Pokémon favorito de Iker?', o:['Charizard','Gengar','Claydol','Mewtwo'], c:2 },
+  { id:'ik3', type:'iker', q:'¿Cuál es el videojuego favorito de Iker, dejando aparte Pokémon?', o:['The Last of Us 2','Red Dead Redemption 2','Valorant','Road 96'], c:3 },
+  { id:'ik4', type:'iker', q:'¿Cómo cree Iker que le va a ir el Nuzlocke?', o:['Ganando los combates ez','Perdiendo en la primera ruta','Sufriendo hasta la última vida','Con el equipo lleno de shinies'], c:0 },
+  { id:'ik5', type:'iker', q:'¿Qué hace Iker cuando pierde un Pokémon?', o:['Se ríe','Se enfada','Se queda en silencio','Culpa a Alex o a Joel'], c:3 },
+  { id:'ik6', type:'iker', q:'¿Quién ha creado esta página?', o:['ChatGPT','Claude','Copilot','El admin, que es un genio'], c:3 },
+  { id:'ik7', type:'iker', q:'¿Cuál es el color favorito de Iker?', o:['Rojo','Azul','Negro','Verde'], c:0 },
+  { id:'ik8', type:'iker', q:'¿Qué estudia Iker?', o:['DAW','DAM','ASIX','Chapa y Valorant'], c:0 },
+  { id:'ik9', type:'iker', q:'¿Cuántas veces han baneado a Iker 2 semanas de Valorant?', o:['1','Ninguna','2','3'], c:2 },
+  { id:'ik10', type:'iker', q:'¿Dónde está el móvil de Alex?', o:['En Ceuta','En Francia','En su casa','Se lo robó su hermano'], c:0 },
   // --- Funciones de la pagina (opinion, sin respuesta correcta) ---
-  { id:'fn1', type:'funciones', q:'¿Qué función de la página te parece menos útil?', o:['Intercambios','Cementerio','Colección','Historial'] },
-  { id:'fn2', type:'funciones', q:'¿Qué juego del casino quitarías?', o:['Plinko','Mines','La Grieta','Sorteo Pokémon'] },
-  { id:'fn3', type:'funciones', q:'¿Qué función nueva te gustaría que añadiéramos?', o:['Más juegos de casino','Estadísticas de cada run','Chat entre jugadores','Apuestas en los combates'] },
-  { id:'fn4', type:'funciones', q:'¿Con qué frecuencia entras a la página mientras juegas?', o:['Varias veces al día','Una vez al día','Cada pocos días','Casi nunca'] },
-  { id:'fn5', type:'funciones', q:'¿Qué es lo que más te molesta de la página?', o:['Tarda en cargar','Es confusa','Faltan datos del tracker','Los premios del casino'] },
+  // Opinion BUENA (sin respuesta correcta, sin tickets)
+  { id:'ob1', type:'opinion_buena', q:'¿Qué función de la página te gusta más?', o:['El casino','Los duelos','La colección','El tracker en directo'], },
+  { id:'ob2', type:'opinion_buena', q:'¿Cuál es tu juego favorito del casino?', o:['Tragaperras','Ruleta','Blackjack','Plinko'] },
+  { id:'ob3', type:'opinion_buena', q:'¿Qué función nueva te gustaría que añadiéramos?', o:['Más juegos de casino','Estadísticas de cada run','Chat entre jugadores','Apuestas en los combates'] },
+  { id:'ob4', type:'opinion_buena', q:'¿Qué es lo mejor de la página?', o:['El diseño','Ver el equipo de los demás','El casino','Los premios'] },
+  { id:'ob5', type:'opinion_buena', q:'¿Qué nota le pones a la página?', o:['10','8 o 9','6 o 7','Menos de 6'] },
+  // Opinion MALA (sin respuesta correcta, sin tickets)
+  { id:'om1', type:'opinion_mala', q:'¿Qué función de la página te parece menos útil?', o:['Intercambios','Cementerio','Colección','Historial'] },
+  { id:'om2', type:'opinion_mala', q:'¿Qué juego del casino quitarías?', o:['Plinko','Mines','La Grieta','Sorteo Pokémon'] },
+  { id:'om3', type:'opinion_mala', q:'¿Qué es lo que más te molesta de la página?', o:['Tarda en cargar','Es confusa','Faltan datos del tracker','Los premios del casino'] },
+  { id:'om4', type:'opinion_mala', q:'¿Qué parte de la página te parece más aburrida?', o:['El cementerio','El historial','Las normas','La colección'] },
+  { id:'om5', type:'opinion_mala', q:'¿Qué es lo que peor funciona?', o:['El tracker','El casino','Los intercambios','Los duelos'] },
 ];
 let giovanniQuizCurrent = null;
 let giovanniQuizTrainer = null;
@@ -6440,7 +6458,7 @@ async function maybeShowGiovanniQuiz(t){
     <img src="${GIOVANNI_IMAGES.hall}" alt="Giovanni, el crupier">
     <div class="gq-tag">Giovanni quiere saber una cosa</div>
     <div class="gq-q">${q.q}</div>
-    ${q.type==='cultura' ? `<div class="gq-tag">Sin IA ni buscadores · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : ''}
+    ${q.type==='cultura' ? `<div class="gq-tag">Sin IA ni buscadores · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : q.type==='iker' ? `<div class="gq-tag">¿Cuánto conoces a Iker? · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : ''}
     <div class="gq-opts">${q.o.map((o,i)=>`<button onclick="answerGiovanniQuiz(${i})">${o}</button>`).join('')}</div>`;
   document.body.appendChild(el);
   return new Promise(resolve => { window._gqResolve = resolve; });
