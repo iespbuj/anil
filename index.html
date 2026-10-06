@@ -6370,12 +6370,116 @@ function openCasinoProfileModal(){
   `, false);
 }
 
+/* ---------------- Cuestionario sorpresa de Giovanni ---------------- */
+const GIOVANNI_QUIZ_TICKETS = 5; // premio por acertar una de cultura general
+const GIOVANNI_QUIZ_CHANCE = 0.1; // 1 de cada 10 veces que eliges perfil en el casino
+const GIOVANNI_QUIZ = [
+  // --- Cultura general (dificil) ---
+  { id:'cg1', type:'cultura', q:'¿Cuál es la capital de Burkina Faso?', o:['Bamako','Uagadugú','Niamey','Acra'], c:1 },
+  { id:'cg2', type:'cultura', q:'¿En qué año se firmó el Tratado de Tordesillas?', o:['1492','1494','1498','1503'], c:1 },
+  { id:'cg3', type:'cultura', q:'¿Quién demostró el último teorema de Fermat?', o:['Grigori Perelman','Terence Tao','Andrew Wiles','Pierre Deligne'], c:2 },
+  { id:'cg4', type:'cultura', q:'¿Cuál es el río más largo de Europa?', o:['Danubio','Volga','Rin','Dniéper'], c:1 },
+  { id:'cg5', type:'cultura', q:'¿Cuál es el hueso más pequeño del cuerpo humano?', o:['Martillo','Yunque','Estribo','Hioides'], c:2 },
+  { id:'cg6', type:'cultura', q:'¿Qué país tiene más husos horarios contando sus territorios de ultramar?', o:['Rusia','Estados Unidos','Francia','Reino Unido'], c:2 },
+  { id:'cg7', type:'cultura', q:'¿En qué año cayó Constantinopla en manos otomanas?', o:['1389','1453','1492','1517'], c:1 },
+  { id:'cg8', type:'cultura', q:'¿Qué elemento químico tiene el símbolo Sb?', o:['Estaño','Antimonio','Azufre','Selenio'], c:1 },
+  { id:'cg9', type:'cultura', q:'¿Qué emperador unificó China en el 221 a. C.?', o:['Han Wudi','Kublai Kan','Qin Shi Huang','Kangxi'], c:2 },
+  { id:'cg10', type:'cultura', q:'¿Qué tratado de 1648 puso fin a la Guerra de los Treinta Años?', o:['Paz de Westfalia','Tratado de Utrecht','Congreso de Viena','Paz de Augsburgo'], c:0 },
+  // --- Funciones de la pagina (opinion, sin respuesta correcta) ---
+  { id:'fn1', type:'funciones', q:'¿Qué función de la página te parece menos útil?', o:['Intercambios','Cementerio','Colección','Historial'] },
+  { id:'fn2', type:'funciones', q:'¿Qué juego del casino quitarías?', o:['Plinko','Mines','La Grieta','Sorteo Pokémon'] },
+  { id:'fn3', type:'funciones', q:'¿Qué función nueva te gustaría que añadiéramos?', o:['Más juegos de casino','Estadísticas de cada run','Chat entre jugadores','Apuestas en los combates'] },
+  { id:'fn4', type:'funciones', q:'¿Con qué frecuencia entras a la página mientras juegas?', o:['Varias veces al día','Una vez al día','Cada pocos días','Casi nunca'] },
+  { id:'fn5', type:'funciones', q:'¿Qué es lo que más te molesta de la página?', o:['Tarda en cargar','Es confusa','Faltan datos del tracker','Los premios del casino'] },
+];
+let giovanniQuizCurrent = null;
+let giovanniQuizTrainer = null;
+let giovanniQuizDone = null;
+
+function injectGiovanniQuizStyle(){
+  if(document.getElementById('gq-style')) return;
+  const s = document.createElement('style');
+  s.id = 'gq-style';
+  s.textContent = `
+  #gq-overlay{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px;overflow-y:auto;
+    background:radial-gradient(circle at 50% 30%,#2a1060,#0a0418 75%);color:#fff;font-family:inherit;text-align:center}
+  #gq-overlay img{height:min(38vh,320px);width:auto;object-fit:contain;filter:drop-shadow(0 12px 26px rgba(0,0,0,.7))}
+  #gq-overlay .gq-tag{font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+  #gq-overlay .gq-q{font-size:clamp(18px,3.4vw,26px);font-weight:700;max-width:640px;line-height:1.3}
+  #gq-overlay .gq-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(640px,100%)}
+  #gq-overlay .gq-opts button,#gq-overlay .gq-enter{padding:14px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:15px;cursor:pointer;font-family:inherit}
+  #gq-overlay .gq-opts button:hover,#gq-overlay .gq-enter:hover{background:rgba(255,255,255,.2)}
+  #gq-overlay .gq-opts button:disabled{opacity:.5;cursor:default}
+  @media(max-width:520px){#gq-overlay .gq-opts{grid-template-columns:1fr}}`;
+  document.head.appendChild(s);
+}
+
+// Devuelve una pregunta que este perfil aun no ha contestado (o null).
+async function pickGiovanniQuestion(t){
+  const done = await storeGet('anil:quiz:' + t, []);
+  if(done === STORE_FETCH_FAILED || !Array.isArray(done)) return null;
+  const answered = new Set(done.map(a => a.qid));
+  const left = GIOVANNI_QUIZ.filter(q => !answered.has(q.id));
+  if(!left.length) return null;
+  return { question: left[Math.floor(Math.random() * left.length)], done };
+}
+
+async function maybeShowGiovanniQuiz(t){
+  if(Math.random() >= GIOVANNI_QUIZ_CHANCE) return false;
+  let pick = null;
+  try{ pick = await pickGiovanniQuestion(t); }catch(e){}
+  if(!pick) return false;
+  giovanniQuizCurrent = pick.question;
+  giovanniQuizTrainer = t;
+  giovanniQuizDone = pick.done;
+  injectGiovanniQuizStyle();
+  const q = pick.question;
+  const el = document.createElement('div');
+  el.id = 'gq-overlay';
+  el.innerHTML = `
+    <img src="${GIOVANNI_IMAGES.hall}" alt="Giovanni, el crupier">
+    <div class="gq-tag">Giovanni quiere saber una cosa</div>
+    <div class="gq-q">${q.q}</div>
+    ${q.type==='cultura' ? `<div class="gq-tag">Sin IA ni buscadores · si aciertas +${GIOVANNI_QUIZ_TICKETS} tickets, si fallas -${GIOVANNI_QUIZ_TICKETS}</div>` : ''}
+    <div class="gq-opts">${q.o.map((o,i)=>`<button onclick="answerGiovanniQuiz(${i})">${o}</button>`).join('')}</div>`;
+  document.body.appendChild(el);
+  return new Promise(resolve => { window._gqResolve = resolve; });
+}
+
+async function answerGiovanniQuiz(i){
+  const q = giovanniQuizCurrent;
+  if(!q) return;
+  giovanniQuizCurrent = null;
+  const el = document.getElementById('gq-overlay');
+  el.querySelectorAll('.gq-opts button').forEach(b => b.disabled = true);
+  const record = { qid:q.id, type:q.type, question:q.q, answer:q.o[i], ts:Date.now() };
+  if(q.c !== undefined) record.correct = (i === q.c);
+  el.querySelector('.gq-tag').textContent = '';
+  const won = record.correct === true;
+  const lost = record.correct === false;
+  el.querySelector('.gq-q').textContent = won ? `¡Correcto! +${GIOVANNI_QUIZ_TICKETS} tickets. Muchas gracias por contestar.`
+    : lost ? `Fallaste: -${GIOVANNI_QUIZ_TICKETS} tickets. Muchas gracias por contestar.`
+    : 'Muchas gracias por contestar.';
+  el.querySelector('.gq-opts').innerHTML = '<button class="gq-enter" style="grid-column:1/-1" onclick="closeGiovanniQuiz()">Entrar al casino</button>';
+  const trainer = giovanniQuizTrainer;
+  try{ await storeSet('anil:quiz:' + trainer, [...giovanniQuizDone, record]); }catch(e){}
+  if(won || lost){
+    try{ await addTickets(trainer, won ? GIOVANNI_QUIZ_TICKETS : -GIOVANNI_QUIZ_TICKETS, (won ? 'acierto' : 'fallo') + ' en el cuestionario de Giovanni'); render(); }catch(e){}
+  }
+}
+
+function closeGiovanniQuiz(){
+  const el = document.getElementById('gq-overlay');
+  if(el) el.remove();
+  if(window._gqResolve){ const r = window._gqResolve; window._gqResolve = null; r(true); }
+}
+
 function confirmCasinoPlayer(t){
   casinoPlayer = t;
   casinoNeedsProfileSelect = false;
   closeModal();
   render();
-  checkDailyBonus(t);
+  Promise.resolve(maybeShowGiovanniQuiz(t)).catch(()=>{}).then(() => checkDailyBonus(t));
 }
 
 function setCasinoPlayer(t){
