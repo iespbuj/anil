@@ -5949,49 +5949,13 @@ function lbRow(t, r){
     </div>`;
 }
 /* ---------------- Tiempo sin Joel ----------------
-   La pagina no necesita saber quien la abre: deduce la actividad de Joel de lo que
-   ya guarda con hora. Se usa lo MAS RECIENTE de:
-   - su Tracker Sync (snapshot.updated: su partida avanza, se mueve, captura...)
-   - el casino y demas gastos/ganancias de tickets hechos por el (historial)
-   - regalos que haya hecho, intercambios (ofertas, contraofertas, aceptaciones)
-   - boletos de loteria, normas que haya escrito y el reto diario que haya empezado
-   Se ignoran cosas que le pasan sin que haga nada (premio de loteria, cobros de
-   apuestas que liquida otro, desafios que le ganan o pierde, devoluciones...). */
-const JOEL_PASSIVE_REASON_RE = /^(Premio de la lotería|Jugar la Final|Jugar el Combate 1|Acertó su apuesta|Ganó un desafío|Perdió un desafío)|cancelado/;
+   Cuenta desde la ultima actualizacion del Tracker Sync de Joel (snapshot.updated, en
+   segundos): solo cuenta que su PARTIDA avance. No se mira el casino ni nada de la web,
+   porque alguien podria entrar por error en su perfil. */
 function joelLastActivityMs(){
-  const J = 'joel', nm = NAMES[J];
-  let last = 0;
-  const bump = v => { v = Number(v); if(Number.isFinite(v) && v > last) last = v; };
-
-  // 1) Tracker Sync (segundos -> ms)
-  const snap = trackerSnapshots[J];
+  const snap = trackerSnapshots.joel;
   const u = snap ? Number(snap.updated) : NaN;
-  if(Number.isFinite(u) && u > 0) bump(u * 1000);
-
-  // 2) Historial: casino/tickets y regalos hechos por el
-  const ticketPrefix = `🎟️ ${nm} `, giftPrefix = `🎁 ${nm} le regaló`;
-  (history || []).forEach(h => {
-    const text = String(h && h.text || '');
-    if(text.startsWith(giftPrefix)){ bump(h.ts); return; }
-    if(!text.startsWith(ticketPrefix)) return;
-    const m = text.match(/^🎟️ .+? [+-]?\d+ tickets \((.+)\) →/);
-    if(m && !JOEL_PASSIVE_REASON_RE.test(m[1])) bump(h.ts);
-  });
-
-  // 3) Intercambios
-  (tradesActive || []).forEach(o => {
-    if(o.trainer === J) bump(o.ts);
-    (o.counters || []).forEach(c => { if(c.trainer === J) bump(c.ts); });
-  });
-  (tradesHistory || []).forEach(x => { if(x.offerTrainer === J) bump(x.ts); }); // quien acepta es el que ofrecio
-
-  // 4) Loteria, normas y reto diario
-  ((loteria && loteria.entries) || []).forEach(e => { if(e.trainer === J) bump(e.ts); });
-  (normas || []).forEach(n => { if(n.trainer === J) bump(n.ts); });
-  const attempt = dailyContestState && dailyContestState.attempts && dailyContestState.attempts[J];
-  if(attempt) bump(attempt.startedAt);
-
-  return last;
+  return Number.isFinite(u) && u > 0 ? u * 1000 : 0;
 }
 function fmtSinceJoel(ms){
   const total = Math.floor(ms / 1000);
@@ -6019,7 +5983,7 @@ function renderSinJoelCard(){
       <div>
         <div class="sin-joel-label">⏱️ Tiempo sin ${NAMES.joel}</div>
         <div class="sin-joel-time" id="sin-joel-time" data-level="">—</div>
-        <div class="sin-joel-note">Se reinicia cuando avanza su partida o hace algo en la web (casino, apuestas, intercambios...).</div>
+        <div class="sin-joel-note">Se reinicia cuando su partida se actualiza (Tracker Sync).</div>
       </div>
     </div>`;
 }
