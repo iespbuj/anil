@@ -839,6 +839,83 @@ body{
 .champion-glow{
   box-shadow: 0 0 34px rgba(255,150,70,0.5), inset 0 0 0 1px rgba(255,200,140,0.5) !important;
 }
+/* --- La Final: campeón más espectacular + clasificación final --- */
+.final-champion-wrap.revealed{
+  position:relative; overflow:hidden; border-color:rgba(255,215,106,.7);
+  background:radial-gradient(circle at 50% 0%,rgba(255,200,90,.2),transparent 62%),linear-gradient(160deg,#16120a,#0b0a10 70%);
+  box-shadow:0 0 70px rgba(255,200,90,.28),inset 0 0 0 1px rgba(255,215,106,.22);
+}
+.final-champion-wrap.revealed::before{
+  content:''; position:absolute; left:50%; top:-90%; width:240%; aspect-ratio:1; transform:translateX(-50%);
+  background:repeating-conic-gradient(from 0deg,rgba(255,215,106,.1) 0 7deg,transparent 7deg 20deg);
+  -webkit-mask-image:radial-gradient(circle,#000 0,transparent 62%); mask-image:radial-gradient(circle,#000 0,transparent 62%);
+  animation:championRays 30s linear infinite; pointer-events:none;
+}
+.final-champion-wrap.revealed > *{ position:relative; z-index:1; }
+@keyframes championRays{ to{ transform:translateX(-50%) rotate(360deg); } }
+.final-champion-wrap.revealed .final-champion-eyebrow{ color:#ffd76a; }
+.final-champion-wrap.revealed .final-champion-crown{ font-size:64px; filter:drop-shadow(0 0 18px rgba(255,200,80,.7)); }
+.final-champion-wrap.revealed .final-champion-name{
+  color:#ffe29a; font-size:clamp(30px,7vw,44px); letter-spacing:3px;
+  text-shadow:0 0 22px rgba(255,200,80,.55),0 2px 0 rgba(0,0,0,.4);
+}
+.final-champion-wrap.revealed .final-champion-sub{ color:#d9c58a; }
+.final-sparkles{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
+.final-sparkles span{
+  position:absolute; bottom:-14px; color:#ffd76a; opacity:0; font-size:14px;
+  animation:sparkleUp 4.2s ease-in infinite;
+}
+.final-sparkles span:nth-child(1){ left:8%;  animation-delay:0s;   font-size:12px; }
+.final-sparkles span:nth-child(2){ left:22%; animation-delay:1.1s; font-size:18px; }
+.final-sparkles span:nth-child(3){ left:38%; animation-delay:2.2s; font-size:11px; }
+.final-sparkles span:nth-child(4){ left:55%; animation-delay:.6s;  font-size:16px; }
+.final-sparkles span:nth-child(5){ left:71%; animation-delay:1.8s; font-size:13px; }
+.final-sparkles span:nth-child(6){ left:86%; animation-delay:2.9s; font-size:17px; }
+@keyframes sparkleUp{
+  0%{ transform:translateY(0) scale(.6); opacity:0; }
+  15%{ opacity:.95; }
+  100%{ transform:translateY(-330px) scale(1.1) rotate(40deg); opacity:0; }
+}
+.final-standings{
+  max-width:460px; margin:0 auto 24px; padding:16px 14px 12px; border-radius:12px;
+  border:1px solid rgba(255,255,255,.09); background:linear-gradient(155deg,#0d1422,#080b13);
+  animation:floatIn .5s ease .25s both;
+}
+.final-standings-title{
+  text-align:center; margin-bottom:10px; color:var(--neon-cyan);
+  font:800 10px var(--f-mono); letter-spacing:.22em; text-transform:uppercase;
+}
+.final-standings-row{
+  display:grid; grid-template-columns:30px 1fr auto 48px; align-items:center; gap:10px;
+  padding:10px 8px; border-top:1px solid rgba(255,255,255,.06);
+}
+.final-standings-row:first-of-type{ border-top:0; }
+.final-standings-row.first{ background:linear-gradient(90deg,rgba(255,200,90,.14),transparent); border-radius:8px; }
+.final-standings-row.lost{ opacity:.55; }
+.fs-pos{ font:800 15px var(--f-mono); color:var(--silver-dim); text-align:center; }
+.final-standings-row.first .fs-pos{ color:#ffd76a; }
+.fs-name{ font-weight:700; color:var(--silver-bright); }
+.fs-detail{ font-size:11px; color:var(--ash); }
+.fs-total{ text-align:right; font:800 18px var(--f-mono); color:var(--silver-bright); }
+.final-standings-row.first .fs-total{ color:#ffd76a; }
+@media (prefers-reduced-motion:reduce){
+  .final-champion-wrap.revealed::before,.final-sparkles span{ animation:none; }
+  .final-sparkles{ display:none; }
+}
+/* --- Marcador: tiempo sin Joel --- */
+.sin-joel{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  margin-bottom:22px; padding:14px 18px;
+}
+.sin-joel-label{ font:800 11px var(--f-mono); letter-spacing:.2em; text-transform:uppercase; color:var(--silver-dim); }
+.sin-joel-time{
+  font:800 clamp(26px,5vw,36px) var(--f-mono); letter-spacing:.04em; color:var(--silver-bright);
+  transition:color .4s ease, text-shadow .4s ease;
+}
+.sin-joel-time[data-level="ok"]{ color:#7ee8a8; text-shadow:0 0 18px rgba(126,232,168,.35); }
+.sin-joel-time[data-level="warn"]{ color:#ffd76a; text-shadow:0 0 18px rgba(255,215,106,.3); }
+.sin-joel-time[data-level="bad"]{ color:#ff7a8a; text-shadow:0 0 18px rgba(255,122,138,.35); }
+.sin-joel-note{ margin-top:4px; font-size:11px; color:var(--silver-dim); }
 .final-page{max-width:1040px;margin:0 auto;padding:4px 0 36px;animation:floatIn .35s ease both}
 .final-page-head{
   display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 22px;padding:0 2px 16px;
@@ -3210,6 +3287,7 @@ const DEFAULT_NORMAS = [
   'Se tendrá que respetar el level cap.',
   'Solo se pueden usar las curas que se encuentran en el suelo. Está prohibido comprar pociones.',
   'Cada vez que se muera uno o más Pokémon se tendrá que guardar la partida.',
+  'No se pueden usar Pokémon legendarios ni singulares. Las Ultraentes sí están permitidas.',
 ];
 let sancionState = { offender: null, prize: null };
 let sancionWheelSpinning = false;
@@ -4931,6 +5009,25 @@ function renderFinalPodium(){
     </div>
   `;
 }
+function renderFinalStandings(){
+  const pts = finalState.pointsAwarded || {};
+  const ranked = finalRankedTrainers();
+  return `
+    <div class="final-standings">
+      <div class="final-standings-title">Clasificación final</div>
+      ${ranked.map((t,i)=>{
+        const lost = hasLostLocke(t);
+        return `
+        <div class="final-standings-row ${i===0 && !lost ? 'first' : ''} ${lost ? 'lost' : ''}">
+          <span class="fs-pos">${i+1}</span>
+          <span class="fs-name">${NAMES[t] || t}</span>
+          <span class="fs-detail">${combatWinsOf(t)} combates${pts[t] ? ` + ${pts[t]} ⭐` : ''}${lost ? ' · 💀' : ''}</span>
+          <span class="fs-total">${finalTotalScoreOf(t)}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
 function renderFinalChampionCard(){
   const pts = finalState.pointsAwarded || {};
   const ranked = finalRankedTrainers();
@@ -4947,6 +5044,7 @@ function renderFinalChampionCard(){
   const name = NAMES[champion] || champion;
   return `
     <div class="final-champion-wrap revealed">
+      <div class="final-sparkles" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span><span>✧</span><span>✦</span><span>✧</span></div>
       <div class="final-champion-eyebrow">CAMPEÓN ABSOLUTO DE ESTE LOCKE</div>
       <div class="final-champion-crown">👑</div>
       <div class="final-champion-name">
@@ -4954,6 +5052,7 @@ function renderFinalChampionCard(){
       </div>
       <div class="final-champion-sub">${finalTotalScoreOf(champion)} puntos totales (${combatWinsOf(champion)} combates${pts[champion]?` + ${pts[champion]} ⭐ FINAL`:''})</div>
     </div>
+    ${renderFinalStandings()}
   `;
 }
 function renderFinal(app){
@@ -5849,6 +5948,82 @@ function lbRow(t, r){
       </div>
     </div>`;
 }
+/* ---------------- Tiempo sin Joel ----------------
+   La pagina no necesita saber quien la abre: deduce la actividad de Joel de lo que
+   ya guarda con hora. Se usa lo MAS RECIENTE de:
+   - su Tracker Sync (snapshot.updated: su partida avanza, se mueve, captura...)
+   - el casino y demas gastos/ganancias de tickets hechos por el (historial)
+   - regalos que haya hecho, intercambios (ofertas, contraofertas, aceptaciones)
+   - boletos de loteria, normas que haya escrito y el reto diario que haya empezado
+   Se ignoran cosas que le pasan sin que haga nada (premio de loteria, cobros de
+   apuestas que liquida otro, desafios que le ganan o pierde, devoluciones...). */
+const JOEL_PASSIVE_REASON_RE = /^(Premio de la lotería|Jugar la Final|Jugar el Combate 1|Acertó su apuesta|Ganó un desafío|Perdió un desafío)|cancelado/;
+function joelLastActivityMs(){
+  const J = 'joel', nm = NAMES[J];
+  let last = 0;
+  const bump = v => { v = Number(v); if(Number.isFinite(v) && v > last) last = v; };
+
+  // 1) Tracker Sync (segundos -> ms)
+  const snap = trackerSnapshots[J];
+  const u = snap ? Number(snap.updated) : NaN;
+  if(Number.isFinite(u) && u > 0) bump(u * 1000);
+
+  // 2) Historial: casino/tickets y regalos hechos por el
+  const ticketPrefix = `🎟️ ${nm} `, giftPrefix = `🎁 ${nm} le regaló`;
+  (history || []).forEach(h => {
+    const text = String(h && h.text || '');
+    if(text.startsWith(giftPrefix)){ bump(h.ts); return; }
+    if(!text.startsWith(ticketPrefix)) return;
+    const m = text.match(/^🎟️ .+? [+-]?\d+ tickets \((.+)\) →/);
+    if(m && !JOEL_PASSIVE_REASON_RE.test(m[1])) bump(h.ts);
+  });
+
+  // 3) Intercambios
+  (tradesActive || []).forEach(o => {
+    if(o.trainer === J) bump(o.ts);
+    (o.counters || []).forEach(c => { if(c.trainer === J) bump(c.ts); });
+  });
+  (tradesHistory || []).forEach(x => { if(x.offerTrainer === J) bump(x.ts); }); // quien acepta es el que ofrecio
+
+  // 4) Loteria, normas y reto diario
+  ((loteria && loteria.entries) || []).forEach(e => { if(e.trainer === J) bump(e.ts); });
+  (normas || []).forEach(n => { if(n.trainer === J) bump(n.ts); });
+  const attempt = dailyContestState && dailyContestState.attempts && dailyContestState.attempts[J];
+  if(attempt) bump(attempt.startedAt);
+
+  return last;
+}
+function fmtSinceJoel(ms){
+  const total = Math.floor(ms / 1000);
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const sec = total % 60;
+  const two = n => String(n).padStart(2, '0');
+  if(d > 0) return `${d}d ${two(h)}h ${two(m)}m ${two(sec)}s`;
+  if(h > 0) return `${h}h ${two(m)}m ${two(sec)}s`;
+  return `${m}m ${two(sec)}s`;
+}
+function updateSinJoel(){
+  const el = document.getElementById('sin-joel-time');
+  if(!el) return;
+  const last = joelLastActivityMs();
+  if(!last){ el.textContent = '—'; el.dataset.level = ''; return; }
+  const ms = Math.max(0, Date.now() - last);
+  el.textContent = fmtSinceJoel(ms);
+  el.dataset.level = ms < 30 * 60e3 ? 'ok' : ms < 3 * 3600e3 ? 'warn' : 'bad';
+}
+function renderSinJoelCard(){
+  return `
+    <div class="kpi brk sin-joel">
+      <div>
+        <div class="sin-joel-label">⏱️ Tiempo sin ${NAMES.joel}</div>
+        <div class="sin-joel-time" id="sin-joel-time" data-level="">—</div>
+        <div class="sin-joel-note">Se reinicia cuando avanza su partida o hace algo en la web (casino, apuestas, intercambios...).</div>
+      </div>
+    </div>`;
+}
+
 function renderHome(app){
   const rankOf = getMedalRanking();
   const order = [...TRAINERS].sort((a,b)=> rankOf[a].pos - rankOf[b].pos);
@@ -5866,6 +6041,7 @@ function renderHome(app){
         <path d="M0 15 Q50 7 100 15 T200 15 T300 15 T400 15 T500 15 T600 15 T700 15 T800 15 T900 15 T1000 15 T1100 15 T1200 15 V22 H0Z" fill="rgba(4,11,22,.92)"/>
       </svg>
     </section>
+    ${renderSinJoelCard()}
     <div class="kpi brk" style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px;padding:14px 16px;">
       <div><strong style="color:var(--silver-bright);">⚔️ ¿Necesitas comprobar un golpe?</strong><br><span style="font-size:12px;color:var(--silver-dim);">Calcula tipos y daño sin salir de la partida.</span></div>
       <button class="primary" onclick="go('types')">Abrir calculadora</button>
@@ -5889,6 +6065,7 @@ function renderHome(app){
     </div>
     ${renderWorldMapWidget()}
   `;
+  updateSinJoel();
 }
 
 /* ===================== PERFIL ===================== */
@@ -11399,6 +11576,7 @@ let dashboardPolling = false;
   showTombPopupIfAny();
   reconcileDailyContestReward().catch(()=>{});
   seedDefaultNormasIfMissing().then(()=>render()).catch(()=>{});
+  setInterval(updateSinJoel, 1000);
   setInterval(async ()=>{
     if(dashboardPolling || document.getElementById('modal-overlay') || duelSpinning || rouletteSpinning || slotSpinning || slotJackpotSpinning || loteriaDrawing || bjDealing || nineDealing || finalWheelSpinningWinner || finalWheelSpinningLoser || match1LoserWheelSpinning || sancionWheelSpinning || eggWheelSpinning || cemeteryAnimating || plinkoDropping || (crashState && crashState.phase === 'running') || (view==='final' && finalState && finalState.unlocked)) return; // don't refresh mid-edit, mid-spin, o mientras se está revelando LA FINAL
     dashboardPolling = true;
