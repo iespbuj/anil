@@ -1116,6 +1116,13 @@ body{
 .arena-stage-status{min-height:30px;color:var(--silver-dim);font-size:10px;line-height:1.45}
 .arena-stage-status strong{color:var(--silver)}
 .arena-stage-action{width:100%;margin-top:11px;padding:8px 7px!important;font-size:10px!important}
+.arena-vote{margin-top:10px;padding-top:9px;border-top:1px dashed rgba(255,255,255,.12)}
+.arena-vote-title{margin-bottom:6px;color:var(--silver-dim);font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.arena-vote-row{display:flex;flex-wrap:wrap;gap:5px}
+.arena-vote-chip{padding:5px 9px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--silver);font:700 10px var(--f-ui);cursor:pointer;transition:border-color .15s,background .15s,color .15s}
+.arena-vote-chip:hover{border-color:var(--lava-hot)}
+.arena-vote-chip.on{border-color:var(--lava-hot);background:rgba(255,106,44,.14);color:var(--lava-hot)}
+.arena-postleague .arena-vote{margin-top:9px;padding-top:0;border-top:0}
 .arena-stage-state{display:inline-flex;align-items:center;gap:5px;color:var(--silver-dim);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .arena-stage-state.ready{color:var(--lava-hot)}
 .arena-stage-state.done{color:var(--neon-green)}
@@ -3650,7 +3657,7 @@ let duelState = { scheduled:null, picks:[], bye:null, match1:null, match1Games:[
 let duelLastArenaPhase = '';
 let duelHistory = [];
 let duelBets = { match1: [], final: [] }; // {trainer, pick, amount}[] por combate
-let arenaJourneyState = { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null };
+let arenaJourneyState = { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null, votes:{} };
 let duelScheduleProgressionKey = null;
 let challengeState = null; // {challenger, opponent, stakeId, stakeMonPid, stakeMonLabel, games:[], narration} o null si no hay ninguno activo
 let challengeActionInFlight = false;
@@ -4230,7 +4237,7 @@ async function loadAll(){
     { key: 'anil:duel', def: { scheduled:null, picks:[], bye:null, match1:null, match1Games:[], match1Winner:null, match1LoserPrize:null, finalGames:[], finalWinner:null, finalWinnerPrize:null, finalLoserPrize:null } },
     { key: 'anil:duelHistory', def: [] },
     { key: 'anil:duelBets', def: { match1: [], final: [] } },
-    { key: 'anil:arenaJourney', def: { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null } },
+    { key: 'anil:arenaJourney', def: { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null, votes:{} } },
     { key: 'anil:challenge', def: null },
     { key: 'anil:dailyContest', def: { date:null, winner:null, attempts:{}, pieces:{iker:0,joel:0,alex:0}, stars:{iker:0,joel:0,alex:0} } },
     { key: 'anil:finalState', def: null },
@@ -4323,20 +4330,8 @@ async function loadAll(){
   if(!saveInFlight['duel']) duelState = duelResult;
   if(!saveInFlight['duelHistory']) duelHistory = duelHistoryResult;
   if(!saveInFlight['duelBets']) duelBets = duelBetsResult;
-  if(!saveInFlight['arenaJourney']){
-    const completed = Array.isArray(arenaJourneyResult?.completed)
-      ? arenaJourneyResult.completed.filter(value=>[2,4,6,8].includes(Number(value))).map(Number)
-      : [];
-    arenaJourneyState = {
-      completed:[...new Set(completed)].sort((a,b)=>a-b),
-      winners:ARENA_MEDAL_MILESTONES.reduce((winners, medals)=>{
-        const winner = arenaJourneyResult?.winners?.[String(medals)];
-        if(TRAINERS.includes(winner)) winners[String(medals)] = winner;
-        return winners;
-      }, {}),
-      postLeagueDone:arenaJourneyResult?.postLeagueDone === true,
-      postLeagueWinner:TRAINERS.includes(arenaJourneyResult?.postLeagueWinner) ? arenaJourneyResult.postLeagueWinner : null,
-    };
+  if(!saveInFlight['arenaJourney'] && !pendingSaves.has('arenaJourney')){
+    arenaJourneyState = normalizeArenaJourney(arenaJourneyResult);
   }
   if(challengeRevisionAtRead === challengeRevision
       && !saveInFlight['challenge'] && !challengeActionInFlight && !pendingSaves.has('challenge')){
@@ -8476,13 +8471,115 @@ function duelArenaPhase(){
 
 const ARENA_MEDAL_MILESTONES = [2, 4, 6, 8];
 function arenaMilestoneKey(medals){ return `medals-${medals}`; }
+const ARENA_VOTE_KEYS = ['2','4','6','8','post-league'];
+function normalizeArenaJourney(raw){
+  const completed = Array.isArray(raw?.completed)
+    ? raw.completed.filter(value=>[2,4,6,8].includes(Number(value))).map(Number)
+    : [];
+  const votes = {};
+  ARENA_VOTE_KEYS.forEach(k=>{
+    const list = raw?.votes?.[k];
+    if(Array.isArray(list)){
+      const clean = [...new Set(list.filter(t=>TRAINERS.includes(t)))];
+      if(clean.length) votes[k] = clean;
+    }
+  });
+  return {
+    completed:[...new Set(completed)].sort((a,b)=>a-b),
+    winners:ARENA_MEDAL_MILESTONES.reduce((winners, medals)=>{
+      const winner = raw?.winners?.[String(medals)];
+      if(TRAINERS.includes(winner)) winners[String(medals)] = winner;
+      return winners;
+    }, {}),
+    postLeagueDone:raw?.postLeagueDone === true,
+    postLeagueWinner:TRAINERS.includes(raw?.postLeagueWinner) ? raw.postLeagueWinner : null,
+    votes,
+  };
+}
+// Votación para adelantar un combate aunque alguien no tenga las medallas.
+// key = '2' | '4' | '6' | '8' | 'post-league'. Se adelanta solo si votan los TRES.
+function arenaVotesOf(key){
+  const list = arenaJourneyState.votes && arenaJourneyState.votes[key];
+  return Array.isArray(list) ? list.filter(t=>TRAINERS.includes(t)) : [];
+}
+function arenaVotedUnanimously(key){
+  const votes = arenaVotesOf(key);
+  return TRAINERS.every(t=>votes.includes(t));
+}
+function arenaAllHaveMedals(medals){
+  return TRAINERS.every(t=>trackerBadgesAvailable[t] && badgeCountOf(t) >= medals);
+}
 function arenaReadyForMilestone(medals){
   const index = ARENA_MEDAL_MILESTONES.indexOf(medals);
   if(index < 0 || (index > 0 && !arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1]))) return false;
-  return TRAINERS.every(t=>trackerBadgesAvailable[t] && badgeCountOf(t) >= medals);
+  return arenaAllHaveMedals(medals) || arenaVotedUnanimously(String(medals));
 }
 function arenaPostLeagueReady(){
-  return arenaJourneyState.completed.includes(8) && arenaReadyForMilestone(8);
+  return arenaJourneyState.completed.includes(8)
+    && (arenaAllHaveMedals(8) || arenaVotedUnanimously('post-league'));
+}
+function arenaVoteBox(key){
+  const votes = arenaVotesOf(key);
+  return `
+    <div class="arena-vote">
+      <div class="arena-vote-title">🗳️ Adelantar sin medallas · ${votes.length}/3 votos</div>
+      <div class="arena-vote-row">
+        ${TRAINERS.map(t=>{
+          const on = votes.includes(t);
+          return `<button type="button" class="arena-vote-chip ${on?'on':''}" aria-pressed="${on}" onclick="toggleArenaVote('${key}','${t}')">${on?'✓ ':''}${NAMES[t]}</button>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+function arenaClearVotes(key){
+  if(!arenaJourneyState.votes || !arenaJourneyState.votes[key]) return;
+  const votes = { ...arenaJourneyState.votes };
+  delete votes[key];
+  arenaJourneyState.votes = votes;
+}
+async function toggleArenaVote(key, trainer){
+  if(!TRAINERS.includes(trainer) || !ARENA_VOTE_KEYS.includes(key)) return;
+  if(duelState.scheduled){ toast('Termina el torneo actual antes de votar.'); return; }
+  const isPost = key === 'post-league';
+  const medals = isPost ? null : Number(key);
+  const index = isPost ? -1 : ARENA_MEDAL_MILESTONES.indexOf(medals);
+  const blocked = isPost
+    ? (arenaJourneyState.postLeagueDone || !arenaJourneyState.completed.includes(8))
+    : (arenaJourneyState.completed.includes(medals) || (index > 0 && !arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1])));
+  if(blocked){ toast('Este combate todavía no se puede votar.'); render(); return; }
+
+  const wantVote = !arenaVotesOf(key).includes(trainer);
+  const applyToggle = (state)=>{
+    const set = new Set(((state.votes||{})[key]||[]).filter(t=>TRAINERS.includes(t)));
+    if(wantVote) set.add(trainer); else set.delete(trainer);
+    const votes = { ...(state.votes||{}) };
+    if(set.size) votes[key] = [...set]; else delete votes[key];
+    state.votes = votes;
+    return state;
+  };
+  applyToggle(arenaJourneyState);
+  if(wantVote && arenaVotedUnanimously(key)){
+    toast('¡Los tres habéis votado! Combate adelantado 🔥');
+    try{ fireConfetti({ count: 60 }); }catch(e){}
+  }
+  render();
+
+  // Guardado con fusión: leemos lo que haya en la hoja y solo aplicamos NUESTRO voto,
+  // para no pisar el voto que otro haya hecho hace un segundo desde su móvil.
+  saveInFlight['arenaJourney'] = (saveInFlight['arenaJourney']||0) + 1;
+  let ok = false;
+  try{
+    const remote = await storeGet('anil:arenaJourney', { completed:[], winners:{}, postLeagueDone:false, postLeagueWinner:null, votes:{} });
+    if(remote !== STORE_FETCH_FAILED){
+      const merged = applyToggle(normalizeArenaJourney(remote));
+      ok = await storeSet('anil:arenaJourney', merged);
+      if(ok) arenaJourneyState = merged;
+    }
+  } finally {
+    saveInFlight['arenaJourney'] = Math.max((saveInFlight['arenaJourney']||1) - 1, 0);
+  }
+  if(!ok) queueRetry('arenaJourney', saveArenaJourney);
+  render();
 }
 function renderArenaJourney(){
   const counts = Object.fromEntries(TRAINERS.map(t=>[
@@ -8504,20 +8601,29 @@ function renderArenaJourney(){
       || duelHistory.find(entry=>entry.progressionKey === key)?.champion;
     const active = !!duelState.scheduled && duelState.progressionKey === key;
     const ready = arenaReadyForMilestone(medals);
+    const voteKey = String(medals);
+    const forcedByVote = !arenaAllHaveMedals(medals) && arenaVotedUnanimously(voteKey);
+    const prevDone = index === 0 || arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1]);
     const blockers = TRAINERS.filter(t=>counts[t] === null || counts[t] < medals);
+    let voteHtml = '';
     let status;
     if(done) status = `<span class="arena-stage-state done">✓ Ganador: ${winner ? NAMES[winner] : 'completado'}</span>`;
     else if(active) status = `<span class="arena-stage-state ready">◷ Torneo programado</span><div>${fmtTime(new Date(duelState.scheduled.datetime).getTime())}</div>`;
     else if(index > 0 && !arenaJourneyState.completed.includes(ARENA_MEDAL_MILESTONES[index-1])){
       status = `<span class="arena-stage-state">🔒 Completa el combate anterior</span>`;
-    }else if(blockers.length){
+    }else if(blockers.length && !forcedByVote){
       const waitingSync = blockers.filter(t=>counts[t] === null);
       const notThereYet = blockers.filter(t=>counts[t] !== null);
       const messages = [];
       if(waitingSync.length) messages.push(`esperando Tracker Sync: ${waitingSync.map(t=>NAMES[t]).join(', ')}`);
       if(notThereYet.length) messages.push(`${notThereYet.map(t=>`${NAMES[t]} ${counts[t]}/${medals}`).join(' · ')}`);
       status = `<span class="arena-stage-state">🔒 Faltan medallas</span><div>${messages.join('<br>')}</div>`;
+      if(prevDone && !duelState.scheduled) voteHtml = arenaVoteBox(voteKey);
     }else if(duelState.scheduled) status = `<span class="arena-stage-state">🔒 Termina el torneo actual</span>`;
+    else if(forcedByVote){
+      status = `<span class="arena-stage-state ready">● Adelantado por votación</span><div>Los tres habéis votado adelantarlo.</div>`;
+      voteHtml = arenaVoteBox(voteKey);
+    }
     else status = `<span class="arena-stage-state ready">● Desbloqueado</span><div>Los tres han llegado a ${medals} medallas.</div>`;
     const canStart = ready && !done && !active && !duelState.scheduled;
     return `
@@ -8525,6 +8631,7 @@ function renderArenaJourney(){
         <div class="arena-stage-medal">${medals} medallas</div>
         <div class="arena-stage-title">Combate ${index+1}</div>
         <div class="arena-stage-status">${status}</div>
+        ${voteHtml}
         ${canStart ? `<button class="primary arena-stage-action" type="button" onclick="openScheduleDuel('${key}')">Programar torneo</button>` : ''}
       </article>`;
   }).join('');
@@ -8539,7 +8646,10 @@ function renderArenaJourney(){
   else if(!arenaJourneyState.completed.includes(8)) postStatus = 'Se habilita al completar el torneo de 8 medallas.';
   else if(!arenaPostLeagueReady()) postStatus = 'Esperando a que los tres tengan las 8 medallas.';
   else if(duelState.scheduled) postStatus = 'Termina el torneo actual para abrir Post-liga.';
+  else if(!arenaAllHaveMedals(8)) postStatus = 'Adelantada por votación de los tres. Ya podéis abrir el último torneo.';
   else postStatus = 'Los tres tienen 8 medallas. Ya podéis abrir el último torneo.';
+  const postVoteHtml = (arenaJourneyState.completed.includes(8) && !arenaJourneyState.postLeagueDone && !postActive && !duelState.scheduled)
+    ? arenaVoteBox('post-league') : '';
   const canStartPostLeague = arenaPostLeagueReady() && !arenaJourneyState.postLeagueDone && !postActive && !duelState.scheduled;
   return `
     <section class="arena-journey" aria-labelledby="arena-journey-title">
@@ -8550,11 +8660,11 @@ function renderArenaJourney(){
       <div class="arena-readiness">${players}</div>
       <div class="arena-journey-track">${stages}</div>
       <div class="arena-postleague">
-        <div><h4>🏆 Post-liga</h4><p>${postStatus}</p></div>
+        <div><h4>🏆 Post-liga</h4><p>${postStatus}</p>${postVoteHtml}</div>
         ${canStartPostLeague ? `<button class="primary" type="button" onclick="openScheduleDuel('post-league')">Post-liga</button>` : ''}
         ${arenaJourneyState.postLeagueDone ? `<span class="arena-stage-state done">✓ Completada</span>` : ''}
       </div>
-      <p class="arena-sync-note">Cada torneo se desbloquea cuando los tres alcanzáis el hito y el anterior está completado. El torneo de Post-liga requiere que los tres tengáis las 8 medallas.</p>
+      <p class="arena-sync-note">Cada torneo se desbloquea cuando los tres alcanzáis el hito y el anterior está completado. Si alguno no llega, los tres podéis votar para adelantarlo: solo se adelanta si votáis los tres. Post-liga requiere las 8 medallas de los tres, o la votación de los tres.</p>
     </section>`;
 }
 
@@ -9935,12 +10045,14 @@ async function finishDuel(){
   if(progressionKey === 'post-league' && !arenaJourneyState.postLeagueDone){
     arenaJourneyState.postLeagueDone = true;
     arenaJourneyState.postLeagueWinner = finalWinner;
+    arenaClearVotes('post-league');
     journeyChanged = true;
   }else if(progressionKey && progressionKey.startsWith('medals-')){
     const medals = Number(progressionKey.replace('medals-',''));
     if(ARENA_MEDAL_MILESTONES.includes(medals) && !arenaJourneyState.completed.includes(medals)){
       arenaJourneyState.completed = [...arenaJourneyState.completed, medals].sort((a,b)=>a-b);
       arenaJourneyState.winners = { ...(arenaJourneyState.winners||{}), [String(medals)]:finalWinner };
+      arenaClearVotes(String(medals));
       journeyChanged = true;
     }
   }
