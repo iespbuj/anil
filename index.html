@@ -3430,8 +3430,8 @@ const NAMES = { iker:'Iker', joel:'Joel', alex:'Alex' };
 // comparar) y llevan un cartel bien visible en su tarjeta de la portada.
 const RETIRED_TRAINERS = new Set(); // vacío: ahora juegan los tres. (Si alguien vuelve a abandonar: new Set(['nombre']))
 
-const LOSER_PRIZES = ['1 captura extra', '1 Menta de Naturaleza', '5 tickets', '10 tickets', 'Banda Focus', 'Pesa Recia', 'Baya Meloc', 'Pierde 3 vidas', 'Pierde 1 vida', '1 Cápsula Habilidad', '1 Cápsula Habilidad', 'Nada'];
-const WINNER_PRIZES = ['2 capturas extra', 'Elegir entre 3 huevos', '2 Mentas de Naturaleza', '10 tickets', '20 tickets', 'Permiso para una ilegalidad', 'Cambiar un Pokémon por otro que quiera de otro equipo', '3 Cápsulas Habilidad'];
+const LOSER_PRIZES = ['1 captura extra', '1 Menta de Naturaleza', '5 tickets', '10 tickets', 'Banda Focus', 'Pesa Recia', 'Baya Meloc', 'Pierde 3 vidas', 'Pierde 1 vida', '1 Cápsula Habilidad', '1 Cápsula Habilidad', 'Un fondo aleatorio', 'Una paleta aleatoria', 'Nada'];
+const WINNER_PRIZES = ['2 capturas extra', 'Elegir entre 3 huevos', '2 Mentas de Naturaleza', '10 tickets', '20 tickets', 'Permiso para una ilegalidad', 'Cambiar un Pokémon por otro que quiera de otro equipo', '3 Cápsulas Habilidad', 'Una skin aleatoria', 'Un título aleatorio', 'Un cosmético aleatorio'];
 const WHEEL_COLORS = ['#9fb2da','#c9a86a','#c9cfdd','#7d97c9','#e0c68a','#b8bfd1','#8fa8d6','#d18aa0'];
 
 const SANCION_WHEEL = [
@@ -5825,7 +5825,19 @@ async function addTickets(t, amount, reason){
   }
 }
 
+const COSMETIC_PRIZES = { 'Una skin aleatoria':'characters', 'Un fondo aleatorio':'backgrounds', 'Una paleta aleatoria':'palettes', 'Un título aleatorio':'titles', 'Un cosmético aleatorio':'any' };
+async function grantCosmeticPrize(t, text, source){
+  try{
+    const got = await FBD.grantCosmetic(t, COSMETIC_PRIZES[text]);
+    if(!got){ await addTickets(t, 30, source + ' · ya lo tenía todo'); toast('Ya tenías todo lo de esa categoría: +30 tickets'); return true; }
+    const nm = FBD.cosmeticName(got.kind, got.id);
+    pushHistory(`🎁 ${NAMES[t]} ha ganado un cosmético: ${nm} (${source})`);
+    toast(`🎁 ${NAMES[t]} gana: ${nm}. Míralo en la taquilla, sale con brillo.`);
+    return true;
+  }catch(e){ return false; }
+}
 async function addPendingPrize(t, text, source){
+  if(COSMETIC_PRIZES[text] && await grantCosmeticPrize(t, text, source)) return;
   pendingPrizes[t] = pendingPrizes[t] || [];
   pendingPrizes[t].unshift({ id: crypto.randomUUID(), text, source, ts: Date.now() });
   pushHistory(`🎁 ${NAMES[t]} tiene un premio pendiente de entregar: ${text} (${source})`);
@@ -12295,7 +12307,7 @@ window.renderShop=a=>{
   const cards=items.map(it=>{const has=!!own[it.id],now=cur===it.id;
     const vis=it.sw?`<div class="sw">${Object.values(it.sw).map(c=>`<i style="background:${esc(c)}"></i>`).join('')}</div>`:it.tt?`<div class="tt">${it.tt}</div>`:`<img class="vis${it.w?' w':''}" src="${it.vis}" alt="">`;
     const btn=has?`<button class="sm" data-eq="${it.id}" ${now?'disabled':''} type="button">${now?'Puesto':'Ponerme'}</button>`:`<button class="btn" data-buy="${it.id}" data-price="${it.price}" ${tk<it.price?'disabled':''} type="button">Comprar ${it.price}</button>`;
-    return `<div class="it${has?' own':''}">${vis}<div class="nm">${it.sw?it.nm:it.tt?it.nm.split('<small>')[0]:it.nm}</div>${btn}</div>`}).join('');
+    return `<div class="it${has?' own':''}${has&&isNew(kind,it.id)?' lk-new':''}">${vis}<div class="nm">${it.sw?it.nm:it.tt?it.nm.split('<small>')[0]:it.nm}</div>${btn}</div>`}).join('');
   a.innerHTML=`<div class="lk"><h2>Tienda</h2><p class="mu">Tienes <b>${tk} tickets</b></p><div style="display:flex;gap:8px;flex-wrap:wrap">${Object.keys(TABS).map(k=>`<button class="sm${k===tab?' on':''}" data-tab="${k}" type="button">${TABS[k][0]}</button>`).join('')}</div><div class="shop">${cards}</div></div>`};
 async function act(fn){if(busy)return;busy=true;try{await fn()}catch{say('Error de conexión. Inténtalo otra vez.')}finally{busy=false}}
 document.addEventListener('click',e=>{const b=e.target.closest('.lk button');if(!b)return;
@@ -12330,7 +12342,7 @@ window.renderLocker=a=>{
   if(kind==='titles')items=ids.filter(i=>cfg.titles&&cfg.titles[i]).sort((x,y)=>cfg.titles[x].stars-cfg.titles[y].stars).map(id=>{const t=cfg.titles[id];return{id,nm:`${'★'.repeat(t.stars)}<small>${esc(t.name)}</small>`,tt:esc(t.name)}});
   const cards=items.map(it=>{const now=cur===String(it.id);
     const vis=it.sw?`<div class="sw">${Object.values(it.sw).map(c=>`<i style="background:${esc(c)}"></i>`).join('')}</div>`:it.tt?`<div class="tt">${it.tt}</div>`:`<img class="vis${it.w?' w':''}" src="${it.vis}" alt="">`;
-    return `<div class="it own">${vis}<div class="nm">${it.sw?it.nm:it.tt?it.nm.split('<small>')[0]:it.nm}</div><button class="sm${now?' on':''}" data-eq="${it.id}" ${now?'disabled':''} type="button">${now?'Puesto ✓':'Ponerme'}</button></div>`}).join('');
+    return `<div class="it own${isNew(kind,it.id)?' lk-new':''}">${vis}<div class="nm">${it.sw?it.nm:it.tt?it.nm.split('<small>')[0]:it.nm}</div><button class="sm${now?' on':''}" data-eq="${it.id}" ${now?'disabled':''} type="button">${now?'Puesto ✓':'Ponerme'}</button></div>`}).join('');
   a.innerHTML=`<div class="lk lk-locker" style="max-width:1000px"><button class="sm" type="button" onclick="go('home')">← Volver al inicio</button>
     <h2>🔐 Tu taquilla</h2><p class="mu">Todo lo que has conseguido. Lo que te pongas se ve en tu perfil.</p>
     <div class="pf-wrap">${window.lkProfileCard(me,true)}</div>
@@ -12338,6 +12350,25 @@ window.renderLocker=a=>{
     ${items.length?`<div class="shop">${cards}</div>`:`<p class="mu" style="margin-top:16px">Aún no tienes nada en esta categoría. <a href="#" onclick="go('shop');return false" style="color:var(--ac)">Ir a la tienda</a> o abre las puertas del calendario.</p>`}</div>`};
 
 setInterval(()=>{if(me&&$('#cg'))paintCal()},30000);
+
+/* ---------- cosméticos de las ruedas y brillo de lo nuevo ---------- */
+Object.assign(window.FBD,{
+  async grantCosmetic(t,kind){
+    const kinds=kind==='any'?['characters','backgrounds','palettes','titles']:[kind],owned=(FBS.inventory||{})[t]||{},pool=[];
+    const range=n=>Array.from({length:n},(_,i)=>String(i+1));
+    for(const k of kinds){
+      const all=k==='characters'?range(cfg.counts?.characters||0):k==='backgrounds'?range(cfg.counts?.backgrounds||0):k==='palettes'?Object.keys(cfg.palettes||{}):Object.keys(cfg.titles||{});
+      all.forEach(id=>{if(!(owned[k]&&owned[k][id]))pool.push([k,String(id)])})}
+    if(!pool.length)return null;
+    const [k,id]=pool[Math.floor(Math.random()*pool.length)];
+    await set(ref(db,`inventory/${t}/${k}/${id}`),true);return{kind:k,id}},
+  cosmeticName(k,id){return k==='characters'?'Personaje '+id:k==='backgrounds'?'Fondo '+id:k==='palettes'?'Paleta '+((cfg.palettes[id]||{}).name||id):'Título '+((cfg.titles[id]||{}).name||id)}});
+function seenSet(){let s=null;try{s=JSON.parse(localStorage.getItem('locke_seen_'+me)||'null')}catch{}
+  if(!s){s={};for(const k of Object.keys(inv))for(const id of Object.keys(inv[k]||{}))(s[k]=s[k]||{})[id]=1;localStorage.setItem('locke_seen_'+me,JSON.stringify(s))}return s}
+function isNew(k,id){return !((seenSet()[k]||{})[id])}
+let seenT=null;
+function scheduleSeen(){clearTimeout(seenT);seenT=setTimeout(()=>{const s={};for(const k of Object.keys(inv))for(const id of Object.keys(inv[k]||{}))(s[k]=s[k]||{})[id]=1;localStorage.setItem('locke_seen_'+me,JSON.stringify(s))},6000)}
+for(const n of ['renderLocker','renderShop']){const f=window[n];window[n]=a=>{f(a);scheduleSeen()}}
 
 </script>
 <script>
@@ -12355,5 +12386,14 @@ setInterval(()=>{if(me&&$('#cg'))paintCal()},30000);
 })();
 </script>
 
+<style>
+.lk .it{ position:relative; }
+.lk .it.lk-new{ overflow:hidden; border-color:var(--ac); animation:lknew 1.6s ease-in-out infinite; }
+.lk .it.lk-new::before{ content:""; position:absolute; top:-50%; bottom:-50%; left:-60%; width:40%; transform:rotate(20deg); pointer-events:none; background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent); animation:lksweep 2.2s ease-in-out infinite; }
+.lk .it.lk-new::after{ content:"NUEVO"; position:absolute; top:6px; right:6px; font:700 10px system-ui,sans-serif; background:var(--ac); color:var(--bg); padding:2px 7px; border-radius:999px; }
+@keyframes lknew{ 0%,100%{ box-shadow:0 0 6px color-mix(in srgb,var(--ac) 40%,transparent); } 50%{ box-shadow:0 0 22px 4px color-mix(in srgb,var(--ac) 85%,transparent); } }
+@keyframes lksweep{ to{ left:130%; } }
+@media (prefers-reduced-motion:reduce){ .lk .it.lk-new,.lk .it.lk-new::before{ animation:none; } }
+</style>
 </body>
 </html>
