@@ -9796,10 +9796,10 @@ const ELO_TIERS = [
   { min: 1400,      max: 1499, name: 'Inmortal',    color: '#d64f68', iconId: 24 },
   { min: 1500,      max: Infinity, name: 'Radiante', color: '#f6d76e', iconId: 27 },
 ];
-function eloEmblem(tier, hidden){
+function eloEmblem(tier){
   const i = ELO_TIERS.indexOf(tier), n = 1 + Math.floor(i / 3), c = tier.color;
   const chev = Array.from({length:n}).map((_, k) => `<path d="M22 ${30 + k*9} 32 ${23 + k*9} 42 ${30 + k*9}" fill="none" stroke="#0e0a0b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`).join('');
-  return `<svg viewBox="0 0 64 64" aria-hidden="true" style="display:${hidden ? 'none' : 'block'};width:100%;height:100%;filter:drop-shadow(0 0 4px ${c}88)"><path d="M32 3 57 13v21c0 14-11 23-25 27C18 57 7 48 7 34V13z" fill="#10141c" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><path d="M32 10 50 18v16c0 10-7 17-18 20-11-3-18-10-18-20V18z" fill="${c}"/><path d="M32 10 50 18v10L32 22 14 28V18z" fill="#fff" opacity=".22"/>${chev}</svg>`;
+  return `<svg viewBox="0 0 64 64" aria-hidden="true" style="display:block;width:100%;height:100%;filter:drop-shadow(0 0 4px ${c}88)"><path d="M32 3 57 13v21c0 14-11 23-25 27C18 57 7 48 7 34V13z" fill="#10141c" stroke="${c}" stroke-width="3" stroke-linejoin="round"/><path d="M32 10 50 18v16c0 10-7 17-18 20-11-3-18-10-18-20V18z" fill="${c}"/><path d="M32 10 50 18v10L32 22 14 28V18z" fill="#fff" opacity=".22"/>${chev}</svg>`;
 }
 function eloTier(r){ return ELO_TIERS.find(t => r >= t.min && r <= t.max) || ELO_TIERS[0]; }
 function eloRankBadge(trainer, compact=false){
@@ -9807,7 +9807,7 @@ function eloRankBadge(trainer, compact=false){
   const tier = eloTier(rating);
   const sizeClass = compact ? ' compact' : '';
   return `<button type="button" class="elo-rank-badge${sizeClass}" style="--tier-color:${tier.color}" aria-label="Ver rango ${tier.name} de ${NAMES[trainer]}" title="${tier.name} · ${rating} ELO" onclick="event.stopPropagation(); showEloRank('${trainer}')">
-    <img src="https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${tier.iconId}/largeicon.png" alt="" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">${eloEmblem(tier, true)}
+    ${eloEmblem(tier)}
   </button>`;
 }
 function eloTierRange(tier){
